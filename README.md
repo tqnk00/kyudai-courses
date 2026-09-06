@@ -3,7 +3,7 @@
 九州大学のシラバスを、時間割のコマから探せるようにした1枚のWebページです。
 `index.html` だけで動きます。サーバーもデータベースも要りません。
 
-**公開URL**: https://USERNAME.github.io/REPO/ ← Pages を有効にしたら書き換える
+**公開URL**: https://tqnk00.github.io/kyudai-courses/
 
 ## できること
 
