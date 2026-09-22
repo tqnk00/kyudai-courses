@@ -1,0 +1,2530 @@
+{
+ "university": "九州大学",
+ "year": 2026,
+ "scope": "2026年度 後期",
+ "sources": [
+  {
+   "faculty": "経済学部",
+   "url": "https://www.econ.kyushu-u.ac.jp/student/schedule",
+   "title": "2026年度時間割",
+   "format": "pdf"
+  }
+ ],
+ "not_found": [],
+ "courses": [
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "Introduction to Japanese Management[GProE][Eng]",
+   "instructors": [
+    "加納"
+   ],
+   "room": "D-107",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経営学Ⅱ",
+   "instructors": [
+    "加納"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "基礎計量経済学Ⅰ（経工）[秋]",
+   "instructors": [
+    "山崎"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "福田"
+   ],
+   "room": "E-203",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "公共経済学",
+   "instructors": [
+    "阿部"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "基礎計量経済学Ⅱ（経工）[冬]",
+   "instructors": [
+    "山崎"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習※前期と教室が異なる",
+   "instructors": [
+    "安田"
+   ],
+   "room": "E-112",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "【経済・産業】現代日本経済論",
+   "instructors": [
+    "藤井"
+   ],
+   "room": "D-103",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "外国書講読２（英語経済）[Eng/Jpn]",
+   "instructors": [
+    "加河"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "2,3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "北澤"
+   ],
+   "room": "E-204",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "外国書講読１（英語経済）[冬][Eng/Jpn]",
+   "instructors": [
+    "北原"
+   ],
+   "room": "E-202",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "2,3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "大坪"
+   ],
+   "room": "E-205",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "潮﨑"
+   ],
+   "room": "D-106",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "加納"
+   ],
+   "room": "E-101",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "藤田"
+   ],
+   "room": "E-317",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "瀧本"
+   ],
+   "room": "E-318",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "菅"
+   ],
+   "room": "E-319",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "大西"
+   ],
+   "room": "研究室",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "北原"
+   ],
+   "room": "E-323",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "小室"
+   ],
+   "room": "E-324",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "月",
+     "period": 4
+    },
+    {
+     "day": "月",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "国際経済学Ⅱ",
+   "instructors": [
+    "山口"
+   ],
+   "room": "オンライン",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "ミクロ経済学Ⅰ[秋]",
+   "instructors": [
+    "藤田"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    },
+    {
+     "day": "火",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "1",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "水野"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    },
+    {
+     "day": "火",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "ミクロ経済学Ⅱ[冬]",
+   "instructors": [
+    "藤田"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    },
+    {
+     "day": "火",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "1",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "與倉"
+   ],
+   "room": "E-202",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    },
+    {
+     "day": "火",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "労働経済",
+   "instructors": [
+    "深井"
+   ],
+   "room": "オンライン※",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学基礎セミナー[秋]",
+   "instructors": [
+    "浦川"
+   ],
+   "room": "E-202",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学基礎セミナー[秋]",
+   "instructors": [
+    "松本"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "左近"
+   ],
+   "room": "E-203",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    },
+    {
+     "day": "火",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学基礎セミナー[秋]",
+   "instructors": [
+    "片山"
+   ],
+   "room": "E-203",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学基礎セミナー[秋]",
+   "instructors": [
+    "宮﨑"
+   ],
+   "room": "E-204",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "岸野"
+   ],
+   "room": "E-204",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    },
+    {
+     "day": "火",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学基礎セミナー[冬]",
+   "instructors": [
+    "菅"
+   ],
+   "room": "E-202",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "外国書講読２（英語経済）[Eng/Jpn]",
+   "instructors": [
+    "中石"
+   ],
+   "room": "E-203",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "2,3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "小津"
+   ],
+   "room": "E-205",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    },
+    {
+     "day": "火",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "特講2（Macroeconomics）[Eng]",
+   "instructors": [
+    "パンガラ"
+   ],
+   "room": "D-106",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学基礎セミナー[冬]",
+   "instructors": [
+    "北原"
+   ],
+   "room": "E-203",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "【経済・産業】経済統計",
+   "instructors": [
+    "加河"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "伊豆永"
+   ],
+   "room": "E-206",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    },
+    {
+     "day": "火",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "※学府合併開講",
+   "instructors": [],
+   "room": "",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 1
+    },
+    {
+     "day": "火",
+     "period": 2
+    },
+    {
+     "day": "水",
+     "period": 2
+    },
+    {
+     "day": "金",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "【産業・企業】人的資源管理",
+   "instructors": [
+    "岸野"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "葉"
+   ],
+   "room": "E-317",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "特講1（国際関係論）[冬][Eng/Jpn]",
+   "instructors": [
+    "周"
+   ],
+   "room": "E-109",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "浦川"
+   ],
+   "room": "E-318",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "室賀"
+   ],
+   "room": "E-319",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "火",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "【企業】原価計算",
+   "instructors": [
+    "丸田"
+   ],
+   "room": "オンライン",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "2,3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "国際経済学Ⅰ",
+   "instructors": [
+    "山ノ内"
+   ],
+   "room": "オンライン",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "情報処理Ⅱ",
+   "instructors": [
+    "屋嘉比"
+   ],
+   "room": "D-103",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学基本演習",
+   "instructors": [
+    "石"
+   ],
+   "room": "E-202",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "証券市場の機能と投資行動（臨時開講科目）",
+   "instructors": [
+    "前田"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学基礎セミナー[秋]",
+   "instructors": [
+    "周"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "応用ファイナンス[Eng]",
+   "instructors": [
+    "葉"
+   ],
+   "room": "E-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "損害保険概論（臨時開講科目）",
+   "instructors": [
+    "三輪"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "水",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "政治経済学Ⅰ",
+   "instructors": [
+    "八木"
+   ],
+   "room": "オンライン",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "情報処理Ⅱ",
+   "instructors": [
+    "伊豆永"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "会計学Ⅱ",
+   "instructors": [
+    "小津"
+   ],
+   "room": "大講Ⅰ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学基本演習",
+   "instructors": [
+    "岸野"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "【経済・産業】開発経済",
+   "instructors": [
+    "水野"
+   ],
+   "room": "D-103",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "会計学Ⅱ",
+   "instructors": [
+    "潮﨑"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学基本演習",
+   "instructors": [
+    "福田"
+   ],
+   "room": "E-206",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "特講1（イノベーション論）[秋]",
+   "instructors": [
+    "石"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "特講2（生態経済学）",
+   "instructors": [
+    "今田"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "外国書講読１（英語経済）[秋][Eng]",
+   "instructors": [
+    "宮﨑"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "2,3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学基本演習",
+   "instructors": [
+    "水野"
+   ],
+   "room": "E-318",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "特講1（経営戦略）[冬]",
+   "instructors": [
+    "石"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "数理ファイナンス",
+   "instructors": [
+    "松本"
+   ],
+   "room": "オンライン",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "外国書講読１（英語経済）[冬][Eng/Jpn]",
+   "instructors": [
+    "片山"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "2,3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "前田"
+   ],
+   "room": "E-208",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "【産業・企業】産業技術",
+   "instructors": [
+    "安田"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "鷲崎"
+   ],
+   "room": "E-101",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "大石"
+   ],
+   "room": "E-211",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "阿部"
+   ],
+   "room": "E-103",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "三輪"
+   ],
+   "room": "E-202",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "松本"
+   ],
+   "room": "E-203",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "宮﨑"
+   ],
+   "room": "E-204",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "李"
+   ],
+   "room": "E-205",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "木",
+     "period": 4
+    },
+    {
+     "day": "木",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "外国書講読２（英語経済）[Eng/Jpn]",
+   "instructors": [
+    "張（化"
+   ],
+   "room": "E-206",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 1
+    }
+   ],
+   "credits": null,
+   "target_grade": "2,3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "GProEへの誘い[秋]",
+   "instructors": [
+    "GProE運営委員長"
+   ],
+   "room": "大講Ⅰ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "1",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済史Ⅱ",
+   "instructors": [
+    "左近"
+   ],
+   "room": "大講Ⅱ",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学基本演習",
+   "instructors": [
+    "鷲崎"
+   ],
+   "room": "E-102",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "政治経済学Ⅱ",
+   "instructors": [
+    "堀井"
+   ],
+   "room": "D-103",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "",
+   "category": "専攻教育科目",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "グローバル経済特別講義[秋][Eng/Jpn]",
+   "instructors": [
+    "前田"
+   ],
+   "room": "E-110",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学基本演習",
+   "instructors": [
+    "與倉"
+   ],
+   "room": "E-323",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "【企業】財務会計",
+   "instructors": [
+    "潮﨑"
+   ],
+   "room": "D-105",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "企業経済学",
+   "instructors": [
+    "吉田"
+   ],
+   "room": "D-103",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 3
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学基本演習",
+   "instructors": [
+    "張（瑞娜"
+   ],
+   "room": "E-324",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "2",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "特講2（経済成長論）[Eng]",
+   "instructors": [
+    "ジェン"
+   ],
+   "room": "E-109",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 2
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "加河"
+   ],
+   "room": "E-208",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "中石"
+   ],
+   "room": "E-103",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "八木"
+   ],
+   "room": "E-201",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習※前期と教室が異なる",
+   "instructors": [
+    "藤井"
+   ],
+   "room": "E-202",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "堀井"
+   ],
+   "room": "E-203",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済・経営学演習",
+   "instructors": [
+    "今田"
+   ],
+   "room": "E-204",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "山崎"
+   ],
+   "room": "E-205",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "堀"
+   ],
+   "room": "E-206",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "吉田"
+   ],
+   "room": "E-104",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "池下"
+   ],
+   "room": "E-317",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    },
+    {
+     "day": "金",
+     "period": 5
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  },
+  {
+   "faculty": "経済学部",
+   "department": "",
+   "course_code": "",
+   "title": "経済工学演習",
+   "instructors": [
+    "村尾"
+   ],
+   "room": "E-318",
+   "term": "後期",
+   "slots": [
+    {
+     "day": "金",
+     "period": 4
+    }
+   ],
+   "credits": null,
+   "target_grade": "3,4",
+   "category": "",
+   "required": "",
+   "note": "",
+   "confidence": "high",
+   "source_url": "https://www.econ.kyushu-u.ac.jp/kyoumu/"
+  }
+ ]
+}
