@@ -1,0 +1,1640 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>九大 授業さがし</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* --- トークン。明るい方を素の :root に全部置く --- */
+  :root {
+    --ink:        #131a26;
+    --ink-mute:   #59657a;
+    --ink-faint:  #8892a4;
+    --paper:      #e9ecf1;
+    --surface:    #ffffff;
+    --surface-2:  #f3f5f8;
+    --line:       #d1d8e1;
+    --line-soft:  #e3e8ee;
+    --accent:     #0b4a7f;
+    --accent-ink: #ffffff;
+    --accent-soft:#dfeaf6;
+    --amber:      #8a5a12;
+    --amber-soft: #f6ecd9;
+    --teal:       #0d6b63;
+    --teal-soft:  #dcefec;
+    --shadow:     0 1px 2px rgba(19,26,38,.06), 0 8px 24px rgba(19,26,38,.06);
+    --focus:      #0b4a7f;
+    --fc-l:       32%;   /* 学部色の明度。暗い配色では明るく振る */
+
+    --f-display: "Shippori Mincho", "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", serif;
+    --f-body: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "YuGothic",
+              "Noto Sans JP", Meiryo, system-ui, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink:        #e4e9f0;
+      --ink-mute:   #9aa6b8;
+      --ink-faint:  #6d7a8d;
+      --paper:      #11151b;
+      --surface:    #181d25;
+      --surface-2:  #1f2630;
+      --line:       #2c3540;
+      --line-soft:  #232b35;
+      --accent:     #6aa9e0;
+      --accent-ink: #0b1620;
+      --accent-soft:#1c2c3c;
+      --amber:      #d9a552;
+      --amber-soft: #2e2718;
+      --teal:       #62bdb2;
+      --teal-soft:  #16292a;
+      --shadow:     0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+      --focus:      #6aa9e0;
+      --fc-l:       74%;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink:        #e4e9f0;
+    --ink-mute:   #9aa6b8;
+    --ink-faint:  #6d7a8d;
+    --paper:      #11151b;
+    --surface:    #181d25;
+    --surface-2:  #1f2630;
+    --line:       #2c3540;
+    --line-soft:  #232b35;
+    --accent:     #6aa9e0;
+    --accent-ink: #0b1620;
+    --accent-soft:#1c2c3c;
+    --amber:      #d9a552;
+    --amber-soft: #2e2718;
+    --teal:       #62bdb2;
+    --teal-soft:  #16292a;
+    --shadow:     0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+    --focus:      #6aa9e0;
+    --fc-l:       74%;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 14px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  .wrap { max-width: 1380px; margin: 0 auto; padding: 0 20px 40px; }
+
+  /* --- ヘッダ --- */
+  .head { padding: 10px 0 8px; display: flex; align-items: baseline;
+          justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .head h1 {
+    font-family: var(--f-display); font-weight: 700; font-size: 21px;
+    letter-spacing: .04em; margin: 0; line-height: 1.25; text-wrap: balance;
+  }
+  .head .sub { color: var(--ink-mute); font-size: 12px; margin-top: 2px; }
+  .head .sub b { font-family: var(--f-mono); font-weight: 500; color: var(--ink);
+                 font-variant-numeric: tabular-nums; }
+
+  /* --- 絞り込み --- */
+  .controls {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; box-shadow: var(--shadow);
+    padding: 8px 14px; display: flex; flex-wrap: wrap; gap: 7px 18px;
+    align-items: flex-end;
+  }
+  .field { display: flex; flex-direction: column; gap: 3px; }
+  .field > .lbl {
+    font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); font-weight: 700;
+  }
+  .field select, .field input[type=search] {
+    font: inherit; font-size: 13.5px; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 7px; padding: 5px 9px; min-height: 31px;
+    max-width: 100%;
+  }
+  #fac { max-width: 160px; }
+  #cat { max-width: 200px; }
+  #camp { max-width: 150px; }
+  .field input[type=search] { min-width: 170px; }
+  .chips { display: flex; gap: 4px; flex-wrap: wrap; }
+  .chip {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--surface); color: var(--ink-mute);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 4px 12px; min-height: 31px; transition: background .12s, color .12s;
+  }
+  .chip:hover { background: var(--surface-2); }
+  .chip[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent);
+    color: var(--accent-ink); font-weight: 600;
+  }
+  .field.grow { flex: 1 1 170px; }
+  .reset {
+    font: inherit; font-size: 12.5px; cursor: pointer; color: var(--ink-mute);
+    background: none; border: none; text-decoration: underline;
+    text-underline-offset: 3px; padding: 8px 2px;
+  }
+  .reset:hover { color: var(--ink); }
+
+  /* --- 本体 2カラム --- */
+  .board { display: grid; grid-template-columns: minmax(0,1fr) 400px; gap: 16px;
+           margin-top: 10px; align-items: start; }
+  @media (max-width: 1100px) { .board { grid-template-columns: minmax(0,1fr); } }
+
+  .panel {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .panel > h2 {
+    margin: 0; padding: 9px 14px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: .08em; border-bottom: 1px solid var(--line-soft);
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  }
+  .panel > h2 .n { font-family: var(--f-mono); color: var(--ink-mute);
+                   font-weight: 400; font-variant-numeric: tabular-nums; }
+
+  /* --- 時間割グリッド --- */
+  .gridscroll { overflow-x: auto; }
+  /* 通常の列幅で収まらない画面用。件数だけの詰めたセルにする（クラスはJSが付ける） */
+  .grid.narrow .gh { font-size: 12.5px; letter-spacing: 0; padding: 4px 0 3px; }
+  .grid.narrow .gp { font-size: 10.5px; }
+  .grid.narrow .cell { padding: 3px 2px; min-height: 46px;
+                       align-items: center; justify-content: center; }
+  .grid.narrow .cell .cnt { font-size: 12px; }
+  .grid.narrow .cell.empty .cnt { font-size: 11px; }
+  /* 1〜2件しか入っていないコマは、狭い画面でも科目名まで出す */
+  .grid.narrow .cell.named { align-items: stretch; justify-content: flex-start; gap: 2px; }
+  .grid.narrow .cell.named .cnt { font-size: 10px; }
+  .grid.narrow .cell .nm {
+    font-size: 9.5px; line-height: 1.25; white-space: normal;
+    overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  }
+  /* 列数はJSが曜日の数で書き替える。min-width も一緒に決めるので固定値は置かない */
+  .grid { display: grid; grid-template-columns: 44px repeat(5, minmax(132px, 1fr)); }
+  .gh {
+    font-family: var(--f-display); font-weight: 500; font-size: 14px;
+    text-align: center; padding: 5px 0 4px; letter-spacing: .1em;
+    border-bottom: 1px solid var(--line); color: var(--ink-mute);
+  }
+  .gh.corner { border-right: 1px solid var(--line-soft); }
+  .gp {
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-faint);
+    display: flex; align-items: center; justify-content: center;
+    border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
+  }
+  .cell {
+    font: inherit; text-align: left; cursor: pointer; color: var(--ink);
+    background: var(--surface); border: 0;
+    border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
+    padding: 4px 7px; min-height: 42px;
+    display: flex; flex-direction: column; gap: 1px;
+    transition: background .12s;
+  }
+  .cell:hover:not(.empty) { background: var(--accent-soft); }
+  .cell.empty { cursor: default; background: var(--surface-2); }
+  .cell[aria-pressed="true"] {
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+  .cell .cnt {
+    font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+    color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: .02em;
+  }
+  .cell.empty .cnt { color: var(--ink-faint); }
+  .cell .nm {
+    font-size: 11px; line-height: 1.35; color: var(--ink-mute);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .cell .more { font-size: 10px; color: var(--ink-faint); }
+
+  /* --- 集中・その他 --- */
+  .tray { padding: 6px 14px; display: flex; align-items: center;
+          gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); }
+  .tray .t-lbl { font-size: 12.5px; color: var(--ink-mute); }
+  .tray button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--amber-soft); color: var(--amber);
+    border: 1px solid transparent; border-radius: 7px; padding: 4px 12px; font-weight: 600;
+  }
+  .tray button[aria-pressed="true"] { border-color: var(--amber); }
+  .tray button:disabled { opacity: .45; cursor: default; }
+  /* お気に入りは時間割の右端に置く。集中講義とは別の切り替え */
+  .tray .favbtn { margin-left: auto; background: var(--surface-2); color: var(--ink-mute); }
+  .tray .favbtn .star { color: var(--amber); }
+  .tray .favbtn[aria-pressed="true"] {
+    background: var(--amber-soft); color: var(--amber); border-color: var(--amber);
+  }
+
+  /* --- 結果一覧 --- */
+  /* 上の絞り込みバーがスティッキーなので、その高さを引かないと下端が画面外に出る */
+  .results { max-height: calc(100vh - var(--sticky, 104px) - 16px); overflow-y: auto;
+             position: sticky; top: calc(var(--sticky, 104px) + 8px); }
+  @media (max-width: 1100px) { .results { position: static; max-height: none; } }
+  .rlist { list-style: none; margin: 0; padding: 0; }
+  .rlist > li { border-bottom: 1px solid var(--line-soft); }
+  .rlist > li:last-child { border-bottom: 0; }
+  /* 科目名の行と★を横に並べる。ボタンは入れ子にできないので兄弟にする */
+  .rrow { display: flex; align-items: stretch; }
+  .rhead {
+    flex: 1 1 auto; min-width: 0; font: inherit; text-align: left; cursor: pointer;
+    color: var(--ink); background: none; border: 0; padding: 11px 6px 11px 16px; display: block;
+  }
+  .rhead:hover { background: var(--surface-2); }
+  .fav {
+    flex: 0 0 auto; width: 42px; font: inherit; font-size: 17px; line-height: 1;
+    cursor: pointer; background: none; border: 0; color: var(--line);
+    display: flex; align-items: flex-start; justify-content: center; padding: 11px 0 0;
+    transition: color .12s, transform .12s;
+  }
+  .fav:hover { color: var(--amber); transform: scale(1.15); }
+  .fav[aria-pressed="true"] { color: var(--amber); }
+  .rhead .rt { font-size: 13.5px; font-weight: 600; line-height: 1.45; }
+  .missing {
+    margin: 26px 0 0; padding: 12px 14px; border: 1px solid var(--line);
+    border-radius: 10px; background: var(--card); font-size: 13px;
+  }
+  .detail .apnote { display: block; color: var(--ink-mute); font-size: .92em;
+                    line-height: 1.6; margin-top: 2px; }
+  .rhead .tag.ap { background: var(--amber-soft); color: var(--amber); }
+  .detail .src { font-size: 11px; color: var(--ink-faint); margin-left: .5em; }
+  .missing > summary { cursor: pointer; font-weight: 600; }
+  .missing .note { margin: 10px 0; color: var(--ink-soft); line-height: 1.7; }
+  .missing h4 { margin: 12px 0 4px; font-size: 13px; }
+  .missing ul { margin: 0; padding-left: 1.2em; line-height: 1.9; }
+  .missing .room { color: var(--ink-faint); font-size: 12px; margin-left: .4em; }
+
+  .rhead .rm {
+    font-size: 11.5px; color: var(--ink-mute); margin-top: 3px;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
+  .rhead .rm .code { font-family: var(--f-mono); color: var(--ink-faint); }
+  .tag {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
+    padding: 1px 7px; border-radius: 4px; white-space: nowrap;
+  }
+  .tag.fac { background: var(--accent-soft); color: var(--accent); }
+  /* 学部ごとの色分け。既定は切ってあり、ボタンで入れたときだけ効く */
+  .colorize li.fc .rrow { box-shadow: inset 3px 0 0 hsl(var(--fc-h) 55% 46%); }
+  .colorize li.fc .tag.fac {
+    background: hsl(var(--fc-h) 60% 46% / .16); color: hsl(var(--fc-h) 58% var(--fc-l));
+  }
+  .tag.iv  { background: var(--amber-soft); color: var(--amber); }
+  .tag.ol  { background: var(--teal-soft); color: var(--teal); }
+  /* 詳細の文字サイズ。子要素は em なので、ここを変えると中身ごと拡大する */
+  .detail { padding: 2px 16px 16px; font-size: 12.5px; color: var(--ink-mute); }
+  .results.big .detail { font-size: 16px; }
+  .results.big .detail .dl { gap: 5px 14px; }
+  .zoombtn {
+    font: inherit; font-size: 11px; cursor: pointer; letter-spacing: .04em;
+    background: var(--surface-2); color: var(--ink-mute);
+    border: 1px solid var(--line); border-radius: 6px; padding: 2px 9px; font-weight: 600;
+  }
+  .zoombtn:hover { color: var(--ink); }
+  .zoombtn[aria-pressed="true"] {
+    background: var(--accent-soft); color: var(--accent); border-color: var(--accent);
+  }
+  .detail p { margin: 0 0 10px; line-height: 1.75; }
+  .dl { display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; margin: 0 0 10px; }
+  .dl dt { color: var(--ink-faint); font-size: .88em; letter-spacing: .04em; }
+  .dl dd { margin: 0; color: var(--ink); }
+  .dl dd.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+  .detail h4 {
+    margin: 16px 0 6px; font-size: .88em; font-weight: 700; letter-spacing: .12em;
+    color: var(--ink-faint); text-transform: uppercase;
+  }
+  .detail .body { color: var(--ink); line-height: 1.8; white-space: pre-wrap; }
+  /* 授業計画。回・テーマ・内容の3列 */
+  .plan { display: grid; grid-template-columns: 2.2em 1fr; gap: 2px 10px;
+          margin: 0; font-size: .96em; }
+  .plan dt {
+    font-family: var(--f-mono); color: var(--ink-faint); text-align: right;
+    font-variant-numeric: tabular-nums; padding-top: 1px;
+  }
+  .plan dd { margin: 0; color: var(--ink); line-height: 1.6; }
+  .plan dd small { display: block; color: var(--ink-mute); }
+  .plan-more {
+    font: inherit; font-size: .92em; cursor: pointer; margin-top: 6px;
+    background: none; border: 0; color: var(--accent); padding: 2px 0;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  /* 成績評価のマトリクス。方法 × 割合 */
+  .grade { width: 100%; border-collapse: collapse; font-size: .96em; }
+  .grade th, .grade td {
+    text-align: left; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--line-soft);
+  }
+  .grade th {
+    font-size: .84em; letter-spacing: .1em; color: var(--ink-faint);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .grade td.m { color: var(--ink); width: 8.5em; }
+  .grade td.p {
+    font-family: var(--f-mono); font-variant-numeric: tabular-nums;
+    text-align: right; width: 4.5em; color: var(--ink);
+  }
+  .grade td.p.none { color: var(--ink-faint); }
+  /* 割合の帯。ひと目で配分が分かるように */
+  .grade td.bar { width: 40%; padding-right: 0; }
+  .grade .track { display: block; height: 6px; border-radius: 3px; background: var(--line-soft); }
+  .grade .fill { display: block; height: 6px; border-radius: 3px; background: var(--accent); }
+  .grade tfoot td { border-bottom: 0; padding-top: 6px; color: var(--ink-mute); }
+  .grade tfoot td.p { color: var(--ink); font-weight: 600; }
+  .grade tfoot td.warn { color: var(--amber); }
+  .notes { margin: 8px 0 0; padding-left: 1.1em; font-size: .96em; line-height: 1.7; }
+  .notes li { margin-bottom: 3px; }
+  .notes b { color: var(--ink); font-weight: 600; }
+  .unused { margin: 6px 0 0; font-size: .92em; color: var(--ink-faint); }
+  .detail a.src {
+    display: inline-block; color: var(--accent); font-weight: 600; font-size: .96em;
+    text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px;
+  }
+  .empty-note { padding: 26px 16px; color: var(--ink-faint); font-size: 13px; text-align: center; }
+  .cap-note { padding: 10px 16px; color: var(--ink-faint); font-size: 11.5px;
+              border-top: 1px solid var(--line-soft); }
+
+  /* --- スマホ（〜560px）--- 時間割を横スクロールなしで画面に収める --- */
+  @media (max-width: 560px) {
+    .wrap { padding: 0 10px 32px; }
+    .head { padding: 12px 0 6px; }
+    .head h1 { font-size: 19px; }
+    .head .sub { font-size: 11.5px; }
+
+    .panel > h2 { padding: 8px 12px; font-size: 12px; }
+    /* ラベルは畳んでボタンだけ並べる。2段になって高さを食っていた */
+    .tray { padding: 7px 10px; gap: 8px; }
+    .tray .t-lbl { display: none; }
+    .tray button { font-size: 12.5px; padding: 7px 12px; }
+    .tray .favbtn { margin-left: auto; }
+
+    /* 既定で開いたままにするので、縦に食う量を減らす */
+    .controls { padding: 8px 10px; gap: 6px 10px; }
+    .controls .field > .lbl { font-size: 9px; letter-spacing: .08em; }
+    .controls .chip { padding: 4px 10px; min-height: 30px; font-size: 12.5px; }
+    .controls .field select { min-height: 34px; }
+    .controls .field input[type=search] { min-height: 36px; }
+    /* セレクトは2つずつ横に並べる。3つ縦積みだと画面の半分が絞り込みになる */
+    .controls .field.sel { flex: 1 1 calc(50% - 5px); min-width: 0; }
+    .controls .field.sel select { max-width: none; width: 100%; }
+    .controls .field.grow { flex: 1 1 100%; }
+    .controls .reset { padding: 4px 2px; }
+
+    .rhead { padding: 12px 4px 12px 12px; }
+    .rhead .rt { font-size: 14px; }
+    .fav { width: 46px; font-size: 19px; padding: 12px 0 0; }
+    .detail { padding: 2px 12px 16px; }
+    .dl { grid-template-columns: 5.5em 1fr; gap: 4px 10px; }
+    .morebtn { padding: 13px 12px; }
+    .foot { font-size: 11px; }
+  }
+
+  /* 狭い画面では絞り込みバーが画面の半分近くを占めるので、追従をやめて折り畳む */
+  @media (max-width: 767px) {
+    .controls { position: static; }
+    .controls[data-collapsed="true"] .field,
+    .controls[data-collapsed="true"] .reset { display: none; }
+    .controls[data-collapsed="true"] .field.always,
+    .controls[data-collapsed="true"] .filtertoggle { display: flex; }
+  }
+  .filtertoggle {
+    display: none; font: inherit; font-size: 12.5px; cursor: pointer;
+    background: var(--surface-2); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 7px; padding: 6px 12px; align-items: center; gap: 6px; align-self: flex-end;
+  }
+  @media (max-width: 767px) { .filtertoggle { display: inline-flex; } }
+  .filtertoggle .cnt { font-family: var(--f-mono); font-size: 11px; color: var(--ink-mute); }
+
+  .morebtn {
+    font: inherit; font-size: 12.5px; cursor: pointer; width: 100%;
+    background: var(--surface-2); color: var(--accent); border: 0;
+    border-top: 1px solid var(--line-soft); padding: 10px 16px; font-weight: 600;
+  }
+  .morebtn:hover { background: var(--accent-soft); }
+
+  /* ===== 時間割ページ（お気に入りを組んだ画面）===== */
+  .ttapp { display: none; }
+  body.tt .ttapp { display: block; }
+  body.tt .wrap > .head,
+  body.tt .wrap > .controls,
+  body.tt .wrap > .board,
+  body.tt .wrap > .foot { display: none; }
+
+  .tthead { display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            padding: 14px 0 12px; }
+  .tthead h1 { font-family: var(--f-display); font-size: 19px; margin: 0; font-weight: 700; }
+  .tthead .spacer { flex: 1 1 auto; }
+  .ttstat { font-size: 12px; color: var(--ink-mute); }
+  .ttstat b { font-family: var(--f-mono); color: var(--ink); font-size: 14px; }
+  .ttback {
+    font: inherit; font-size: 12.5px; cursor: pointer; padding: 7px 13px;
+    background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 8px; font-weight: 600;
+  }
+  .ttback:hover { background: var(--surface-2); }
+
+  .ttgrid { display: grid; gap: 4px; background: none; }
+  .ttgrid .hd { font-family: var(--f-display); font-size: 13px; text-align: center;
+                color: var(--ink-mute); padding: 2px 0 4px; }
+  .ttgrid .pn { font-family: var(--f-mono); font-size: 11px; color: var(--ink-faint);
+                display: flex; align-items: center; justify-content: center; }
+  .ttcell {
+    font: inherit; text-align: left; cursor: pointer; min-height: 74px;
+    border-radius: 10px; border: 1px solid var(--line-soft);
+    background: var(--surface-2); color: var(--ink-faint);
+    padding: 7px 8px; display: flex; flex-direction: column; gap: 3px;
+    transition: background .12s, border-color .12s;
+  }
+  .ttcell:hover { border-color: var(--line); }
+  .ttcell.filled {
+    background: hsl(var(--tt-h, 210) 60% 46% / .14);
+    border-color: hsl(var(--tt-h, 210) 55% 46% / .5);
+    color: var(--ink);
+  }
+  .ttcell .nm2 { font-size: 12px; font-weight: 700; line-height: 1.3;
+                 overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;
+                 -webkit-line-clamp: 3; }
+  .ttcell .sub2 { font-size: 10.5px; color: var(--ink-mute); line-height: 1.3; }
+  .ttcell .plus { font-size: 17px; color: var(--ink-faint); margin: auto; font-weight: 400; }
+  .ttcell.dup { outline: 2px solid var(--amber); }
+
+  .ttnote { margin-top: 14px; font-size: 11.5px; color: var(--ink-faint); line-height: 1.9; }
+  .ttempty { padding: 34px 16px; text-align: center; color: var(--ink-faint); font-size: 13px; }
+
+  /* 下から出るシート。コマの中身と追加の両方に使う */
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: var(--surface); border-top: 1px solid var(--line);
+    box-shadow: 0 -8px 30px rgba(0,0,0,.18);
+    border-radius: 14px 14px 0 0; padding: 14px 16px 18px;
+    max-height: 76vh; overflow-y: auto;
+  }
+  .sheet[hidden] { display: none; }
+  .sheet .sh {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;
+  }
+  .sheet .sh h3 { margin: 0; font-size: 15px; font-weight: 700; }
+  .sheet .sh .when { font-size: 12px; color: var(--ink-mute); font-family: var(--f-mono); }
+  .sheet .sh .x {
+    margin-left: auto; font: inherit; font-size: 13px; cursor: pointer;
+    background: none; border: 0; color: var(--ink-mute); padding: 2px 6px;
+  }
+  .sheet .kv { display: grid; grid-template-columns: 5em 1fr; gap: 4px 12px;
+               font-size: 13px; margin-bottom: 12px; }
+  .sheet .kv dt { color: var(--ink-faint); font-size: 11.5px; }
+  .sheet .kv dd { margin: 0; }
+  .sheet .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sheet .acts a, .sheet .acts button {
+    font: inherit; font-size: 12.5px; cursor: pointer; padding: 8px 14px;
+    border-radius: 8px; border: 1px solid var(--line); background: var(--surface);
+    color: var(--ink); text-decoration: none; font-weight: 600;
+  }
+  .sheet .acts .danger { color: var(--shu, #b03030); border-color: currentColor; }
+  .sheet .addlist { list-style: none; margin: 10px 0 0; padding: 0;
+                    display: flex; flex-direction: column; gap: 1px; }
+  .sheet .addlist li button {
+    width: 100%; text-align: left; font: inherit; cursor: pointer;
+    background: none; border: 0; border-bottom: 1px solid var(--line-soft);
+    padding: 10px 4px; color: var(--ink);
+  }
+  .sheet .addlist li button:hover { background: var(--surface-2); }
+  .sheet .addlist .t2 { font-size: 13px; font-weight: 600; display: block; }
+  .sheet .addlist .m2 { font-size: 11px; color: var(--ink-mute); }
+  .sheet input[type=search] {
+    width: 100%; font: inherit; font-size: 13.5px; padding: 8px 10px;
+    border: 1px solid var(--line); border-radius: 8px;
+    background: var(--surface); color: var(--ink);
+  }
+  .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.28); z-index: 49; }
+  .backdrop[hidden] { display: none; }
+
+  .foot { margin-top: 26px; color: var(--ink-faint); font-size: 11.5px; line-height: 1.9; }
+  .foot code { font-family: var(--f-mono); font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="head">
+    <div>
+      <h1>九大 授業さがし</h1>
+      <div class="sub">
+        <span id="scope"></span> <b id="total">0</b> 件 ／
+        サイト生成日 <b id="asof">–</b>
+      </div>
+    </div>
+  </header>
+
+  <section class="controls" id="controls" data-collapsed="false" aria-label="絞り込み">
+    <div class="field">
+      <span class="lbl">開講期</span>
+      <div class="chips" id="qchips" role="group" aria-label="開講期"></div>
+    </div>
+    <div class="field sel">
+      <span class="lbl">学部</span>
+      <select id="fac" aria-label="学部"></select>
+    </div>
+    <div class="field sel">
+      <span class="lbl">科目区分</span>
+      <select id="cat" aria-label="科目区分"></select>
+    </div>
+    <div class="field">
+      <span class="lbl">学年</span>
+      <div class="chips" id="gchips" role="group" aria-label="学年"></div>
+    </div>
+    <div class="field sel">
+      <span class="lbl">キャンパス</span>
+      <select id="camp" aria-label="キャンパス"></select>
+    </div>
+    <div class="field grow always">
+      <span class="lbl">科目名・教員・キーワード</span>
+      <input type="search" id="q" placeholder="例: 統計 / 田中" autocomplete="off">
+    </div>
+    <button class="filtertoggle" id="filtertoggle" type="button" aria-expanded="true"
+            aria-controls="controls"><span id="filtertogglelabel">絞り込みを閉じる</span>
+      <span class="cnt" id="filtercnt"></span></button>
+    <button class="chip" id="colorbtn" type="button" aria-pressed="false">学部を色分け</button>
+    <button class="reset" id="reset" type="button">絞り込みを解除</button>
+  </section>
+
+  <div class="board">
+    <div class="panel">
+      <h2>時間割 <span class="n" id="gridnote"></span></h2>
+      <div class="gridscroll"><div class="grid" id="grid"></div></div>
+      <div class="tray">
+        <span class="t-lbl">曜日・時限が決まっていない科目</span>
+        <button type="button" id="traybtn" aria-pressed="false">集中講義ほか <span id="traycnt">0</span> 件</button>
+        <button type="button" class="favbtn" id="favbtn" aria-pressed="false">
+          <span class="star">★</span> お気に入り <span id="favcnt">0</span> 件</button>
+        <button type="button" class="favbtn" id="tobtn">お気に入りを時間割化する</button>
+      </div>
+    </div>
+
+    <div class="panel results">
+      <h2 id="rtitle">科目 <span class="n" id="rcount"></span>
+        <button type="button" class="zoombtn" id="zoom" aria-pressed="false"
+                title="詳細の文字を大きくする">文字を大きく</button></h2>
+      <ul class="rlist" id="rlist"></ul>
+      <div class="empty-note" id="rempty" hidden>条件に合う科目がありません。</div>
+      <button class="morebtn" id="rmore" type="button" hidden></button>
+      <div class="cap-note" id="rcap" hidden></div>
+    </div>
+  </div>
+
+  <section class="ttapp" id="ttapp" aria-label="わたしの時間割">
+    <div class="tthead">
+      <h1>わたしの時間割</h1>
+      <span class="ttstat"><b id="ttcount">0</b> 科目 ／ 計 <b id="ttcredits">0</b> 単位</span>
+      <span class="spacer"></span>
+      <button type="button" class="ttback" id="ttback">授業さがしに戻る</button>
+    </div>
+    <div class="ttgrid" id="ttgrid"></div>
+    <div class="ttempty" id="ttempty" hidden>
+      まだ科目がありません。空いているコマを押すと追加できます。
+    </div>
+    <p class="ttnote">
+      コマを押すと教員・教室・シラバスへのリンクが出ます。空いているコマを押すと、
+      そのコマに入る科目から選んで追加できます。★のお気に入りと中身は同じです。<br>
+      同じコマに2つ以上入っている場合は枠を橙色にしています。開講期が違えば重なりません。
+    </p>
+  </section>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+  <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true"></div>
+
+  <details class="missing" id="missingBox" hidden>
+    <summary>時間割には載っているのに、シラバスが見つからない科目 <span id="missingN"></span></summary>
+    <p class="note">
+      各学部が公開している時間割表には出てくるのに、Campusmate のシラバス一覧に無い科目です。
+      概要や成績評価は取れないので検索には出せませんが、開講されている可能性が高いので名前だけ載せます。
+      履修の前に、必ず学部の時間割表と学務で確認してください。
+    </p>
+    <div id="missingList"></div>
+  </details>
+
+  <footer class="foot">
+    出典: 九州大学シラバス（Campusmate）。科目名をクリックすると概要が開き、公式のシラバスページへ移動できます。<br>
+    開講期は複数選べます。何も選ばなければ全部表示。<b>「後期」は後期通しの科目</b>で、秋・冬の両方にわたって開講されます。
+    秋学期のコマに何があるかを見るなら <b>後期＋秋学期</b> を選んでください。<br>
+    絞り込んだ状態のURLをそのまま送れば、相手も同じ条件で開けます。<br>
+    一覧の右端の <b>★</b> を押すとお気に入りに入り、「お気に入り」を押すとその科目だけの時間割になります。
+    お気に入りはこの端末のブラウザに保存されます（他の端末とは共有されません）。<br>
+    通年や半期またぎの科目は、開講期を選ぶとその学期のコマだけを時間割に出します。学期がコマごとに変わる科目は一覧に学期つきで表示します。<br>
+    <b>集中講義の実施日・教室は公式資料で確認してください。</b>曜日・時限が未確定の科目は「集中講義ほか」にまとめてあります。
+    成績評価の割合は自動抽出です。出席条件など配点でない割合は数値にせず、原文を補足として出しています。
+  </footer>
+</div>
+
+<script type="application/json" id="data">/*__DATA__*/</script>
+<script>
+(function () {
+  "use strict";
+  var DATA = JSON.parse(document.getElementById("data").textContent);
+  var COURSES = DATA.courses, META = DATA.meta;
+  var DAYS = ["月", "火", "水", "木", "金"];
+  ["土", "日"].forEach(function (day) {
+    if (COURSES.some(function (c) { return c.sl.some(function (s) { return s[1] === day; }); })) DAYS.push(day);
+  });
+  var LIST_CAP = 300;
+  var NAMES_MAX = 4;   // セルに科目名を並べる上限
+  var NARROW_NAMES = 2; // 狭い画面で科目名まで出す上限
+  // 曜日時限行が持つ学期 -> 表示グループ。通年科目は前期コマと後期コマを別々に扱う
+  var TGMAP = META.term_group_map || {};
+  function slotGroup(c, s) { return (s[0] && TGMAP[s[0]]) || c.tg; }
+  // その科目が関わる開講期グループ。学期欄と曜日時限行の両方を見る
+  function courseGroups(c) {
+    if (c._g === undefined) {
+      var seen = {}, out = [c.tg];
+      seen[c.tg] = 1;
+      c.sl.forEach(function (s) {
+        var g = slotGroup(c, s);
+        if (!seen[g]) { seen[g] = 1; out.push(g); }
+      });
+      c._g = out;
+    }
+    return c._g;
+  }
+
+  // terms は開講期チップの選択集合。空なら全部（後期・秋・冬・通年ほか）を出す
+  var state = { terms: {}, fac: "", cat: "", grade: 0, camp: "", text: "", words: [],
+                cell: null, tray: false, fav: false, cap: LIST_CAP, view: "search" };
+  // 表示順はチップの並び（後期・秋学期・冬学期・通年ほか）に揃える
+  function termsOn() {
+    return META.term_groups.filter(function (g) { return state.terms[g]; });
+  }
+
+  var el = function (id) { return document.getElementById(id); };
+
+  /* ---- 表示の好み。URLではなく端末に残す（見ている人の設定で、共有するものではない） ---- */
+  var PREF_KEY = "kyudai-pref-" + META.year;
+  var pref = { zoom: false, color: false };
+  try {
+    var savedPref = localStorage.getItem(PREF_KEY);
+    if (savedPref) {
+      var v = JSON.parse(savedPref);
+      pref.zoom = !!v.zoom;
+      pref.color = !!v.color;
+    }
+  } catch (e) { /* 読めない環境では既定のまま */ }
+  function savePref() {
+    try { localStorage.setItem(PREF_KEY, JSON.stringify(pref)); } catch (e) {}
+  }
+  function applyPref() {
+    document.querySelector(".results").classList.toggle("big", pref.zoom);
+    document.querySelector(".wrap").classList.toggle("colorize", pref.color);
+    el("zoom").setAttribute("aria-pressed", String(pref.zoom));
+    el("zoom").textContent = pref.zoom ? "文字を戻す" : "文字を大きく";
+    el("colorbtn").setAttribute("aria-pressed", String(pref.color));
+  }
+  el("zoom").addEventListener("click", function () {
+    pref.zoom = !pref.zoom; savePref(); applyPref();
+    syncHash();
+  });
+  el("colorbtn").addEventListener("click", function () {
+    pref.color = !pref.color; savePref(); applyPref();
+  });
+
+  // 学部ごとの色相。黄金角でずらすと、隣り合う学部の色が似ない
+  var FAC_HUE = Object.create(null);
+  // 起点を青に置く。先頭が赤だと警告の色に見える
+  META.faculties.forEach(function (f, i) { FAC_HUE[f] = Math.round((210 + i * 137.508) % 360); });
+
+  /* ---- 絞り込みの状態をURLに残す ----
+     「この条件で見て」とリンクで渡せるようにする。値は既定と違うものだけ書く */
+  var pendingPush = false;
+  function stateToHash() {
+    var p = [], t = termsOn();
+    if (t.length) { p.push("t=" + encodeURIComponent(t.join(","))); }
+    if (state.fac) { p.push("f=" + encodeURIComponent(state.fac)); }
+    if (state.cat) { p.push("c=" + encodeURIComponent(state.cat)); }
+    if (state.grade) { p.push("g=" + state.grade); }
+    if (state.camp) { p.push("p=" + encodeURIComponent(state.camp)); }
+    if (state.text) { p.push("q=" + encodeURIComponent(state.text)); }
+    if (state.view === "tt") { p.push("view=tt"); }
+    if (pref.zoom) { p.push("z=1"); }
+    if (state.fav) { p.push("v=fav"); }
+    else if (state.tray) { p.push("v=tray"); }
+    else if (state.cell) { p.push("k=" + encodeURIComponent(state.cell)); }
+    return p.join("&");
+  }
+  function syncHash() {
+    var h = stateToHash(), push = pendingPush;
+    pendingPush = false;
+    if (location.hash.replace(/^#/, "") === h) { return; }
+    var url = location.pathname + location.search + (h ? "#" + h : "");
+    try {
+      // コマやお気に入りの切り替えだけ履歴に積む。文字入力で履歴が埋まらないように
+      if (push) { history.pushState(null, "", url); }
+      else { history.replaceState(null, "", url); }
+    } catch (e) { /* file:// などで使えないことがある。URLは諦めて動作は続ける */ }
+  }
+  function applyHash() {
+    var q = {};
+    location.hash.replace(/^#/, "").split("&").forEach(function (kv) {
+      var i = kv.indexOf("=");
+      if (i > 0) { q[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, " ")); }
+    });
+    state.terms = {};
+    (q.t ? q.t.split(",") : []).forEach(function (g) {
+      if (META.term_groups.indexOf(g) >= 0) { state.terms[g] = 1; }
+    });
+    // 知らない値が入っていても壊れないよう、選択肢にあるものだけ採る
+    state.fac = META.faculties.indexOf(q.f) >= 0 ? q.f : "";
+    state.cat = q.c || "";
+    state.grade = /^[1-6]$/.test(q.g || "") ? +q.g : 0;
+    state.camp = META.campuses.indexOf(q.p) >= 0 ? q.p : "";
+    state.text = q.q || "";
+    state.words = state.text ? norm(state.text).split(/\s+/).filter(Boolean) : [];
+    state.fav = q.v === "fav";
+    state.tray = q.v === "tray";
+    state.cell = (!state.fav && !state.tray && /^[^\d]\d$/.test(q.k || "")) ? q.k : null;
+    state.cap = LIST_CAP;
+    state.view = q.view === "tt" ? "tt" : "search";
+    document.body.classList.toggle("tt", state.view === "tt");
+    // 文字の大きさはURLでも渡せる。指定があればそれを優先し、端末にも覚えさせる
+    if (q.z === "1" || q.z === "0") {
+      var z = q.z === "1";
+      if (z !== pref.zoom) { pref.zoom = z; savePref(); applyPref(); }
+    }
+    el("fac").value = state.fac;
+    el("camp").value = state.camp;
+    el("q").value = state.text;
+  }
+  window.addEventListener("popstate", function () {
+    applyHash();
+    closeSheet();
+    render();
+    if (state.view === "tt") { drawTT(); }
+    syncSticky();
+  });
+
+  /* ---- お気に入り ----
+     この端末のブラウザにだけ残す。単体のHTMLとして配る前提なので、
+     サーバも通信も使わない。読み書きは失敗しうるので必ず握りつぶす */
+  var FAV_KEY = "kyudai-fav-" + META.year;
+  var favs = Object.create(null);
+  try {
+    var savedFavs = localStorage.getItem(FAV_KEY);
+    if (savedFavs) {
+      JSON.parse(savedFavs).forEach(function (code) { favs[code] = 1; });
+    }
+  } catch (e) { /* プライベートウィンドウなどでは読めない。空で始める */ }
+
+  function favCodes() { return Object.keys(favs); }
+  function isFav(code) { return !!favs[code]; }
+  function toggleFav(code) {
+    if (favs[code]) { delete favs[code]; } else { favs[code] = 1; }
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favCodes())); } catch (e) {}
+  }
+  function syncFavUI() {
+    var n = favCodes().length;
+    el("favcnt").textContent = n.toLocaleString();
+    el("favbtn").disabled = n === 0 && !state.fav;
+    el("favbtn").setAttribute("aria-pressed", String(state.fav));
+  }
+  el("scope").textContent = META.year + "年度 " + (META.undergrad_only ? "学部科目" : "全科目（大学院・判定不能を含む）");
+  document.title = "九大 " + META.year + "年度 授業さがし";
+  document.getElementById("total").textContent = META.n.toLocaleString();
+
+  // 時間割にあってシラバスが無い科目。学部ごとにまとめて名前だけ出す
+  (function () {
+    var ms = META.missing || [];
+    if (!ms.length) { return; }
+    var box = el("missingBox"), byFac = {};
+    ms.forEach(function (m) { (byFac[m.faculty] = byFac[m.faculty] || []).push(m); });
+    var html = "";
+    Object.keys(byFac).sort().forEach(function (f) {
+      html += "<h4>" + esc(f) + "（" + byFac[f].length + "件）</h4><ul>";
+      byFac[f].forEach(function (m) {
+        html += "<li>" + esc(m.title || m.code || "") +
+          (m.room ? '<span class="room">' + esc(m.room) + "</span>" : "") + "</li>";
+      });
+      html += "</ul>";
+    });
+    var urls = {};
+    ms.forEach(function (m) { if (m.source_url) { urls[m.source_url] = 1; } });
+    html += '<p class="note">出典: ' + Object.keys(urls).map(function (u) {
+      return '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(u) + "</a>";
+    }).join("　") + "</p>";
+    el("missingList").innerHTML = html;
+    el("missingN").textContent = "(" + ms.length + "件)";
+    box.hidden = false;
+  }());
+  document.getElementById("asof").textContent = (META.generated_at || "").slice(0, 10);
+
+  /* ---- 絞り込みUIの組み立て ---- */
+  function chipGroup(host, items, isOn, toggle) {
+    host.innerHTML = "";
+    items.forEach(function (it) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.textContent = it.label;
+      b.setAttribute("aria-pressed", String(isOn(it.value)));
+      b.addEventListener("click", function () { toggle(it.value); render(); });
+      host.appendChild(b);
+    });
+  }
+  function selectFrom(host, blank, values) {
+    host.innerHTML = "";
+    var o0 = document.createElement("option");
+    o0.value = ""; o0.textContent = blank; host.appendChild(o0);
+    values.forEach(function (v) {
+      var o = document.createElement("option");
+      o.value = v; o.textContent = v; host.appendChild(o);
+    });
+  }
+  selectFrom(el("fac"), "すべての学部", META.faculties);
+  selectFrom(el("camp"), "すべてのキャンパス", META.campuses);
+  el("fac").addEventListener("change", function () {
+    state.fac = this.value; state.cat = ""; state.cap = LIST_CAP; render();
+  });
+  el("cat").addEventListener("change", function () {
+    state.cat = this.value; state.cap = LIST_CAP; render();
+  });
+
+  // 科目区分は学部ごとに顔ぶれが違う（基幹教育なら文系／理系ディシプリン科目など）。
+  // 選ばれている学部の中に実在する区分だけを、件数つきで出す
+  function drawCategories() {
+    var counts = Object.create(null);
+    COURSES.forEach(function (c) {
+      if (!c.cat || !passesExceptCategory(c)) return;
+      counts[c.cat] = (counts[c.cat] || 0) + 1;
+    });
+    // 件数の多い順。ただし「その他」は寄せ集めなので末尾に固定する
+    var other = META.category_other;
+    var names = Object.keys(counts).sort(function (a, b) {
+      if (a === other) return 1;
+      if (b === other) return -1;
+      return counts[b] - counts[a] || a.localeCompare(b, "ja");
+    });
+    if (state.cat && names.indexOf(state.cat) < 0) state.cat = "";
+    var sel = el("cat");
+    sel.innerHTML = "";
+    var o0 = document.createElement("option");
+    o0.value = ""; o0.textContent = "すべての区分"; sel.appendChild(o0);
+    names.forEach(function (n) {
+      var o = document.createElement("option");
+      o.value = n; o.textContent = n + "（" + counts[n] + "）";
+      sel.appendChild(o);
+    });
+    sel.value = state.cat;
+  }
+  el("camp").addEventListener("change", function () {
+    state.camp = this.value; state.cap = LIST_CAP; render();
+  });
+
+  // 一覧は300件ずつ。押すたびに続きを出す
+  el("rmore").addEventListener("click", function () {
+    state.cap += LIST_CAP;
+    render();
+  });
+
+  // 狭い画面では絞り込みを畳んでおく。時間割が最初の画面に入るようにする
+  el("filtertoggle").addEventListener("click", function () {
+    var box = el("controls");
+    var open = box.getAttribute("data-collapsed") === "true";
+    box.setAttribute("data-collapsed", open ? "false" : "true");
+    this.setAttribute("aria-expanded", String(open));
+    el("filtertogglelabel").textContent = open ? "絞り込みを閉じる" : "絞り込み";
+    syncSticky();
+  });
+  function activeCount() {
+    var n = termsOn().length + (state.fac ? 1 : 0) + (state.cat ? 1 : 0)
+          + (state.grade ? 1 : 0) + (state.camp ? 1 : 0);
+    return n;
+  }
+
+  var timer = null;
+  el("q").addEventListener("input", function () {
+    var v = this.value;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      state.text = v.trim();
+      // 空白区切りは AND。「統計 力学」で両方を含む科目が出る
+      state.words = norm(state.text).split(/\s+/).filter(Boolean);
+      state.cap = LIST_CAP;
+      render();
+    }, 140);
+  });
+  el("reset").addEventListener("click", function () {
+    clearTimeout(timer);
+    state = { terms: {}, fac: "", cat: "", grade: 0, camp: "", text: "", words: [],
+              cell: null, tray: false, fav: false, cap: LIST_CAP, view: state.view };
+    el("fac").value = ""; el("camp").value = ""; el("q").value = "";
+    openCodes = Object.create(null);
+    render();
+    syncSticky();
+  });
+  el("traybtn").addEventListener("click", function () {
+    state.tray = !state.tray; state.cell = null; state.fav = false;
+    state.cap = LIST_CAP; pendingPush = true; render();
+  });
+  // お気に入りだけの時間割に切り替える。絞り込みは当てず、登録した科目をそのまま出す
+  el("favbtn").addEventListener("click", function () {
+    state.fav = !state.fav; state.tray = false; state.cell = null;
+    state.cap = LIST_CAP; pendingPush = true; render();
+  });
+
+  /* ---- 絞り込み本体 ---- */
+  // 全角英数と半角カナを寄せる。教員名が半角カナで入っている科目が29件あり、
+  // 正規化しないと「スルチョードリ」で0件になる
+  function norm(s) {
+    s = String(s == null ? "" : s);
+    if (s.normalize) { s = s.normalize("NFKC"); }
+    // 長音符とダッシュ類も1つに寄せる（U+30FC と U+2010〜U+2015）
+    return s.replace(/[ー‐-―]/g, "-").toLowerCase();
+  }
+  function haystack(c) {
+    if (c._h === undefined) {
+      c._h = norm(c.t + " " + c.s + " " + c.i.join(" ") + " " + c.kw + " " + c.c + " " + c.n);
+    }
+    return c._h;
+  }
+  function passesTerm(c) {
+    var on = termsOn();
+    if (!on.length) return true;
+    return courseGroups(c).some(function (g) { return state.terms[g]; });
+  }
+  function passesText(c) {
+    if (!state.words.length) return true;
+    var h = haystack(c);
+    return state.words.every(function (w) { return h.indexOf(w) >= 0; });
+  }
+  function passes(c) {
+    if (state.cat && c.cat !== state.cat) return false;
+    return passesExceptCategory(c);
+  }
+  // 科目区分以外の条件を当てた集合。区分の選択肢と件数をここから作るので、
+  // 学年やキーワードで絞ったときも表示される件数が実際と合う
+  function passesExceptCategory(c) {
+    if (state.fac && c.f !== state.fac) return false;
+    if (state.grade && c.g.indexOf(state.grade) < 0) return false;
+    if (state.camp && c.cp !== state.camp) return false;
+    if (!passesTerm(c)) return false;
+    if (!passesText(c)) return false;
+    return true;
+  }
+
+  /* ---- 描画 ---- */
+  function render() {
+    drawChips();
+    drawCategories();
+    var na = activeCount();
+    el("filtercnt").textContent = na ? na + "件の条件" : "";
+    // お気に入り表示のときは絞り込みを当てない。登録した科目がそのまま時間割になる
+    var pool = state.fav
+      ? COURSES.filter(function (c) { return isFav(c.c); })
+      : COURSES.filter(passes);
+
+    // セル -> 科目。1科目が2限連続なら両方に入る
+    var buckets = {}, tray = [], maxP = 5;
+    var onTerms = state.fav ? [] : termsOn();
+    pool.forEach(function (c) {
+      var valid = c.sl.filter(function (s) {
+        return DAYS.indexOf(s[1]) >= 0 && /^[1-9]$/.test(s[2]);
+      });
+      // 開講期を選んでいるなら、その学期のコマだけを置く。通年科目の前期コマが
+      // 後期の時間割に居座らなくなる。1つも残らないときは絞らず全部出す
+      var ss = valid;
+      if (onTerms.length) {
+        var keep = valid.filter(function (s) { return state.terms[slotGroup(c, s)]; });
+        if (keep.length) { ss = keep; }
+      }
+      var placed = false, seen = {};
+      ss.forEach(function (s) {
+        var d = s[1], p = s[2];
+        var k = d + p;
+        placed = true;
+        // 「秋学期 月2」「冬学期 月2」の2コマを持つ科目は同じセルに来る。1件として数える
+        if (seen[k]) return;
+        seen[k] = 1;
+        (buckets[k] || (buckets[k] = [])).push(c);
+        if (+p > maxP) maxP = +p;
+      });
+      if (!placed) tray.push(c);
+    });
+
+    drawGrid(buckets, maxP);
+    el("traycnt").textContent = tray.length.toLocaleString();
+    el("traybtn").disabled = tray.length === 0;
+    el("traybtn").setAttribute("aria-pressed", String(state.tray));
+    var on = termsOn();
+    el("gridnote").textContent = state.fav
+      ? "★ お気に入り " + pool.length.toLocaleString() + " 件の時間割（絞り込みは当てていません）"
+      : pool.length.toLocaleString() + " 件が該当 ／ "
+        + (on.length ? on.join("・") : "開講期すべて") + "を表示";
+    syncFavUI();
+
+    var shown, title;
+    if (state.tray) { shown = tray; title = "集中講義ほか"; }
+    else if (state.cell) {
+      shown = buckets[state.cell] || [];
+      title = state.cell[0] + "曜 " + state.cell.slice(1) + "限";
+    } else if (state.fav) { shown = pool; title = "★ お気に入り"; }
+    else { shown = pool; title = "該当する科目"; }
+    drawList(shown, title);
+    syncHash();
+  }
+
+  // 科目名まで出すには曜日1列あたり最低これだけ要る
+  var COL_MIN = 112, PERIOD_COL = 44, PERIOD_COL_NARROW = 22;
+
+  function gridAvail() {
+    var sc = document.querySelector(".gridscroll");
+    var w = sc ? sc.clientWidth : 0;
+    return w > 0 ? w : Math.max(window.innerWidth - 60, 240);
+  }
+  // 実際に使える幅で判断する。固定のブレークポイントだと、土日が増えたときや
+  // タブレットの中間の幅で横スクロールが残る
+  function isNarrow() {
+    return PERIOD_COL + DAYS.length * COL_MIN > gridAvail() - 2;
+  }
+
+  function drawGrid(buckets, maxP) {
+    var g = el("grid"), html = [];
+    var narrow = isNarrow();
+    g.className = narrow ? "grid narrow" : "grid";
+    if (narrow) {
+      // 時限の列を細くして、曜日は等分。5〜7列でも画面内に入る
+      g.style.gridTemplateColumns =
+        PERIOD_COL_NARROW + "px repeat(" + DAYS.length + ", minmax(0, 1fr))";
+      g.style.minWidth = "0";
+    } else {
+      g.style.gridTemplateColumns =
+        PERIOD_COL + "px repeat(" + DAYS.length + ", minmax(" + COL_MIN + "px, 1fr))";
+      // 土日が増えると列が7〜8本になる。最小幅も一緒に決めないとセルが潰れる
+      g.style.minWidth = (PERIOD_COL + DAYS.length * COL_MIN) + "px";
+    }
+    html.push('<div class="gh corner"></div>');
+    DAYS.forEach(function (d) { html.push('<div class="gh">' + d + "</div>"); });
+    for (var p = 1; p <= maxP; p++) {
+      html.push('<div class="gp">' + p + "</div>");
+      for (var i = 0; i < DAYS.length; i++) {
+        var k = DAYS[i] + p, list = buckets[k] || [], key = k;
+        var on = state.cell === key && !state.tray;
+        if (!list.length) {
+          html.push('<div class="cell empty"><span class="cnt">–</span></div>');
+          continue;
+        }
+        // 絞り込む前は1コマに60〜150件入る。そこで2件だけ名前を出しても情報にならないので、
+        // 件数が少ないときだけ科目名を見せる。初期表示はグリッド全体が締まって5・6限まで入る
+        var names = "", more = "";
+        if (narrow) {
+          // 幅が無いので普段は件数だけ。1〜2件なら名前が入るので出す
+          var few = list.length <= NARROW_NAMES;
+          if (few) {
+            names = list.map(function (c) {
+              return '<span class="nm">' + esc(c.t) + "</span>";
+            }).join("");
+          }
+          html.push(
+            '<button type="button" class="cell' + (few ? " named" : "") + '" data-k="' + key +
+            '" aria-pressed="' + on + '"' +
+            ' aria-label="' + DAYS[i] + "曜" + p + '限 ' + list.length + '件">' +
+            '<span class="cnt">' + list.length + "</span>" + names + "</button>");
+          continue;
+        }
+        if (list.length <= NAMES_MAX) {
+          names = list.map(function (c) {
+            return '<span class="nm">' + esc(c.t) + "</span>";
+          }).join("");
+        } else if (list.length <= 12) {
+          names = list.slice(0, 2).map(function (c) {
+            return '<span class="nm">' + esc(c.t) + "</span>";
+          }).join("");
+          more = '<span class="more">ほか ' + (list.length - 2) + " 件</span>";
+        }
+        html.push(
+          '<button type="button" class="cell" data-k="' + key + '" aria-pressed="' + on + '">' +
+          '<span class="cnt">' + list.length + " 件</span>" + names + more + "</button>");
+      }
+    }
+    g.innerHTML = html.join("");
+    Array.prototype.forEach.call(g.querySelectorAll(".cell[data-k]"), function (b) {
+      b.addEventListener("click", function () {
+        var k = this.getAttribute("data-k");
+        state.cell = (state.cell === k && !state.tray) ? null : k;
+        state.tray = false; state.cap = LIST_CAP; pendingPush = true;
+    render();
+    syncSticky();
+        if (window.innerWidth <= 1100) {
+          document.querySelector(".results").scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+  }
+
+  // コマの表示。学期が複数にまたがる科目は、コマごとに学期を添える
+  function slotLabel(c) {
+    var groups = {}, n = 0;
+    c.sl.forEach(function (s) { var g = slotGroup(c, s); if (!groups[g]) { groups[g] = 1; n++; } });
+    if (n > 1) {
+      return c.sl.map(function (s) { return s[0] + " " + s[1] + s[2] + "限"; }).join("・");
+    }
+    var slot = c.sl.map(function (s) { return s[1] + s[2]; }).join(" ");
+    return c.tm + (slot ? " " + slot : "");
+  }
+
+  // 開いている詳細の科目コード。絞り込みを変えても閉じないように覚えておく
+  var openCodes = Object.create(null);
+
+  function openDetail(li, code) {
+    var c = byCode(code);
+    if (!c) { return; }
+    var d = document.createElement("div");
+    d.className = "detail";
+    d.innerHTML = detailHTML(c);
+    li.appendChild(d);
+    var more = d.querySelector(".plan-more");
+    if (more) {
+      more.addEventListener("click", function () {
+        var wrap = this.parentNode;
+        this.previousElementSibling.outerHTML = planHTML(c, true);
+        wrap.removeChild(this);
+      });
+    }
+  }
+
+  function drawList(list, title) {
+    // 一覧の並びも学部セレクトと同じ順にそろえる
+    var sorted = list.slice().sort(function (a, b) {
+      return facRank(a.f) - facRank(b.f) || a.c.localeCompare(b.c);
+    });
+    var capped = sorted.slice(0, state.cap);
+    el("rtitle").childNodes[0].nodeValue = title + " ";
+    el("rcount").textContent = list.length.toLocaleString() + " 件";
+    el("rempty").hidden = list.length > 0;
+    el("rempty").textContent = state.fav
+      ? "お気に入りはまだありません。一覧の右端の ★ を押すと登録できます。"
+      : "条件に合う科目がありません。";
+    var rest = sorted.length - capped.length;
+    var more = el("rmore");
+    more.hidden = rest <= 0;
+    more.textContent = "残り " + rest.toLocaleString() + " 件のうち "
+      + Math.min(rest, LIST_CAP) + " 件を表示";
+    el("rcap").hidden = true;
+
+    var ul = el("rlist");
+    ul.innerHTML = capped.map(function (c) {
+      // 学部が空の科目が3件ある。空のタグは不具合に見えるので出さない
+      var tags = c.f ? '<span class="tag fac">' + esc(c.f) + "</span>" : "";
+      if (c.iv) tags += '<span class="tag iv">集中</span>';
+      if (c.ol) tags += '<span class="tag ol">遠隔あり</span>';
+      // 事前申請は履修登録より前に締め切られるので、一覧の時点で見えるようにする
+      if (c.ap) tags += '<span class="tag ap">要事前申請</span>';
+      var on = isFav(c.c);
+      var fc = c.f ? ' class="fc" style="--fc-h:' + FAC_HUE[c.f] + '"' : "";
+      return '<li' + fc + '><div class="rrow">' +
+        '<button type="button" class="rhead" data-c="' + esc(c.c) + '">' +
+        '<span class="rt">' + esc(c.t) + "</span>" +
+        '<span class="rm">' + tags +
+        '<span class="code">' + esc(c.c) + "</span>" +
+        "<span>" + esc(slotLabel(c)) + "</span>" +
+        "<span>" + esc(c.i.slice(0, 2).join("・")) + (c.i.length > 2 ? " ほか" : "") + "</span>" +
+        "</span></button>" +
+        '<button type="button" class="fav" data-f="' + esc(c.c) + '" aria-pressed="' + on + '"' +
+        ' title="' + (on ? "お気に入りから外す" : "お気に入りに追加") + '"' +
+        ' aria-label="' + esc(c.t) + 'をお気に入り' + (on ? "から外す" : "に追加") + '">★</button>' +
+        "</div></li>";
+    }).join("");
+
+    Array.prototype.forEach.call(ul.querySelectorAll(".fav"), function (b) {
+      b.addEventListener("click", function () {
+        var code = this.getAttribute("data-f");
+        toggleFav(code);
+        var on = isFav(code);
+        this.setAttribute("aria-pressed", String(on));
+        this.title = on ? "お気に入りから外す" : "お気に入りに追加";
+        syncFavUI();
+        // お気に入り一覧を見ている最中に外したら、その場から消す
+        if (state.fav) { render(); }
+      });
+    });
+
+    Array.prototype.forEach.call(ul.querySelectorAll(".rhead"), function (b) {
+      b.addEventListener("click", function () {
+        var li = this.closest("li"), code = this.getAttribute("data-c");
+        if (li.querySelector(".detail")) {
+          li.removeChild(li.querySelector(".detail"));
+          delete openCodes[code];
+          return;
+        }
+        openCodes[code] = 1;
+        openDetail(li, code);
+      });
+      // 描き直しのたびに閉じていた。開いていた科目はそのまま開いておく
+      var code = b.getAttribute("data-c"), li = b.closest("li");
+      if (openCodes[code] && !li.querySelector(".detail")) { openDetail(li, code); }
+    });
+  }
+
+  var FAC_RANK = Object.create(null);
+  META.faculties.forEach(function (f, i) { FAC_RANK[f] = i; });
+  function facRank(f) { return f in FAC_RANK ? FAC_RANK[f] : 999; }
+
+  var index = null;
+  function byCode(code) {
+    if (!index) {
+      index = Object.create(null);
+      COURSES.forEach(function (c) { index[c.c] = c; });
+    }
+    return index[code];
+  }
+
+  function detailHTML(c) {
+    var evNames = ["試験", "レポート", "小テスト", "出席・平常点"];
+    var ev = c.ev.map(function (v, i) { return v ? evNames[i] : null; })
+                 .filter(Boolean).join("・") || "記載なし";
+    // 1行は {label, value, num, html}。num は数字として右寄せ、
+    // html は「こちらで組み立てたHTMLをそのまま入れる」印。
+    // 以前は [label, value, true, false] の配列で、位置を間違える事故が続いた
+    function row(label, value, opt) {
+      return Object.assign({label: label, value: value, num: false, html: false},
+                           opt || {});
+    }
+    function at(label) {
+      return rows.findIndex(function (r) { return r.label === label; });
+    }
+    var rows = [
+      row("対象学年", c.grraw || "指定なし（学年フィルタでは1〜4年として扱います）"),
+      row("単位", c.cr == null ? "—" : c.cr, {num: true}),
+      row("必修選択", c.rq || "—"),
+      row("開講", c.sl.length ? slotLabel(c) : (c.tm || "—")),
+      row("キャンパス", c.cp || "—"),
+      row("使用言語", c.ln || "—"),
+      row("担当教員", c.i.join("・") || "—"),
+      ["成績評価", ev, false],
+      // ナンバリングと更新日は履修選択の判断に使わないので表には出さない。
+      // ナンバリングはキーワード検索の対象としては残してある
+      row("科目区分", c.cat || "—")
+    ];
+    // 教室が分かっている科目は開講のすぐ下に出す。
+    // 出どころは文学部のシラバスと、各学部が公開している時間割表（rmu）
+    if (c.rm) {
+      // この行は生HTMLとして入れるので、PDF由来の文字列は自分でエスケープする
+      var room = esc(c.rm);
+      if (c.rmu) {
+        // 基幹教育はB表、ほかの学部は各学部の時間割表から取っている
+        var label = c.rmu.indexOf("artsci") >= 0 ? "基幹教育院のB表より" : "学部の時間割表より";
+        room += ' <a class="src" href="' + esc(c.rmu) + '" target="_blank" ' +
+                'rel="noopener">' + label + "</a>";
+      }
+      rows.splice(at("開講") + 1, 0,
+                  row("教室", room, {html: true}));   // room は上でエスケープ済み
+    }
+    // 基幹教育の事前申請。抽選があるので、履修登録より前に手続きがいる
+    if (c.ap) {
+      var years = Object.keys(c.ap);
+      var marks = {};
+      years.forEach(function (y) {
+        c.ap[y].split("").forEach(function (ch) { marks[ch] = 1; });
+      });
+      var txt = years.map(function (y) {
+        return esc(c.ap[y]) + "（" + esc(y) + "）";
+      }).join(" ／ ");
+      if (marks["○"]) {
+        txt += '<br><span class="apnote">○ 受講したい場合はMoodleから期限までに事前申請が必要。' +
+               "抽選で通った人だけ履修登録されます（自分での登録は不要）。</span>";
+      }
+      if (marks["●"]) {
+        txt += '<br><span class="apnote">● 受講したい場合はCampusmate‑Jで履修登録しておく。' +
+               "人数によっては抽選があり、漏れると登録が消えます。</span>";
+      }
+      if (marks["※"]) {
+        txt += '<br><span class="apnote">※ 教員が抽選します。申請は○の科目と同じMoodleページから。' +
+               "やり方がシラバス指定の科目もあるので備考を確認してください。</span>";
+      }
+      if (c.apu) {
+        txt += ' <a class="src" href="' + esc(c.apu) + '" target="_blank" ' +
+               'rel="noopener">基幹教育院のB表より</a>';
+      }
+      rows.splice(at("開講") + 1, 0, row("事前申請", txt, {html: true}));
+    }
+    // 担当クラスが決まっている科目（基幹教育）は、誰向けの枠かを出す
+    if (c.kl) {
+      rows.push(row("担当クラス", c.kl));
+    }
+    // 区分を統合した科目は、シラバスの元の表記も見せる（経済学部の学科ごとの扱いなど）
+    if (c.catr) {
+      rows.splice(at("科目区分") + 1, 0, row("シラバス表記", c.catr));
+    }
+    var dl = rows.map(function (r) {
+      var v = r.html ? String(r.value) : esc(String(r.value));
+      return "<dt>" + esc(r.label) + "</dt>" +
+             "<dd" + (r.num ? ' class="num"' : "") + ">" + v + "</dd>";
+    }).join("");
+    var out = "";
+    if (c.s) out += "<p><b>" + esc(c.s) + "</b></p>";
+    if (c.d) out += '<h4>授業の概要</h4><p class="body">' + esc(c.d) + "</p>";
+    out += '<dl class="dl">' + dl + "</dl>";
+    if (c.kw) out += "<p>キーワード: " + esc(c.kw) + "</p>";
+    if (c.pl.length) {
+      out += "<h4>授業計画 全" + c.pl.length + "回</h4>" + planHTML(c);
+    }
+    out += gradeHTML(c);
+    var src = c.su || META.detail_url.replace("{code}", encodeURIComponent(c.c));
+    out += '<a class="src" target="_blank" rel="noopener" href="' + esc(src) +
+      '">公式シラバスを開く</a>';
+    return out;
+  }
+
+  function gradeHTML(c) {
+    if (!c.gr.length && !c.ep) return "";
+    var out = "<h4>成績評価</h4>";
+    if (!c.gr.length) return out + '<p class="body">' + esc(c.ep) + "</p>";
+
+    var max = Math.max.apply(null, c.gr.map(function (r) { return r[1] || 0; })) || 100;
+    var body = c.gr.map(function (r) {
+      // r[3] は「割合はあるが配点ではない」の印。出席率などの条件を配点と読ませない
+      var pct = r[1] === null
+        ? '<td class="p none">' + (r[3] ? "条件" : "実施") + "</td>"
+        : '<td class="p">' + esc(r[1]) + "%</td>";
+      var bar = r[1] === null ? "" :
+        '<span class="track"><span class="fill" style="width:' +
+        (r[1] / max * 100).toFixed(1) + '%"></span></span>';
+      return '<tr><td class="m">' + esc(r[0]) + "</td>" + pct +
+             '<td class="bar">' + bar + "</td></tr>";
+    }).join("");
+
+    var foot = "";
+    if (c.gt !== null) {
+      var off = Math.abs(c.gt - 100) > 0.5;
+      foot = '<tfoot><tr><td class="m">合計</td>' +
+        '<td class="p' + (off ? " warn" : "") + '">' + esc(c.gt) + "%</td>" +
+        '<td>' + (off ? "シラバスの記載どおり。100%になりません" : "") + "</td></tr></tfoot>";
+    }
+    out += '<table class="grade"><thead><tr><th>方法</th><th>割合</th><th></th></tr></thead>' +
+           "<tbody>" + body + "</tbody>" + foot + "</table>";
+
+    // 条件や注意書きは表に入れず、下に並べる
+    var notes = c.gr.filter(function (r) { return r[2]; }).map(function (r) {
+      return "<li><b>" + esc(r[0]) + "</b> — " + esc(r[2]) + "</li>";
+    }).concat(c.gx.map(function (x) { return "<li>" + esc(x) + "</li>"; }));
+    if (notes.length) out += '<ul class="notes">' + notes.join("") + "</ul>";
+    if (c.gu.length) {
+      out += '<p class="unused">実施しない: ' + esc(c.gu.join("・")) + "</p>";
+    }
+    return out;
+  }
+
+  var PLAN_HEAD = 5;
+  function planHTML(c, full) {
+    var rows = full ? c.pl : c.pl.slice(0, PLAN_HEAD);
+    var html = '<dl class="plan">' + rows.map(function (r) {
+      return "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) +
+        (r[2] ? "<small>" + esc(r[2]) + "</small>" : "") + "</dd>";
+    }).join("") + "</dl>";
+    if (!full && c.pl.length > PLAN_HEAD) {
+      html += '<button type="button" class="plan-more" data-c="' + esc(c.c) + '">' +
+        "残り " + (c.pl.length - PLAN_HEAD) + " 回を表示</button>";
+    }
+    return html;
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  var TERM_CHIPS = META.term_groups.map(function (g) { return { label: g, value: g }; });
+  var GRADE_CHIPS = [{ label: "全", value: 0 }].concat(
+    [1, 2, 3, 4, 5, 6].map(function (n) { return { label: String(n), value: n }; }));
+
+  function drawChips() {
+    // 開講期は複数選択。ひとつも選んでいない状態は「ぜんぶ」の意味にする
+    chipGroup(el("qchips"), TERM_CHIPS,
+      function (v) { return !!state.terms[v]; },
+      function (v) {
+        if (state.terms[v]) delete state.terms[v]; else state.terms[v] = 1;
+        state.cell = null; state.cap = LIST_CAP;
+      });
+    chipGroup(el("gchips"), GRADE_CHIPS,
+      function (v) { return state.grade === v; },
+      function (v) { state.grade = v; state.cap = LIST_CAP; });
+  }
+
+  // 一覧パネルの追従位置は、絞り込みバーの実際の高さから決める。
+  // バーは選択肢の数で2段にも3段にもなるので、決め打ちだと下端が画面外に出る
+  function syncSticky() {
+    var h = document.querySelector(".controls").offsetHeight;
+    document.documentElement.style.setProperty("--sticky", h + "px");
+  }
+  // 幅の変化は時間割の入れ物そのもので見る。回転・分割表示・ズームのどれでも拾えるし、
+  // resize イベントが飛ばない環境でも取りこぼさない
+  var wasNarrow = isNarrow(), resizeTimer = null;
+  function onWidthChange() {
+    syncSticky();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      if (isNarrow() !== wasNarrow) {
+        wasNarrow = isNarrow();
+        render();
+        syncSticky();
+      }
+    }, 120);
+  }
+  window.addEventListener("resize", onWidthChange);
+  window.addEventListener("orientationchange", onWidthChange);
+  if (window.ResizeObserver) {
+    new ResizeObserver(onWidthChange).observe(document.querySelector(".gridscroll"));
+  }
+
+
+  /* ===== 時間割ページ =====
+     お気に入りをそのまま自分の時間割として扱う。詳細は出さず、
+     科目名・教員・教室・シラバスへのリンクと、追加削除だけに絞る */
+  var TT_PERIODS = 6;
+
+  function ttCourses() {
+    return COURSES.filter(function (c) { return isFav(c.c); });
+  }
+  function ttHue(c) {
+    if (c.f && FAC_HUE[c.f] !== undefined) { return FAC_HUE[c.f]; }
+    var h = 0;
+    for (var i = 0; i < c.c.length; i++) { h = (h * 31 + c.c.charCodeAt(i)) % 360; }
+    return h;
+  }
+  function ttBuckets() {
+    var b = {};
+    ttCourses().forEach(function (c) {
+      c.sl.forEach(function (s) {
+        if (DAYS.indexOf(s[1]) < 0 || !/^[1-9]$/.test(s[2])) { return; }
+        var k = s[1] + s[2];
+        if (!b[k]) { b[k] = []; }
+        if (b[k].indexOf(c) < 0) { b[k].push(c); }
+      });
+    });
+    return b;
+  }
+
+  function drawTT() {
+    var courses = ttCourses(), buckets = ttBuckets();
+    var maxP = TT_PERIODS;
+    Object.keys(buckets).forEach(function (k) {
+      var p = +k.slice(1);
+      if (p > maxP) { maxP = p; }
+    });
+    var credits = courses.reduce(function (sum, c) {
+      return sum + (typeof c.cr === "number" ? c.cr : 0);
+    }, 0);
+    el("ttcount").textContent = courses.length;
+    el("ttcredits").textContent = Math.round(credits * 10) / 10;
+    el("ttempty").hidden = courses.length > 0;
+
+    var g = el("ttgrid"), html = [];
+    g.style.gridTemplateColumns = "26px repeat(" + DAYS.length + ", minmax(0, 1fr))";
+    html.push("<div></div>");
+    DAYS.forEach(function (d) { html.push('<div class="hd">' + d + "</div>"); });
+    for (var p = 1; p <= maxP; p++) {
+      html.push('<div class="pn">' + p + "</div>");
+      for (var i = 0; i < DAYS.length; i++) {
+        var k = DAYS[i] + p, list = buckets[k] || [];
+        if (!list.length) {
+          html.push('<button type="button" class="ttcell" data-tk="' + k + '"' +
+            ' aria-label="' + DAYS[i] + "曜" + p + '限 空き。押すと追加">' +
+            '<span class="plus">＋</span></button>');
+          continue;
+        }
+        var c = list[0];
+        var extra = list.length > 1
+          ? '<span class="sub2">ほか ' + (list.length - 1) + " 件</span>" : "";
+        html.push('<button type="button" class="ttcell filled' +
+          (list.length > 1 ? " dup" : "") + '" data-tk="' + k + '"' +
+          ' style="--tt-h:' + ttHue(c) + '">' +
+          '<span class="nm2">' + esc(c.t) + "</span>" +
+          (c.rm ? '<span class="sub2">' + esc(c.rm) + "</span>" : "") +
+          '<span class="sub2">' + esc(c.i.slice(0, 1).join("")) + "</span>" +
+          extra + "</button>");
+      }
+    }
+    g.innerHTML = html.join("");
+    Array.prototype.forEach.call(g.querySelectorAll(".ttcell"), function (b) {
+      b.addEventListener("click", function () {
+        var k = this.getAttribute("data-tk");
+        var list = ttBuckets()[k] || [];
+        if (list.length) { sheetCourses(k, list); } else { sheetAdd(k); }
+      });
+    });
+  }
+
+  /* ---- 下から出るシート ---- */
+  function openSheet(html) {
+    el("sheet").innerHTML = html;
+    el("sheet").hidden = false;
+    el("backdrop").hidden = false;
+  }
+  function closeSheet() {
+    el("sheet").hidden = true;
+    el("backdrop").hidden = true;
+  }
+  el("backdrop").addEventListener("click", closeSheet);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { closeSheet(); }
+  });
+
+  function slotWhen(k) { return k[0] + "曜 " + k.slice(1) + "限"; }
+
+  function sheetCourses(k, list) {
+    var out = '<div class="sh"><h3>' + slotWhen(k) + "</h3>" +
+      '<span class="when">' + list.length + " 科目</span>" +
+      '<button type="button" class="x" data-close="1">閉じる</button></div>';
+    list.forEach(function (c) {
+      var src = c.su || META.detail_url.replace("{code}", encodeURIComponent(c.c));
+      out += '<div style="margin-bottom:14px">' +
+        '<h3 style="margin:0 0 6px;font-size:14px">' + esc(c.t) + "</h3>" +
+        '<dl class="kv">' +
+        "<dt>担当</dt><dd>" + (esc(c.i.join("・")) || "—") + "</dd>" +
+        "<dt>教室</dt><dd>" + (esc(c.rm) || "—") + "</dd>" +
+        "<dt>開講</dt><dd>" + esc(c.tm || "—") + "</dd>" +
+        "<dt>単位</dt><dd>" + (c.cr == null ? "—" : esc(c.cr)) + "</dd>" +
+        "<dt>学部</dt><dd>" + (esc(c.f) || "—") + "</dd>" +
+        "</dl>" +
+        '<div class="acts">' +
+        '<a href="' + esc(src) + '" target="_blank" rel="noopener">シラバスを開く</a>' +
+        '<button type="button" class="danger" data-drop="' + esc(c.c) + '">時間割から外す</button>' +
+        "</div></div>";
+    });
+    openSheet(out);
+    bindSheet();
+  }
+
+  function sheetAdd(k) {
+    var day = k[0], period = k.slice(1);
+    var cands = COURSES.filter(function (c) {
+      return !isFav(c.c) && c.sl.some(function (s) {
+        return s[1] === day && s[2] === period;
+      });
+    });
+    var out = '<div class="sh"><h3>' + slotWhen(k) + " に追加</h3>" +
+      '<span class="when">' + cands.length + " 科目</span>" +
+      '<button type="button" class="x" data-close="1">閉じる</button></div>' +
+      '<input type="search" id="addq" placeholder="科目名・教員で絞り込む" autocomplete="off">' +
+      '<ul class="addlist" id="addlist"></ul>';
+    openSheet(out);
+    function draw(q) {
+      var words = q ? norm(q).split(/\s+/).filter(Boolean) : [];
+      var hit = cands.filter(function (c) {
+        return !words.length || words.every(function (w) { return haystack(c).indexOf(w) >= 0; });
+      }).slice(0, 60);
+      el("addlist").innerHTML = hit.map(function (c) {
+        return '<li><button type="button" data-add="' + esc(c.c) + '">' +
+          '<span class="t2">' + esc(c.t) + "</span>" +
+          '<span class="m2">' + esc(c.f) + " ／ " + esc(c.tm) +
+          (c.rm ? " ／ " + esc(c.rm) : "") +
+          (c.i.length ? " ／ " + esc(c.i.slice(0, 2).join("・")) : "") + "</span>" +
+          "</button></li>";
+      }).join("") || '<li><div class="ttempty">見つかりません</div></li>';
+      bindSheet();
+    }
+    draw("");
+    el("addq").addEventListener("input", function () { draw(this.value); });
+  }
+
+  function bindSheet() {
+    var sh = el("sheet");
+    Array.prototype.forEach.call(sh.querySelectorAll("[data-close]"), function (b) {
+      b.addEventListener("click", closeSheet);
+    });
+    Array.prototype.forEach.call(sh.querySelectorAll("[data-drop]"), function (b) {
+      b.addEventListener("click", function () {
+        toggleFav(this.getAttribute("data-drop"));
+        closeSheet(); syncFavUI(); drawTT();
+      });
+    });
+    Array.prototype.forEach.call(sh.querySelectorAll("[data-add]"), function (b) {
+      b.addEventListener("click", function () {
+        toggleFav(this.getAttribute("data-add"));
+        closeSheet(); syncFavUI(); drawTT();
+      });
+    });
+  }
+
+  function setView(v, push) {
+    state.view = v;
+    document.body.classList.toggle("tt", v === "tt");
+    closeSheet();
+    pendingPush = !!push;
+    if (v === "tt") { drawTT(); syncHash(); } else { render(); }
+    window.scrollTo(0, 0);
+  }
+  el("tobtn").addEventListener("click", function () { setView("tt", true); });
+  el("ttback").addEventListener("click", function () { setView("search", true); });
+
+  applyPref();
+  applyHash();
+  render();
+  if (state.view === "tt") { drawTT(); }
+  syncSticky();
+})();
+</script>
+
+</body>
+</html>

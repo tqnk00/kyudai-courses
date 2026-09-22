@@ -1,0 +1,335 @@
+"""時間割PDFから「科目 → 教室」を取り出す。
+
+レイアウトの復元はしない。学部ごとに教室の書き方だけが違うので、その正規表現だけを
+個別に持ち、拾った教室を Campusmate 側の科目名リスト（＝正解表）と突き合わせる。
+名前（または講義コード）が一致したときだけ採用するため、崩れたPDFでも誤りが入りにくい。
+
+  教育学部  科目名【A104】教員          → 【】の手前が科目名
+  理学部    科目名 教員 W1-C-501        → 教室記号の手前、教員をまたぐので前方一致も見る
+  農学部    26346215 森林環境経営学 溝上 展也 327  → 講義コードが主キー、末尾の数字が教室
+  経済学部  科目名 D-103 教員            → 専用パーサの結果(econ-timetable.json)を使う
+  基幹教育・共創学部  教室の記載そのものが無い（共創のPDFは「シラバスで通知」と明記）
+"""
+import json, re, unicodedata, collections
+import pdfplumber
+
+import db as DB
+from config import KYUSHU, DATA_DIR, PDF_DIR, YEAR
+
+UID = KYUSHU["university_id"]
+
+EDU_URL = "https://www.education.kyushu-u.ac.jp/schedules/"
+SCI_URL = "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+AGR_URL = "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ECON_URL = "https://www.econ.kyushu-u.ac.jp/student/schedule"
+LAW_URL = "https://www.law.kyushu-u.ac.jp/faculty/study"
+ENG_EECS_URL = "https://www.eecs.kyushu-u.ac.jp/school.html"
+ENG_CIVIL_URL = "https://civil.kyushu-u.ac.jp/student/schedule/"
+DESIGN_URL = "https://www.design.kyushu-u.ac.jp/curriculum/"
+
+CODE = re.compile(r"(2\d{7})")
+ROOM_EDU = re.compile(r"【([^】]{1,24})】")
+ROOM_SCI = re.compile(r"([A-Z]\d?-[A-Z0-9]{1,2}-\d{3}(?:\s*,\s*[A-Z]-?\d{3})?"
+                      r"|[^\s【】]{0,6}号館[^\s【】]{0,8}|講義室\s?[0-9０-９A-Z]{1,4}"
+                      r"|[0-9０-９]{3,4}講義室)")
+# 法学部  ローマ法Ⅰ 五十君 B112 ２・３・４
+ROOM_LAW = re.compile(r"(?<![A-Za-z0-9])([A-E]\d{3}|演習室\s?[0-9０-９ⅠⅡⅢⅣⅤ]+"
+                      r"|大講義室[ⅠⅡⅢ]?|中講義室[ⅠⅡⅢ]?|小講義室[ⅠⅡⅢ]?|教員研究室)")
+# 工学部・芸術工学部  括弧の中が教室  EC(工学部第7)一木 / 佐川（工14） / （W2-319）
+ROOM_PAREN = re.compile(r"[（(]\s*((?:工学部第|シス情|創作工房|ウエスト|イースト|センター)"
+                        r"[^（）()]{0,10}|[A-Z]\d?-\d{3}[^（）()]{0,6}|工\s?\d{1,2}[^（）()]{0,6}"
+                        r"|工大[^（）()]{0,4}|[0-9０-９]{3}[^（）()]{0,8}"
+                        r"|[^（）()]{0,6}(?:講義室|実験室|工作房|スタジオ|演習室|ホール)[^（）()]{0,6})\s*[）)]")
+
+NOT_ROOM = re.compile(r"時間割参照|参照|注意|必修|備考|未定|TBA|基幹教育|学部$|^前期$|^後期$")
+
+
+def norm(s):
+    s = unicodedata.normalize("NFKC", s or "").lower()
+    s = re.sub(r"【[^】]*】|\[[^\]]*\]|〔[^〕]*〕|※.*$", "", s)
+    s = re.sub(r"[◆■□〇●◎○◇※☆★▲△\*]", "", s)
+    return re.sub(r"[\s・､、,（）()〈〉<>･\-−―ー~〜]", "", s)
+
+
+def clean_room(r):
+    r = re.sub(r"\s+", "", r).strip(" 　,、")
+    return re.sub(r"^伊都地区", "", r)
+
+
+def load_courses(con, year):
+    """DBから科目コード・科目名・学部・コマ・教員を引く。
+
+    以前はビルド済みのサイトJSONを読んでいたが、出力を入力にすることになり、
+    更地からビルドできなかった。照合に要るのはこれだけなのでDBから直接引く。
+    """
+    rows = con.execute(
+        "SELECT course_code, title, faculty, instructors FROM course_structured "
+        "WHERE university_id=? AND year=? AND is_undergrad=1",
+        (UID, year)).fetchall()
+    slots = collections.defaultdict(list)
+    for r in con.execute("SELECT course_code, weekday, period FROM course_slots "
+                         "WHERE university_id=? AND year=? ORDER BY course_code, seq",
+                         (UID, year)):
+        slots[r["course_code"]].append((r["weekday"], r["period"]))
+    idx, by_fac = {}, collections.defaultdict(lambda: collections.defaultdict(list))
+    for r in rows:
+        c = {"c": r["course_code"], "t": r["title"] or "",
+             "f": r["faculty"] or "",
+             "i": [x for x in (r["instructors"] or "").splitlines() if x.strip()],
+             "slots": slots.get(r["course_code"], [])}
+        idx[c["c"]] = c
+        by_fac[c["f"]][norm(c["t"])].append(c)
+    return idx, by_fac
+
+
+def find_name(seg, names, tail_only=False):
+    """segの中にある科目名を探す。教室にいちばん近いもの、同じ位置なら長いものを採る。
+
+    格子のPDFでは「3 数学特論11 坂本 祥太 W1-C-513」のように、科目名の前に時限、
+    後ろに教員名が付く。末尾・先頭の一致だけでは拾えないので、途中も探す。
+    """
+    n = norm(seg)
+    if not n:
+        return None
+    best, best_at = None, -1
+    for name in names:
+        if len(name) < 4:        # 「英語」等の短い名前は誤爆するので使わない
+            continue
+        at = n.rfind(name)
+        if at < 0:
+            continue
+        if tail_only and at + len(name) < len(n) - 12:
+            continue            # 直前の行を見るときは、末尾寄りのものだけ
+        if at > best_at or (at == best_at and len(name) > len(best)):
+            best, best_at = name, at
+    return best
+
+
+def lines_of(path):
+    with pdfplumber.open(PDF_DIR / path) as pdf:
+        out = []
+        for page in pdf.pages:
+            out += (page.extract_text() or "").split("\n")
+    return out
+
+
+def by_room_marker(files, faculty, rx, names, url, tail_only=False, extra=None):
+    """教室の表記を目印に、その手前の文字列から科目名を当てる。
+
+    extra を渡すと、Campusmateに無い科目の候補もそこに溜める。
+    """
+    if extra is None:
+        extra = {}
+    got, mention, amb = {}, 0, 0
+    for f in files:
+        prev_seg = ""
+        for line in lines_of(f):
+            if not line.strip():
+                continue
+            pos = 0
+            for m in rx.finditer(line):
+                room = clean_room(next(g for g in m.groups() if g))
+                seg, pos = line[pos:m.start()], m.end()
+                if not room or NOT_ROOM.search(room):
+                    continue
+                mention += 1
+                # その行で見つからなければ、直前の行の末尾も見る（セルが折り返される）
+                key = find_name(seg, names, tail_only) or \
+                    find_name(prev_seg, names, tail_only=True)
+                if not key:
+                    # 名前らしき部分を切り出して、もう一度だけ突き合わせてみる
+                    t = guess_title(seg)
+                    # 隣の升の教員名が頭に残ることがあるので、頭から1語ずつ削って試す
+                    for cand in (t, *(t.split(" ", i)[-1] for i in range(1, 3))):
+                        if norm(cand) in names:
+                            key, t = norm(cand), cand
+                            break
+                if not key:
+                    # それでも無ければ、Campusmateに載っていない科目の候補として控える
+                    # 隣の升から教員名・曜日・学年が頭に残っていれば落とす
+                    t = re.sub(r"^(?:[月火水木金土日]|[0-9０-９２３４・]+|[◆♦■□〇●○◇]"
+                               r"|（[^）]*）|課題発見科目|高年次)[\s　]*", "", t).strip()
+                    t = re.sub(r"^[一-龥]{2,4}[\s　]+(?=.{5,})", "", t).strip()
+                    t = re.sub(r"[\s　][一-龥]{2,3}$", "", t).strip()
+                    t = re.sub(r"^[◆♦■□〇●○◇]\s*", "", t).strip()
+                    if 4 <= len(t) <= 26 and not re.search(
+                            r"補講枠|時間割|教室|曜日|コース$|参照|^同上|^～|^[0-9]", t):
+                        extra.setdefault(norm(t), {"title": t, "room": room,
+                                                   "faculty": faculty, "source_url": url})
+                    continue
+                cands = names[key]
+                if len(cands) == 1:
+                    got.setdefault(cands[0]["c"], {"room": room, "source_url": url})
+                else:
+                    amb += 1
+            prev_seg = line
+    return got, mention, amb
+
+
+# 「◆ローマ法Ⅰ 五十君 」から科目名だけを取り出す
+LEAD_JUNK = re.compile(r"^[\s０-９0-9２３４・､、|]*(?:[◆■□〇●◎○◇※☆★▲△\*]\s*)*")
+TRAIL_NAME = re.compile(r"[\s　]([^\s　]{1,6})$")
+
+
+def guess_title(seg):
+    """教室の手前の文字列から、科目名らしい部分を切り出す。
+
+    法学部は「２・３・４ ◆中国法演習 西 」のように、前に学年と記号、後ろに教員名が付く。
+    教育学部は「国際教育文化コース 〔秋学期〕教育哲学特論Ⅱ演習」のように前に区分が付く。
+    """
+    t = re.sub(r"〔[^〕]*〕", "", seg).strip()
+    t = re.sub(r"^.*?(?:コース|系 共 通|教 育 心 理 学 系 共 通)\s*", "", t)
+    t = LEAD_JUNK.sub("", t.strip())
+    t = TRAIL_NAME.sub("", t).strip()      # 末尾の教員名を落とす
+    t = re.sub(r"^[０-９0-9２３４・､、\s]+", "", t)
+    t = re.sub(r"^(?:年生用補講枠|補講枠)\s*", "", t)
+    return t
+
+
+def agr_rooms(idx):
+    """農学部は講義コードが入っているので、コードごとに後ろの教室番号を採る。
+
+    1行に複数の科目が並ぶので、教室は「そのコードの直後に最初に現れる番号」を採る。
+    末尾を採ると隣の科目の教室を拾ってしまう（土壌物理学 229 / 田村 和彦 228）。
+    拾ったあと、PDF側の科目名がCampusmateの同コードの科目名と合うかを検算する。
+    """
+    got, mention, disagree = {}, 0, 0
+    rx = re.compile(r"^\s*(.*?)\s*(?:^|\s)([0-9０-９]{2,3}|[A-Z]-?\d{3}"
+                    r"|[^\s]{0,6}号館[^\s]{0,8}|遠隔授業|オンライン)(?:\s|$)")
+    for line in lines_of("agr-2026.pdf"):
+        parts = CODE.split(line)
+        for i in range(1, len(parts), 2):
+            code = parts[i]
+            tail = parts[i + 1] if i + 1 < len(parts) else ""
+            if code not in idx:
+                continue
+            m = rx.match(tail)
+            if not m:
+                continue
+            mention += 1
+            head = unicodedata.normalize("NFKC", m.group(1))
+            # 検算: コードの直後に科目名か教員名が来ているはず。
+            # Campusmateの科目名と食い違い、かつ教員名にも見えないものは捨てる
+            want = norm(idx[code]["t"])
+            if want and want[:5] not in norm(head) and not re.fullmatch(
+                    r"[^\s]{1,5}\s+[^\s]{1,6}", head.strip()):
+                disagree += 1
+                continue
+            got.setdefault(code, {"room": clean_room(m.group(2)), "source_url": AGR_URL})
+    return got, mention, disagree
+
+
+def econ_rooms(by_fac):
+    """経済学部は専用パーサの結果を、科目名＋コマで突き合わせる。"""
+    p = DATA_DIR / "econ-timetable.json"
+    if not p.exists():
+        return {}, 0, 0
+    tt = json.loads(p.read_text(encoding="utf-8"))["courses"]
+    names = by_fac.get("経済学部", {})
+    got, amb = {}, 0
+    for t in tt:
+        room = clean_room(t.get("room") or "")
+        if not room:
+            continue
+        cands = names.get(norm(t["title"]), [])
+        if len(cands) > 1:
+            want = {(s["day"], str(s["period"])) for s in t.get("slots", [])}
+            cands = [c for c in cands if want & set(c["slots"])] or cands
+        if len(cands) > 1:
+            # 「経済・経営学演習」のように同名・同コマが20件あるので、教員で絞る
+            # PDF側は姓だけのことが多い
+            fam = [re.sub(r"[\s　].*$", "", x) for x in t.get("instructors", []) if x]
+            if fam:
+                cands = [c for c in cands
+                         if any(f and f in "".join(c.get("i") or []) for f in fam)] or cands
+        if len(cands) == 1:
+            got[cands[0]["c"]] = {"room": room, "source_url": ECON_URL}
+        elif cands:
+            amb += 1
+    return got, len(tt), amb
+
+
+def run(con, year=YEAR):
+    idx, by_fac = load_courses(con, year)
+    rooms, stats = {}, []
+
+    # 未掲載科目は、レイアウトが素直で名前を切り出せるPDFだけを対象にする
+    missing = {}
+    g, n, a = by_room_marker(["edu-2026.pdf"], "教育学部", ROOM_EDU,
+                             by_fac["教育学部"], EDU_URL, extra=missing)
+    rooms.update(g); stats.append(("教育学部", "【教室】", n, len(g), a))
+
+    sci = [f"sci-{x}.pdf" for x in
+           ("math_4", "phys_4", "chem_3", "bio_4", "geo_3", "info_4", "com")]
+    g, n, a = by_room_marker(sci, "理学部", ROOM_SCI, by_fac["理学部"], SCI_URL)
+    rooms.update(g); stats.append(("理学部", "W1-C-501等", n, len(g), a))
+
+    g, n, dis = agr_rooms(idx)
+    rooms.update(g); stats.append(("農学部", "講義コード＋番号", n, len(g), dis))
+
+    g, n, a = econ_rooms(by_fac)
+    rooms.update(g); stats.append(("経済学部", "専用パーサ", n, len(g), a))
+
+    g, n, a = by_room_marker(["law-2026.pdf"], "法学部", ROOM_LAW,
+                             by_fac["法学部"], LAW_URL, extra=missing)
+    rooms.update(g); stats.append(("法学部", "B112/演習室2等", n, len(g), a))
+
+    g, n, a = by_room_marker(["eng-eecs-c.pdf", "eng-eecs-d.pdf", "eng-civil.pdf"],
+                             "工学部", ROOM_PAREN, by_fac["工学部"], ENG_EECS_URL)
+    rooms.update(g); stats.append(("工学部", "（工学部第7）等", n, len(g), a))
+
+    g, n, a = by_room_marker(["design-a.pdf"], "芸術工学部", ROOM_PAREN,
+                             by_fac["芸術工学部"], DESIGN_URL)
+    rooms.update(g); stats.append(("芸術工学部", "（室番号）", n, len(g), a))
+
+    stats.append(("基幹教育科目", "記載なし", 0, 0, 0))
+    stats.append(("共創学部", "記載なし(シラバスで通知)", 0, 0, 0))
+
+    # 農学部は講義コードで判定できる。PDFにあってCampusmateに無いコードを拾う
+    for line in lines_of("agr-2026.pdf"):
+        for code in CODE.findall(line):
+            if code not in idx:
+                missing.setdefault("code:" + code, {
+                    "title": "", "code": code, "room": "",
+                    "faculty": "農学部", "source_url": AGR_URL})
+    return idx, rooms, stats, missing
+
+
+def build(con, year=YEAR):
+    """PDFを読んで data/ に教室と未掲載科目のJSONを書き出す。"""
+    idx, rooms, stats, missing = run(con, year)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    # 同名が複数あって決められなかった件数も残す。捨てた数が見えないと、
+    # あとで詰めるときの手がかりが無くなる
+    payload = dict(rooms)
+    payload["_meta"] = {
+        "generated_for": year,
+        "per_faculty": [{"faculty": f, "how": how, "detected": n,
+                         "resolved": k, "dropped_ambiguous": a}
+                        for f, how, n, k, a in stats],
+    }
+    (DATA_DIR / f"timetable-rooms-{year}.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    (DATA_DIR / f"timetable-missing-{year}.json").write_text(
+        json.dumps(sorted(missing.values(), key=lambda m: (m["faculty"], m["title"])),
+                   ensure_ascii=False, indent=1), encoding="utf-8")
+    return idx, rooms, stats, missing
+
+
+if __name__ == "__main__":
+    import random
+    with DB.session() as con:
+        idx, rooms, stats, missing = build(con)
+    print(f"{'学部':14}{'教室の書き方':26}{'検出':>6}{'確定':>6}{'除外/同名':>9}")
+    for f, how, n, k, a in stats:
+        print(f"{f:14}{how:26}{n:6}{k:6}{a:9}")
+    print()
+    print(f"教室が付いた科目: {len(rooms)}")
+    bym = collections.Counter(m["faculty"] for m in missing.values())
+    print("時間割にあってCampusmateに無い科目の候補: "
+          + " / ".join(f"{k} {v}" for k, v in bym.most_common()))
+    print()
+    print("教室の抜き取り確認 12件:")
+    random.seed(1)
+    for code in random.sample(sorted(rooms), min(12, len(rooms))):
+        print(f"  {idx[code]['f']:8} {idx[code]['t'][:30]:32} → {rooms[code]['room']}")

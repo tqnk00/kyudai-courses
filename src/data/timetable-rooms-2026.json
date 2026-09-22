@@ -1,0 +1,1578 @@
+{
+ "26071060": {
+  "room": "A104",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26071058": {
+  "room": "A103",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26071053": {
+  "room": "B430（学習環境シミュレーション室）",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26071054": {
+  "room": "A117",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26071055": {
+  "room": "B102",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072056": {
+  "room": "B103",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072052": {
+  "room": "E110",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072070": {
+  "room": "A433（教育学調査資料室）",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072061": {
+  "room": "A433（教育学調査資料室）",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072064": {
+  "room": "A104",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072051": {
+  "room": "B106",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072058": {
+  "room": "D108",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072071": {
+  "room": "B101",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072066": {
+  "room": "B207",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072055": {
+  "room": "B105",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26073051": {
+  "room": "B101",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26073052": {
+  "room": "B102",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26073001": {
+  "room": "A102",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26074055": {
+  "room": "B208",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26074051": {
+  "room": "A117",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26074059": {
+  "room": "B102",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26074062": {
+  "room": "B106",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26074058": {
+  "room": "A101",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26075051": {
+  "room": "A433（教育学調査資料室）",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26075059": {
+  "room": "A105",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26075007": {
+  "room": "B105",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26224045": {
+  "room": "W1-C-501",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26226107": {
+  "room": "W1-B-210",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224049": {
+  "room": "W1-C-501",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224016": {
+  "room": "W1-C-501",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224061": {
+  "room": "W1-C-513",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26226110": {
+  "room": "W1-C-501",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224039": {
+  "room": "W1-C-513",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224028": {
+  "room": "W1-D-313",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224041": {
+  "room": "W1-C-513",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224029": {
+  "room": "W1-D-313",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224020": {
+  "room": "W1-C-513",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224057": {
+  "room": "W1-C-502",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26226109": {
+  "room": "W1-C-501",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224058": {
+  "room": "W1-C-50１",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224015": {
+  "room": "W1-C-501",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224048": {
+  "room": "W1-C-513",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224034": {
+  "room": "W1-B-505",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224040": {
+  "room": "W1-D-314",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224037": {
+  "room": "W1-D-313",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224023": {
+  "room": "W1-C-201",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224038": {
+  "room": "W1-D-313",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224017": {
+  "room": "W1-C-501",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26224082": {
+  "room": "W1-C-513",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220058": {
+  "room": "W1-B-212",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223024": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220041": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220094": {
+  "room": "W1-D-315",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220067": {
+  "room": "W1-B-212",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220002": {
+  "room": "W1-C-201",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220045": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220044": {
+  "room": "W1-B-212",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220075": {
+  "room": "W1-B-212",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220093": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220065": {
+  "room": "W1-B-212",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220059": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220029": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220068": {
+  "room": "W1-C-201",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220007": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220072": {
+  "room": "W1-B-212",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220006": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223052": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26220023": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222017": {
+  "room": "W1-B-314",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222015": {
+  "room": "W1-B-212",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222021": {
+  "room": "W1-B-314",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222027": {
+  "room": "W1-B-314",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222009": {
+  "room": "W1-B-505",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222030": {
+  "room": "W1-C-201",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222013": {
+  "room": "W1-B-314",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222024": {
+  "room": "W1-B-314",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26225007": {
+  "room": "W1-D-20７",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26225049": {
+  "room": "W1-D-207",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26225061": {
+  "room": "W1-D-207",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26225047": {
+  "room": "W1-D-207",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26225043": {
+  "room": "W1-D-207",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223025": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223037": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223051": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223002": {
+  "room": "W1-B-518",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223050": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223001": {
+  "room": "W1-B-518",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223048": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223044": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223045": {
+  "room": "W1-D-209",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26223074": {
+  "room": "W1-B-514",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221012": {
+  "room": "W1-B-505",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221058": {
+  "room": "W1-B-211",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221015": {
+  "room": "W1-B-313",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221045": {
+  "room": "W1-B-504",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221002": {
+  "room": "W1-C-502",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221016": {
+  "room": "W1-B-313",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221046": {
+  "room": "W1-B-504",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221057": {
+  "room": "W1-B-504",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221026": {
+  "room": "W1-C-502",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26341210": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341201": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340203": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341205": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341214": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341212": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341203": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341207": {
+  "room": "224",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342205": {
+  "room": "223",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342206": {
+  "room": "228",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342203": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343310": {
+  "room": "229",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342201": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340204": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342322": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342204": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342208": {
+  "room": "225",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342202": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340213": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343311": {
+  "room": "229",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345212": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343312": {
+  "room": "230",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343313": {
+  "room": "223",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26344205": {
+  "room": "223",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340209": {
+  "room": "225",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340210": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345206": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340207": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340205": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345208": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345204": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340211": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346208": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346216": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346212": {
+  "room": "230",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346207": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347216": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347303": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347218": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347210": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347201": {
+  "room": "330",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347220": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347207": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347205": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347212": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347204": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341211": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341202": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341215": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341213": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341204": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340206": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342323": {
+  "room": "229",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343201": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340214": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345213": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26344202": {
+  "room": "225",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26344203": {
+  "room": "222",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345205": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345207": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340208": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345216": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26340212": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345215": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345214": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346209": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346210": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346214": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346217": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346213": {
+  "room": "330",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346218": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347219": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347217": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347304": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347211": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347221": {
+  "room": "104",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347209": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347208": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347206": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347213": {
+  "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26535544": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341321": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341312": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342308": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342319": {
+  "room": "222",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26532645": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342303": {
+  "room": "224",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342318": {
+  "room": "222",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342312": {
+  "room": "225",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26532646": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343319": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343317": {
+  "room": "228",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345350": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345336": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345352": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345322": {
+  "room": "220",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345348": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345343": {
+  "room": "225",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345319": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345321": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345337": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26533545": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346351": {
+  "room": "225",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347307": {
+  "room": "225",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347309": {
+  "room": "224",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347347": {
+  "room": "330",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26535645": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347322": {
+  "room": "330",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347361": {
+  "room": "330",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26534650": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341322": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26341313": {
+  "room": "329",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26342304": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343320": {
+  "room": "226",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26343318": {
+  "room": "228",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346358": {
+  "room": "223",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345353": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345349": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26345351": {
+  "room": "328",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26534545": {
+  "room": "224",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26534546": {
+  "room": "224",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26534649": {
+  "room": "230",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26347348": {
+  "room": "330",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26172001": {
+  "room": "D-107",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172002": {
+  "room": "大講Ⅱ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172005": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170001": {
+  "room": "E-203",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172003": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172006": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170002": {
+  "room": "E-112",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172004": {
+  "room": "D-103",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172007": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170003": {
+  "room": "E-204",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172008": {
+  "room": "E-202",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170004": {
+  "room": "E-205",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170005": {
+  "room": "D-106",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170006": {
+  "room": "E-101",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170007": {
+  "room": "E-317",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170008": {
+  "room": "E-318",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170009": {
+  "room": "E-319",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170010": {
+  "room": "研究室",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170011": {
+  "room": "E-323",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170012": {
+  "room": "E-324",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172009": {
+  "room": "オンライン",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172010": {
+  "room": "大講Ⅱ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170013": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172011": {
+  "room": "大講Ⅱ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170014": {
+  "room": "E-202",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172021": {
+  "room": "オンライン※",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172012": {
+  "room": "E-202",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172017": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170015": {
+  "room": "E-203",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172052": {
+  "room": "E-203",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172018": {
+  "room": "E-204",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170016": {
+  "room": "E-204",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172013": {
+  "room": "E-202",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172019": {
+  "room": "E-203",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170017": {
+  "room": "E-205",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172054": {
+  "room": "D-106",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172014": {
+  "room": "E-203",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172020": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170018": {
+  "room": "E-206",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172015": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170019": {
+  "room": "E-317",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172016": {
+  "room": "E-109",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170020": {
+  "room": "E-318",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170021": {
+  "room": "E-319",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172022": {
+  "room": "オンライン",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172023": {
+  "room": "オンライン",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172025": {
+  "room": "D-103",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172055": {
+  "room": "E-202",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172028": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172024": {
+  "room": "E-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172029": {
+  "room": "オンライン",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172030": {
+  "room": "大講Ⅱ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172034": {
+  "room": "大講Ⅰ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172038": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172031": {
+  "room": "D-103",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172035": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172039": {
+  "room": "E-206",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172056": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172032": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172036": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172040": {
+  "room": "E-318",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172057": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172033": {
+  "room": "オンライン",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172053": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170022": {
+  "room": "E-208",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172037": {
+  "room": "大講Ⅱ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170023": {
+  "room": "E-101",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170024": {
+  "room": "E-211",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170025": {
+  "room": "E-103",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170026": {
+  "room": "E-202",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170027": {
+  "room": "E-203",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170028": {
+  "room": "E-204",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170029": {
+  "room": "E-205",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172058": {
+  "room": "E-206",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172041": {
+  "room": "大講Ⅰ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172045": {
+  "room": "大講Ⅱ",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172048": {
+  "room": "E-102",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172042": {
+  "room": "D-103",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172046": {
+  "room": "E-110",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172049": {
+  "room": "E-323",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172043": {
+  "room": "D-105",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172047": {
+  "room": "D-103",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26172044": {
+  "room": "E-109",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170030": {
+  "room": "E-208",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170031": {
+  "room": "E-103",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170032": {
+  "room": "E-201",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170033": {
+  "room": "E-202",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170034": {
+  "room": "E-203",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170035": {
+  "room": "E-204",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170036": {
+  "room": "E-205",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170037": {
+  "room": "E-206",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170038": {
+  "room": "E-104",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170039": {
+  "room": "E-317",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26170040": {
+  "room": "E-318",
+  "source_url": "https://www.econ.kyushu-u.ac.jp/student/schedule"
+ },
+ "26152601": {
+  "room": "D103",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151803": {
+  "room": "教員研究室",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151601": {
+  "room": "D105",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151807": {
+  "room": "D109",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26153601": {
+  "room": "E112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26153501": {
+  "room": "D106",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152603": {
+  "room": "演習室２",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26155701": {
+  "room": "大講義室Ⅰ",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26155801": {
+  "room": "D103",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151602": {
+  "room": "大講義室Ⅰ",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151701": {
+  "room": "大講義室Ⅰ",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151801": {
+  "room": "D103",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151603": {
+  "room": "E112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151702": {
+  "room": "E112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151802": {
+  "room": "E105",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151604": {
+  "room": "D107",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151703": {
+  "room": "E109",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26151901": {
+  "room": "D108",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152701": {
+  "room": "D103",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152801": {
+  "room": "大講義室Ⅰ",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152602": {
+  "room": "大講義室Ⅰ",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152702": {
+  "room": "大講義室Ⅰ",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152802": {
+  "room": "大講義室Ⅱ",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152604": {
+  "room": "E112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152704": {
+  "room": "B112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152804": {
+  "room": "E110",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152605": {
+  "room": "E101",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152901": {
+  "room": "D108",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26153701": {
+  "room": "E110",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26153602": {
+  "room": "D106",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26153705": {
+  "room": "E103",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26153603": {
+  "room": "E109",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26154701": {
+  "room": "E110",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26154801": {
+  "room": "E104",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26153604": {
+  "room": "D106",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152703": {
+  "room": "E112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26152803": {
+  "room": "E112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26155601": {
+  "room": "E110",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26155702": {
+  "room": "E112",
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+ },
+ "26251299": {
+  "room": "工学部第8",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26258080": {
+  "room": "工学部第7",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251395": {
+  "room": "工学部第8",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251357": {
+  "room": "工学部第16",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251386": {
+  "room": "工学部第2",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251399": {
+  "room": "工学部第8",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251354": {
+  "room": "工学部第4",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251377": {
+  "room": "工学部第9",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251269": {
+  "room": "シス情210",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251383": {
+  "room": "創作工房",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251252": {
+  "room": "工学部第7",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251301": {
+  "room": "工学部第8",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251295": {
+  "room": "シス情210",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251396": {
+  "room": "工学部第4",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251359": {
+  "room": "工学部第1",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251387": {
+  "room": "工学部第2",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251355": {
+  "room": "工学部第8",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251378": {
+  "room": "工学部第16",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251270": {
+  "room": "シス情210",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251384": {
+  "room": "創作工房",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26254751": {
+  "room": "工7",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "_meta": {
+  "generated_for": 2026,
+  "per_faculty": [
+   {
+    "faculty": "教育学部",
+    "how": "【教室】",
+    "detected": 40,
+    "resolved": 26,
+    "dropped_ambiguous": 0
+   },
+   {
+    "faculty": "理学部",
+    "how": "W1-C-501等",
+    "detected": 323,
+    "resolved": 74,
+    "dropped_ambiguous": 0
+   },
+   {
+    "faculty": "農学部",
+    "how": "講義コード＋番号",
+    "detected": 245,
+    "resolved": 123,
+    "dropped_ambiguous": 16
+   },
+   {
+    "faculty": "経済学部",
+    "how": "専用パーサ",
+    "detected": 98,
+    "resolved": 94,
+    "dropped_ambiguous": 1
+   },
+   {
+    "faculty": "法学部",
+    "how": "B112/演習室2等",
+    "detected": 195,
+    "resolved": 39,
+    "dropped_ambiguous": 0
+   },
+   {
+    "faculty": "工学部",
+    "how": "（工学部第7）等",
+    "detected": 134,
+    "resolved": 21,
+    "dropped_ambiguous": 3
+   },
+   {
+    "faculty": "芸術工学部",
+    "how": "（室番号）",
+    "detected": 1,
+    "resolved": 0,
+    "dropped_ambiguous": 0
+   },
+   {
+    "faculty": "基幹教育科目",
+    "how": "記載なし",
+    "detected": 0,
+    "resolved": 0,
+    "dropped_ambiguous": 0
+   },
+   {
+    "faculty": "共創学部",
+    "how": "記載なし(シラバスで通知)",
+    "detected": 0,
+    "resolved": 0,
+    "dropped_ambiguous": 0
+   }
+  ]
+ }
+}

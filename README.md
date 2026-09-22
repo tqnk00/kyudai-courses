@@ -56,3 +56,27 @@ git add index.html && git commit -m "データ更新" && git push
 - 単一のHTMLファイル（6.3MB、gzipで約1.4MB）。データはページ内にJSONとして埋め込み
 - 外部依存はGoogle Fontsのみ。読み込めない環境では代替フォントで表示
 - お気に入りは `localStorage` に保存。端末のブラウザごとで、サーバーには送りません
+
+
+---
+
+## このリポジトリの構成
+
+```
+index.html   配布しているページそのもの（GitHub Pages がこれを配信）
+src/         作るためのコード一式
+src/data/    Campusmateに無い情報（文学部のシラバス、各学部の教室、事前申請）
+```
+
+### 作り直しかた
+
+```
+cd src
+python run.py daily            # Campusmateの一覧を取り直し、新しい科目の本文を取る
+python run.py rooms --refresh  # 各学部の時間割表PDFを取り直し、教室と事前申請を作る
+python run.py site             # index.html のもとになるHTMLを組み立てる
+```
+
+`src/data/pdf/` は履歴に入れていない（11MBあり学期ごとに差し替わるため）。
+`run.py rooms` が取りに行くので手当ては要らない。取得先は `src/timetable_pdfs.py`
+にまとめてあり、学部がファイル名を変えて404になったらそこを直す。

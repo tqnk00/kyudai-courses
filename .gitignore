@@ -1,3 +1,10 @@
 Thumbs.db
 .DS_Store
 desktop.ini
+
+__pycache__/
+*.pyc
+src/exports/
+# 各学部の時間割表PDF。11MBあり学期ごとに差し替わるので履歴に入れない。
+# `python run.py rooms --refresh` で取り直せる（取得先は src/timetable_pdfs.py）
+src/data/pdf/
