@@ -343,5 +343,35 @@ class ReviewFixes(unittest.TestCase):
         self.assertEqual(extract.grades_of("全学年", "歯学部"), "1,2,3,4,5,6")
         self.assertEqual(extract.grades_of("全学年", "法学部"), "1,2,3,4")
 
+class GradingSharedAllocation(unittest.TestCase):
+    def test_合わせての配点を重ねて数えない(self):
+        # 表のセルが結合されていて、複数の方法が同じ説明と同じ割合を持って入ってくる（鉄鋼製錬学）
+        raw = "\n".join([
+            "定期試験", "学期末試験と小テストと併せて60%",
+            "小テスト", "学期末試験と小テストと併せて60%",
+            "レポート", "レポート、授業への貢献度を合わせて40%",
+            "授業への貢献度", "レポート、授業への貢献度を合わせて40%"])
+        g = grading.parse(raw)
+        self.assertEqual(grading.total_pct(g["rows"]), 100.0)
+        shared = [r[0] for r in g["rows"] if len(r) > 3 and r[3] == grading.SHARED]
+        self.assertEqual(shared, ["小テスト", "授業への貢献度"])
+
+    def test_説明が無い同じ割合はまとめない(self):
+        g = grading.parse("\n".join(["レポート", "50%", "発表", "50%"]))
+        self.assertEqual(grading.total_pct(g["rows"]), 100.0)
+
+
+class StaleFilterByScope(unittest.TestCase):
+    def test_一部の開講期だけ巡回しても他の開講期の科目は消えない(self):
+        latest = {"20": "2026-09-23T10:00:00", "00": "2026-09-14T10:00:00"}
+        # 通年(00)の科目は9/14の巡回で見えていて、9/23は対象外だった
+        self.assertFalse(site_data.is_stale("00", "2026-09-14T10:01:00", latest))
+        # 後期(20)の科目が9/23の巡回で見えなくなった
+        self.assertTrue(site_data.is_stale("20", "2026-09-14T10:01:00", latest))
+        # 開講期が移った科目は、どちらかの巡回で見えていれば残す
+        self.assertFalse(site_data.is_stale("20,00", "2026-09-14T10:01:00", latest))
+        self.assertFalse(site_data.is_stale("99", "2020-01-01T00:00:00", latest))
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

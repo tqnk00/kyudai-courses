@@ -432,6 +432,7 @@
             padding: 14px 0 12px; }
   .tthead h1 { font-family: var(--f-display); font-size: 19px; margin: 0; font-weight: 700; }
   .tthead .spacer { flex: 1 1 auto; }
+  .ttsem { display: inline-flex; gap: 6px; }
   .ttstat { font-size: 12px; color: var(--ink-mute); }
   .ttstat b { font-family: var(--f-mono); color: var(--ink); font-size: 14px; }
   .ttback {
@@ -465,6 +466,24 @@
   .ttcell .sub2 { font-size: 10.5px; color: var(--ink-mute); line-height: 1.3; }
   .ttcell .plus { font-size: 17px; color: var(--ink-faint); margin: auto; font-weight: 400; }
   .ttcell.dup { outline: 2px solid var(--amber); }
+  /* 重なっているコマ。先頭の科目の色に寄せず、注意の色で全科目の名前を並べる */
+  .ttcell.filled.dup { background: var(--amber-soft); border-color: var(--amber); }
+  .ttcell .dupbadge { font-size: 10px; font-weight: 700; color: var(--amber); }
+  .ttcell .dupline { font-size: 11px; font-weight: 600; line-height: 1.3; color: var(--ink);
+                     border-left: 3px solid hsl(var(--tt-h, 210) 55% 46%); padding-left: 4px;
+                     overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;
+                     -webkit-line-clamp: 2; word-break: break-all; }
+  .ttcell .dupline .qt { margin-right: 3px; }
+  .sheet .dupnote { margin: 0 0 12px; padding: 8px 10px; border-radius: 8px; font-size: 12.5px;
+                    background: var(--amber-soft); color: var(--amber); font-weight: 600; }
+  /* クォーター科目（秋・冬／春・夏）は1コマを上下に分けて、両方を見せる */
+  .ttsplit { display: grid; grid-template-rows: 1fr 1fr; gap: 3px; min-height: 74px; }
+  .ttsplit .ttcell { min-height: 0; padding: 4px 7px; gap: 1px; border-radius: 8px; }
+  .ttsplit .ttcell .nm2 { -webkit-line-clamp: 2; font-size: 11.5px; }
+  .ttsplit .ttcell .plus { font-size: 13px; margin: auto; }
+  .ttcell .qt { font-family: var(--f-mono); font-size: 9.5px; font-weight: 500;
+                color: var(--ink-mute); letter-spacing: .04em; }
+  .ttcell:not(.filled) .qt { margin-right: auto; }
 
   .ttnote { margin-top: 14px; font-size: 11.5px; color: var(--ink-faint); line-height: 1.9; }
   .ttempty { padding: 34px 16px; text-align: center; color: var(--ink-faint); font-size: 13px; }
@@ -517,6 +536,15 @@
   .backdrop[hidden] { display: none; }
 
   .foot { margin-top: 26px; color: var(--ink-faint); font-size: 11.5px; line-height: 1.9; }
+  /* 引用であることの明示。上部は1行、下部に出典の一覧 */
+  .cite { margin: 6px 0 0; font-size: 11.5px; color: var(--ink-mute); line-height: 1.6; }
+  .cite a { color: inherit; }
+  .sources { margin-top: 22px; padding: 14px 16px; border: 1px solid var(--line-soft);
+             border-radius: 12px; background: var(--surface); font-size: 12px;
+             color: var(--ink-mute); line-height: 1.8; }
+  .sources h2 { font-size: 13px; margin: 0 0 6px; color: var(--ink); }
+  .sources ul { margin: 6px 0; padding-left: 1.2em; }
+  .sources a { color: inherit; word-break: break-all; }
   .foot code { font-family: var(--f-mono); font-size: 11px; }
 </style>
 </head>
@@ -530,6 +558,10 @@
         <span id="scope"></span> <b id="total">0</b> 件 ／
         サイト生成日 <b id="asof">–</b>
       </div>
+      <p class="cite">
+        掲載している科目情報はすべて、九州大学が公開しているシラバス・時間割からの引用です。
+        九州大学の公式サイトではありません。<a href="#sources">出典一覧</a>
+      </p>
     </div>
   </header>
 
@@ -593,6 +625,10 @@
     <div class="tthead">
       <h1>わたしの時間割</h1>
       <span class="ttstat"><b id="ttcount">0</b> 科目 ／ 計 <b id="ttcredits">0</b> 単位</span>
+      <span class="ttsem" role="group" aria-label="学期">
+        <button type="button" class="chip" data-sem="spring">前期</button>
+        <button type="button" class="chip" data-sem="autumn">後期</button>
+      </span>
       <span class="spacer"></span>
       <button type="button" class="ttback" id="ttback">授業さがしに戻る</button>
     </div>
@@ -603,7 +639,9 @@
     <p class="ttnote">
       コマを押すと教員・教室・シラバスへのリンクが出ます。空いているコマを押すと、
       そのコマに入る科目から選んで追加できます。★のお気に入りと中身は同じです。<br>
-      同じコマに2つ以上入っている場合は枠を橙色にしています。開講期が違えば重なりません。
+      前期と後期は上のボタンで切り替えます。通年の科目はどちらにも出ます。
+      秋学期と冬学期（春学期と夏学期）で別の科目を入れたコマは、上下半分ずつに分けて出します。
+      同じ時期の同じコマに2つ以上入っている場合は枠を橙色にしています。
     </p>
   </section>
 
@@ -620,10 +658,38 @@
     <div id="missingList"></div>
   </details>
 
+  <section class="sources" id="sources" aria-label="出典">
+    <h2>出典（引用元）</h2>
+    このページの科目情報（科目名・担当教員・開講期・曜日時限・教室・授業概要・授業計画・成績評価・事前申請の印など）は、
+    すべて次の資料からの引用です。このページが独自に作った情報ではなく、著作権は各資料の作成者にあります。
+    <ul>
+      <li>九州大学 シラバス（Campusmate）… 文学部以外の全科目
+        <a href="https://ku-portal.kyushu-u.ac.jp/campusweb/" target="_blank" rel="noopener">ku-portal.kyushu-u.ac.jp/campusweb/</a></li>
+      <li>九州大学 文学部 シラバス・時間割 … 文学部の科目と教室
+        <a href="https://www3.lit.kyushu-u.ac.jp/~syllabus/" target="_blank" rel="noopener">www3.lit.kyushu-u.ac.jp/~syllabus/</a></li>
+      <li>九州大学 基幹教育院 開講科目一覧（B表）… 基幹教育科目の教室・事前申請
+        <a href="https://www.artsci.kyushu-u.ac.jp/campus_life/course.html" target="_blank" rel="noopener">www.artsci.kyushu-u.ac.jp/campus_life/course.html</a></li>
+      <li>各学部が公開している時間割表 … 教室と、シラバスが見つからない科目の一覧<br>
+        <a href="https://www.education.kyushu-u.ac.jp/schedules/" target="_blank" rel="noopener">教育学部</a>・
+        <a href="https://www.law.kyushu-u.ac.jp/faculty/study" target="_blank" rel="noopener">法学部</a>・
+        <a href="https://www.econ.kyushu-u.ac.jp/kyoumu/" target="_blank" rel="noopener">経済学部</a>・
+        <a href="https://www.sci.kyushu-u.ac.jp/student/timetable.html" target="_blank" rel="noopener">理学部</a>・
+        <a href="https://www.eecs.kyushu-u.ac.jp/school.html" target="_blank" rel="noopener">工学部 電気情報工学科</a>・
+        <a href="https://civil.kyushu-u.ac.jp/student/schedule/" target="_blank" rel="noopener">工学部 土木工学科</a>・
+        <a href="https://www.design.kyushu-u.ac.jp/curriculum/" target="_blank" rel="noopener">芸術工学部</a>・
+        <a href="https://ag.kyushu-u.ac.jp/" target="_blank" rel="noopener">農学部</a>・
+        <a href="https://kyoso.kyushu-u.ac.jp/pages/students/study" target="_blank" rel="noopener">共創学部</a></li>
+    </ul>
+    文章は原文から機械的に取り出したもので、長い概要は途中で切っています。成績評価の割合の整理、開講期のまとめ方、
+    教室と科目の対応づけはこのページで自動処理したもので、原文と食い違うことがあります。
+    取得した時点の内容なので、履修の判断は必ず各科目の「公式シラバスを開く」から原文で確認してください。
+  </section>
+
   <footer class="foot">
-    出典: 九州大学シラバス（Campusmate）。科目名をクリックすると概要が開き、公式のシラバスページへ移動できます。<br>
-    開講期は複数選べます。何も選ばなければ全部表示。<b>「後期」は後期通しの科目</b>で、秋・冬の両方にわたって開講されます。
-    秋学期のコマに何があるかを見るなら <b>後期＋秋学期</b> を選んでください。<br>
+    科目名をクリックすると概要が開き、公式のシラバスページへ移動できます。<br>
+    前期・後期の両方の科目を載せています。最初は今の学期（と通年）を選んだ状態で開きます。
+    開講期は複数選べ、全部外すと全開講期を表示します。<b>「後期」は後期通しの科目</b>で、秋・冬の両方にわたって開講されます。
+    秋学期のコマに何があるかを見るなら <b>後期＋秋学期</b> を選んでください（前期なら <b>前期＋春学期</b> など）。<br>
     絞り込んだ状態のURLをそのまま送れば、相手も同じ条件で開けます。<br>
     一覧の右端の <b>★</b> を押すとお気に入りに入り、「お気に入り」を押すとその科目だけの時間割になります。
     お気に入りはこの端末のブラウザに保存されます（他の端末とは共有されません）。<br>
@@ -663,10 +729,21 @@
     return c._g;
   }
 
-  // terms は開講期チップの選択集合。空なら全部（後期・秋・冬・通年ほか）を出す
+  // terms は開講期チップの選択集合。空なら全部の開講期を出す
   var state = { terms: {}, fac: "", cat: "", grade: 0, camp: "", text: "", words: [],
                 cell: null, tray: false, fav: false, cap: LIST_CAP, view: "search" };
   // 表示順はチップの並び（後期・秋学期・冬学期・通年ほか）に揃える
+  // 前期と後期の両方を載せているので、何も指定がなければ今の学期（と通年）から始める。
+  // 全部を重ねると、同じコマに前期と後期の科目が混ざって時間割として読めない
+  var SPRING_TERMS = ["前期", "春学期", "夏学期"];
+  var AUTUMN_TERMS = ["後期", "秋学期", "冬学期"];
+  function defaultTerms() {
+    var m = new Date().getMonth() + 1;
+    var want = (m >= 4 && m <= 8 ? SPRING_TERMS : AUTUMN_TERMS).concat(["通年・その他"]);
+    var out = {};
+    want.forEach(function (g) { if (META.term_groups.indexOf(g) >= 0) { out[g] = 1; } });
+    return out;
+  }
   function termsOn() {
     return META.term_groups.filter(function (g) { return state.terms[g]; });
   }
@@ -711,8 +788,9 @@
      「この条件で見て」とリンクで渡せるようにする。値は既定と違うものだけ書く */
   var pendingPush = false;
   function stateToHash() {
+    // 開講期は常に書く。無指定は「今の学期」と読むので、全部のときは all と明示する
     var p = [], t = termsOn();
-    if (t.length) { p.push("t=" + encodeURIComponent(t.join(","))); }
+    p.push("t=" + (t.length ? encodeURIComponent(t.join(",")) : "all"));
     if (state.fac) { p.push("f=" + encodeURIComponent(state.fac)); }
     if (state.cat) { p.push("c=" + encodeURIComponent(state.cat)); }
     if (state.grade) { p.push("g=" + state.grade); }
@@ -743,9 +821,13 @@
       if (i > 0) { q[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, " ")); }
     });
     state.terms = {};
-    (q.t ? q.t.split(",") : []).forEach(function (g) {
-      if (META.term_groups.indexOf(g) >= 0) { state.terms[g] = 1; }
-    });
+    if (q.t === undefined) {
+      state.terms = defaultTerms();
+    } else {
+      q.t.split(",").forEach(function (g) {
+        if (META.term_groups.indexOf(g) >= 0) { state.terms[g] = 1; }
+      });
+    }
     // 知らない値が入っていても壊れないよう、選択肢にあるものだけ採る
     state.fac = META.faculties.indexOf(q.f) >= 0 ? q.f : "";
     state.cat = q.c || "";
@@ -815,6 +897,7 @@
       html += "<h4>" + esc(f) + "（" + byFac[f].length + "件）</h4><ul>";
       byFac[f].forEach(function (m) {
         html += "<li>" + esc(m.title || m.code || "") +
+          (m.season === "spring" ? '<span class="room">前期</span>' : "") +
           (m.room ? '<span class="room">' + esc(m.room) + "</span>" : "") + "</li>";
       });
       html += "</ul>";
@@ -906,7 +989,10 @@
     syncSticky();
   });
   function activeCount() {
-    var n = termsOn().length + (state.fac ? 1 : 0) + (state.cat ? 1 : 0)
+    // 開講期は既定（今の学期）のままなら条件として数えない
+    var def = Object.keys(defaultTerms()).sort().join(",");
+    var termN = termsOn().slice().sort().join(",") === def ? 0 : termsOn().length;
+    var n = termN + (state.fac ? 1 : 0) + (state.cat ? 1 : 0)
           + (state.grade ? 1 : 0) + (state.camp ? 1 : 0);
     return n;
   }
@@ -925,7 +1011,7 @@
   });
   el("reset").addEventListener("click", function () {
     clearTimeout(timer);
-    state = { terms: {}, fac: "", cat: "", grade: 0, camp: "", text: "", words: [],
+    state = { terms: defaultTerms(), fac: "", cat: "", grade: 0, camp: "", text: "", words: [],
               cell: null, tray: false, fav: false, cap: LIST_CAP, view: state.view };
     el("fac").value = ""; el("camp").value = ""; el("q").value = "";
     openCodes = Object.create(null);
@@ -1131,14 +1217,25 @@
     });
   }
 
+  // 1コマぶんの曜日時限。集中講義などは曜日も時限も「その他」で入っているので、
+  // そのままつなぐと「その他その他」になる。1語にまとめる
+  function slotText(s, withGen) {
+    if (s[1] === "その他" && s[2] === "その他") { return "日時は別途"; }
+    return s[1] + s[2] + (withGen && /^[0-9]+$/.test(s[2]) ? "限" : "");
+  }
   // コマの表示。学期が複数にまたがる科目は、コマごとに学期を添える
   function slotLabel(c) {
     var groups = {}, n = 0;
     c.sl.forEach(function (s) { var g = slotGroup(c, s); if (!groups[g]) { groups[g] = 1; n++; } });
     if (n > 1) {
-      return c.sl.map(function (s) { return s[0] + " " + s[1] + s[2] + "限"; }).join("・");
+      return c.sl.map(function (s) { return s[0] + " " + slotText(s, true); }).join("・");
     }
-    var slot = c.sl.map(function (s) { return s[1] + s[2]; }).join(" ");
+    var seen = {}, parts = [];
+    c.sl.forEach(function (s) {
+      var t = slotText(s, false);
+      if (!seen[t]) { seen[t] = 1; parts.push(t); }
+    });
+    var slot = parts.join(" ");
     return c.tm + (slot ? " " + slot : "");
   }
 
@@ -1340,7 +1437,8 @@
     }
     out += gradeHTML(c);
     var src = c.su || META.detail_url.replace("{code}", encodeURIComponent(c.c));
-    out += '<a class="src" target="_blank" rel="noopener" href="' + esc(src) +
+    out += '<span class="src">出典: ' + (c.su ? "九州大学 文学部シラバス" : "九州大学シラバス（Campusmate）") +
+      '</span> <a class="src" target="_blank" rel="noopener" href="' + esc(src) +
       '">公式シラバスを開く</a>';
     return out;
   }
@@ -1352,9 +1450,10 @@
 
     var max = Math.max.apply(null, c.gr.map(function (r) { return r[1] || 0; })) || 100;
     var body = c.gr.map(function (r) {
-      // r[3] は「割合はあるが配点ではない」の印。出席率などの条件を配点と読ませない
+      // r[3] は割合の扱いの印。1 は出席率などの条件（配点ではない）、
+      // 2 は上の方法と1つの配点を分け合っている行
       var pct = r[1] === null
-        ? '<td class="p none">' + (r[3] ? "条件" : "実施") + "</td>"
+        ? '<td class="p none">' + (r[3] === 2 ? "上と合算" : r[3] ? "条件" : "実施") + "</td>"
         : '<td class="p">' + esc(r[1]) + "%</td>";
       var bar = r[1] === null ? "" :
         '<span class="track"><span class="fill" style="width:' +
@@ -1368,14 +1467,22 @@
       var off = Math.abs(c.gt - 100) > 0.5;
       foot = '<tfoot><tr><td class="m">合計</td>' +
         '<td class="p' + (off ? " warn" : "") + '">' + esc(c.gt) + "%</td>" +
-        '<td>' + (off ? "シラバスの記載どおり。100%になりません" : "") + "</td></tr></tfoot>";
+        '<td>' + (off ? "100%になりません。公式シラバスで確認してください" : "") + "</td></tr></tfoot>";
     }
     out += '<table class="grade"><thead><tr><th>方法</th><th>割合</th><th></th></tr></thead>' +
            "<tbody>" + body + "</tbody>" + foot + "</table>";
 
     // 条件や注意書きは表に入れず、下に並べる
-    var notes = c.gr.filter(function (r) { return r[2]; }).map(function (r) {
-      return "<li><b>" + esc(r[0]) + "</b> — " + esc(r[2]) + "</li>";
+    // 合算の行は説明文も同じなので、1つにまとめて方法名を並べる
+    var noteRows = [], byNote = {};
+    c.gr.forEach(function (r) {
+      if (!r[2]) return;
+      if (byNote[r[2]]) { byNote[r[2]].push(r[0]); return; }
+      byNote[r[2]] = [r[0]];
+      noteRows.push(r[2]);
+    });
+    var notes = noteRows.map(function (n) {
+      return "<li><b>" + esc(byNote[n].join("・")) + "</b> — " + esc(n) + "</li>";
     }).concat(c.gx.map(function (x) { return "<li>" + esc(x) + "</li>"; }));
     if (notes.length) out += '<ul class="notes">' + notes.join("") + "</ul>";
     if (c.gu.length) {
@@ -1452,9 +1559,32 @@
      お気に入りをそのまま自分の時間割として扱う。詳細は出さず、
      科目名・教員・教室・シラバスへのリンクと、追加削除だけに絞る */
   var TT_PERIODS = 6;
+  // 前期と後期は別の時間割として見せる。重ねると同じコマに別の学期の科目が並ぶ
+  var ttSem = (function () {
+    var m = new Date().getMonth() + 1;
+    return m >= 4 && m <= 8 ? "spring" : "autumn";
+  }());
+  function semGroups() {
+    return (ttSem === "spring" ? SPRING_TERMS : AUTUMN_TERMS).concat(["通年・その他"]);
+  }
+  function inSem(c, s) { return semGroups().indexOf(slotGroup(c, s)) >= 0; }
+  // 学期の前半・後半のクォーター。後期なら秋学期・冬学期、前期なら春学期・夏学期
+  function semQuarters() {
+    return ttSem === "spring" ? ["春学期", "夏学期"] : ["秋学期", "冬学期"];
+  }
+  function courseInSem(c) {
+    if (c.sl.length) { return c.sl.some(function (s) { return inSem(c, s); }); }
+    return courseGroups(c).some(function (g) { return semGroups().indexOf(g) >= 0; });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".ttsem [data-sem]"), function (b) {
+    b.addEventListener("click", function () {
+      ttSem = this.getAttribute("data-sem");
+      closeSheet(); drawTT();
+    });
+  });
 
   function ttCourses() {
-    return COURSES.filter(function (c) { return isFav(c.c); });
+    return COURSES.filter(function (c) { return isFav(c.c) && courseInSem(c); });
   }
   function ttHue(c) {
     if (c.f && FAC_HUE[c.f] !== undefined) { return FAC_HUE[c.f]; }
@@ -1462,21 +1592,46 @@
     for (var i = 0; i < c.c.length; i++) { h = (h * 31 + c.c.charCodeAt(i)) % 360; }
     return h;
   }
+  // コマ -> 科目の並び。各コマの q には、科目ごとにそのコマが入る学期の集合を持たせる
+  // （秋学期だけ・冬学期だけ・通しの区別に使う）
   function ttBuckets() {
     var b = {};
     ttCourses().forEach(function (c) {
       c.sl.forEach(function (s) {
         if (DAYS.indexOf(s[1]) < 0 || !/^[1-9]$/.test(s[2])) { return; }
+        if (!inSem(c, s)) { return; }
         var k = s[1] + s[2];
-        if (!b[k]) { b[k] = []; }
+        if (!b[k]) { b[k] = []; b[k].q = {}; }
         if (b[k].indexOf(c) < 0) { b[k].push(c); }
+        (b[k].q[c.c] = b[k].q[c.c] || {})[slotGroup(c, s)] = 1;
       });
     });
     return b;
   }
+  // そのコマの科目がクォーターで上下に分けられるなら [前半, 後半]（無い側は null）を返す。
+  // 通しの科目があるか、同じクォーターに2つ以上あれば分けられないので null
+  function ttSplit(list) {
+    var qs = semQuarters(), halves = [null, null];
+    for (var i = 0; i < list.length; i++) {
+      var g = Object.keys(list.q[list[i].c]);
+      if (g.length !== 1) { return null; }
+      var at = qs.indexOf(g[0]);
+      if (at < 0 || halves[at]) { return null; }
+      halves[at] = list[i];
+    }
+    return halves;
+  }
+  function ttFilled(c, k, extraClass, inner) {
+    return '<button type="button" class="ttcell filled' + (extraClass || "") +
+      '" data-tk="' + k + '" data-code="' + esc(c.c) + '" style="--tt-h:' + ttHue(c) + '">' +
+      inner + "</button>";
+  }
 
   function drawTT() {
     var courses = ttCourses(), buckets = ttBuckets();
+    Array.prototype.forEach.call(document.querySelectorAll(".ttsem [data-sem]"), function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-sem") === ttSem));
+    });
     var maxP = TT_PERIODS;
     Object.keys(buckets).forEach(function (k) {
       var p = +k.slice(1);
@@ -1503,24 +1658,57 @@
             '<span class="plus">＋</span></button>');
           continue;
         }
+        var halves = ttSplit(list);
+        if (halves) {
+          // 秋学期と冬学期で別の科目。上下半分ずつに出し、空いた側からも追加できる
+          var qs = semQuarters();
+          html.push('<div class="ttsplit">' + halves.map(function (h, i) {
+            var qt = '<span class="qt">' + qs[i].charAt(0) + "</span>";
+            if (!h) {
+              return '<button type="button" class="ttcell" data-tk="' + k + '" data-q="' + qs[i] + '"' +
+                ' aria-label="' + DAYS_LABEL(k) + " " + qs[i] + ' 空き。押すと追加">' +
+                qt + '<span class="plus">＋</span></button>';
+            }
+            return ttFilled(h, k, "", qt + '<span class="nm2">' + esc(h.t) + "</span>" +
+              (h.rm ? '<span class="sub2">' + esc(h.rm) + "</span>" : ""));
+          }).join("") + "</div>");
+          continue;
+        }
         var c = list[0];
-        var extra = list.length > 1
-          ? '<span class="sub2">ほか ' + (list.length - 1) + " 件</span>" : "";
-        html.push('<button type="button" class="ttcell filled' +
-          (list.length > 1 ? " dup" : "") + '" data-tk="' + k + '"' +
+        if (list.length > 1) {
+          // 重なっているコマは全科目の名前を学期つきで並べる（先頭の1件だけだと、
+          // 何が重なっているのかを押すまで分からない）
+          var lines = list.slice(0, 3).map(function (x) {
+            var gs = Object.keys(list.q[x.c]).map(function (g) { return g.charAt(0); }).join("");
+            return '<span class="dupline" style="--tt-h:' + ttHue(x) + '">' +
+              '<span class="qt">' + esc(gs) + "</span>" + esc(x.t) + "</span>";
+          }).join("");
+          html.push('<button type="button" class="ttcell filled dup" data-tk="' + k + '"' +
+            ' aria-label="' + DAYS_LABEL(k) + " " + list.length + '科目が重なっています">' +
+            '<span class="dupbadge">⚠ 重複' + list.length + "</span>" + lines +
+            (list.length > 3 ? '<span class="sub2">ほか ' + (list.length - 3) + " 件</span>" : "") +
+            "</button>");
+          continue;
+        }
+        html.push('<button type="button" class="ttcell filled" data-tk="' + k + '"' +
           ' style="--tt-h:' + ttHue(c) + '">' +
           '<span class="nm2">' + esc(c.t) + "</span>" +
           (c.rm ? '<span class="sub2">' + esc(c.rm) + "</span>" : "") +
           '<span class="sub2">' + esc(c.i.slice(0, 1).join("")) + "</span>" +
-          extra + "</button>");
+          "</button>");
       }
     }
     g.innerHTML = html.join("");
     Array.prototype.forEach.call(g.querySelectorAll(".ttcell"), function (b) {
       b.addEventListener("click", function () {
-        var k = this.getAttribute("data-tk");
+        var k = this.getAttribute("data-tk"), q = this.getAttribute("data-q");
+        var code = this.getAttribute("data-code");
         var list = ttBuckets()[k] || [];
-        if (list.length) { sheetCourses(k, list); } else { sheetAdd(k); }
+        // 半分に分けたコマは、押した側の科目だけを出す
+        if (code && this.closest(".ttsplit")) {
+          sheetCourses(k, list.filter(function (c) { return c.c === code; }));
+        } else if (q) { sheetAdd(k, q); }
+        else if (list.length) { sheetCourses(k, list); } else { sheetAdd(k); }
       });
     });
   }
@@ -1540,12 +1728,19 @@
     if (e.key === "Escape") { closeSheet(); }
   });
 
-  function slotWhen(k) { return k[0] + "曜 " + k.slice(1) + "限"; }
+  function DAYS_LABEL(k) { return k[0] + "曜" + k.slice(1) + "限"; }
+  function slotWhen(k, q) {
+    return (q || (ttSem === "spring" ? "前期" : "後期")) + " " + k[0] + "曜 " + k.slice(1) + "限";
+  }
 
   function sheetCourses(k, list) {
     var out = '<div class="sh"><h3>' + slotWhen(k) + "</h3>" +
       '<span class="when">' + list.length + " 科目</span>" +
-      '<button type="button" class="x" data-close="1">閉じる</button></div>';
+      '<button type="button" class="x" data-close="1">閉じる</button></div>' +
+      (list.length > 1
+        ? '<p class="dupnote">⚠ このコマに ' + list.length + " 科目が入っています。" +
+          "同時には受けられないので、取らない科目は「時間割から外す」で外してください。</p>"
+        : "");
     list.forEach(function (c) {
       var src = c.su || META.detail_url.replace("{code}", encodeURIComponent(c.c));
       out += '<div style="margin-bottom:14px">' +
@@ -1566,14 +1761,16 @@
     bindSheet();
   }
 
-  function sheetAdd(k) {
+  // q を渡すと、そのクォーター（秋学期など）にそのコマを持つ科目だけを候補にする
+  function sheetAdd(k, q) {
     var day = k[0], period = k.slice(1);
     var cands = COURSES.filter(function (c) {
       return !isFav(c.c) && c.sl.some(function (s) {
-        return s[1] === day && s[2] === period;
+        return s[1] === day && s[2] === period && inSem(c, s) &&
+          (!q || slotGroup(c, s) === q);
       });
     });
-    var out = '<div class="sh"><h3>' + slotWhen(k) + " に追加</h3>" +
+    var out = '<div class="sh"><h3>' + slotWhen(k, q) + " に追加</h3>" +
       '<span class="when">' + cands.length + " 科目</span>" +
       '<button type="button" class="x" data-close="1">閉じる</button></div>' +
       '<input type="search" id="addq" placeholder="科目名・教員で絞り込む" autocomplete="off">' +

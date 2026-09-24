@@ -49,12 +49,13 @@ def parse(page, term):
 def build():
     """PDFを読んで data/econ-timetable.json を書き出す。"""
     with pdfplumber.open(PDF_DIR / "econ-2026.pdf") as pdf:
-        courses = parse(pdf.pages[1], "後期")     # 2ページ目が後期
+        # 1ページ目が前期、2ページ目が後期
+        courses = parse(pdf.pages[0], "前期") + parse(pdf.pages[1], "後期")
 
-    # 同じ科目が連続コマ等で複数行に出る。科目名＋教室＋担当者でまとめる
+    # 同じ科目が連続コマ等で複数行に出る。学期＋科目名＋教室＋担当者でまとめる
     merged = {}
     for c in courses:
-        key = (c["title"], c["room"], tuple(c["instructors"]))
+        key = (c["term"], c["title"], c["room"], tuple(c["instructors"]))
         if key in merged:
             for s in c["slots"]:
                 if s not in merged[key]["slots"]:
@@ -63,7 +64,7 @@ def build():
             merged[key] = c
     courses = list(merged.values())
 
-    out = {"university": "九州大学", "year": 2026, "scope": "2026年度 後期",
+    out = {"university": "九州大学", "year": 2026, "scope": "2026年度 前期・後期",
            "sources": [{"faculty": "経済学部",
                         "url": "https://www.econ.kyushu-u.ac.jp/student/schedule",
                         "title": "2026年度時間割", "format": "pdf"}],

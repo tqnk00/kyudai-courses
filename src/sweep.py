@@ -46,7 +46,7 @@ def store(con, year, kaiko_cd, rows):
     return new
 
 
-def run(year=YEAR, which="phase1", pause=1.0):
+def run(year=YEAR, which="all", pause=1.0):
     codes = SETS[which]
     con = DB.init()
     run_id = con.execute(
@@ -94,7 +94,7 @@ def run(year=YEAR, which="phase1", pause=1.0):
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
-    ap.add_argument("--set", default="phase1", choices=list(SETS))
+    ap.add_argument("--set", default="all", choices=list(SETS))
     ap.add_argument("--year", type=int, default=YEAR)
     ap.add_argument("--pause", type=float, default=1.0)
     a = ap.parse_args()

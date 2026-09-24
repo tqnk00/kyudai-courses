@@ -121,26 +121,55 @@ def load_extra(path, what, empty, how):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def latest_sweep_by_kaiko(con):
+    """開講時期コードごとに、それを対象にした最後の成功した一覧巡回の開始時刻を返す。
+
+    crawl_runs.scope は「phase1:20,23,...」の形。巡回ごとに対象の開講時期が違うので、
+    全体の最新時刻ひとつで比べると、対象外だった開講時期の科目まで消えてしまう。
+    """
+    latest = {}
+    for r in con.execute("SELECT started_at, scope FROM crawl_runs "
+                         "WHERE job='sweep' AND status='ok'"):
+        codes = (r["scope"] or "").partition(":")[2].split(",")
+        for kc in filter(None, codes):
+            if r["started_at"] > latest.get(kc, ""):
+                latest[kc] = r["started_at"]
+    return latest
+
+
+def is_stale(kaiko_cd, last_seen, latest):
+    """直近の巡回で見えなくなった科目か。
+
+    科目は複数の開講時期コードで拾われることがある（kaiko_cd はカンマ区切りで追記される）。
+    そのどれかの巡回に一度でも出ていれば残す。つまり、自分の開講時期コードを対象にした
+    巡回のうち、いちばん古い「最新巡回」より前にしか見えていなければ消えたとみなす。
+    """
+    times = [latest[k] for k in (kaiko_cd or "").split(",") if k in latest]
+    if not times or not last_seen:
+        return False
+    return last_seen < min(times)
+
+
 def build(year=YEAR, undergrad_only=True):
     with DB.session() as con:
         DB.assert_extracted(con, UID, year)
         where = "AND st.is_undergrad=1" if undergrad_only else ""
-        # 直近の一覧巡回に出てこなかった科目は載せない。シラバスが非公開になった・
-        # 開講が取りやめになった科目で、DBには古い本文が残っている（2026-09-14 に5件）
-        last_sweep = con.execute(
-            "SELECT MAX(started_at) FROM crawl_runs WHERE job='sweep' AND status='ok'").fetchone()[0]
-        if last_sweep:
-            where += " AND ci.last_seen >= ?"
         rows = con.execute(f"""
-            SELECT st.*, sr.body, sr.layout, sr.updated_at
+            SELECT st.*, sr.body, sr.layout, sr.updated_at, ci.kaiko_cd, ci.last_seen
               FROM course_structured st
               JOIN syllabus_raw sr ON sr.university_id=st.university_id
                    AND sr.year=st.year AND sr.course_code=st.course_code
               JOIN course_index ci ON ci.university_id=st.university_id
                    AND ci.year=st.year AND ci.course_code=st.course_code
              WHERE st.university_id=? AND st.year=? {where}
-             ORDER BY st.course_code""",
-            (UID, year) + ((last_sweep,) if last_sweep else ())).fetchall()
+             ORDER BY st.course_code""", (UID, year)).fetchall()
+        # 直近の一覧巡回に出てこなかった科目は載せない。シラバスが非公開になった・
+        # 開講が取りやめになった科目で、DBには古い本文が残っている（2026-09-14 に5件）
+        latest = latest_sweep_by_kaiko(con)
+        n_all = len(rows)
+        rows = [r for r in rows if not is_stale(r["kaiko_cd"], r["last_seen"], latest)]
+        if n_all != len(rows):
+            print(f"[site_data] 直近の巡回で見えなくなった科目 {n_all - len(rows)}件を除外")
 
         slots = {}
         for r in con.execute("SELECT course_code, term, weekday, period, seq FROM course_slots "

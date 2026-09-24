@@ -19,8 +19,9 @@ FACULTY = "文学部"
 def script_for(year: int) -> str:
     return "table-even.cgi" if year % 2 == 0 else "table-odd.cgi"
 
-# gakki: 1前期 / 2後期 / 3春クォータ / 4夏クォータ / 5秋クォータ / 6冬クォータ / 0すべて
-GAKKI = {"spring": ["1", "3", "4"], "autumn": ["2", "5", "6"], "all": ["0"]}
+# 学期は show の先頭で決まる。S1… が前学期（前期・春・夏）、S2… が後学期（後期・秋・冬）。
+# 2桁目は 1 が学部。フォームにある gakki は効かず、どの値でも同じ表が返る（2026-09-23 確認）
+SHOW = {"spring": ["S1110000"], "autumn": ["S2110000"], "all": ["S1110000", "S2110000"]}
 
 _TAGS = re.compile(r"<[^>]+>")
 _CELL = re.compile(r"<td[^>]*>(.*?)</td>", re.S | re.I)
@@ -221,15 +222,15 @@ def parse_course(raw_html: str, num: str, year: int):
 
 # ---- 取得 ----------------------------------------------------------------
 
-def crawl(year=2026, which="autumn", pause=1.0, limit=None, log=print, cache_dir=None):
+def crawl(year=2026, which="all", pause=1.0, limit=None, log=print, cache_dir=None):
     """時間割 -> 個別ページの順に取る。戻り値は course の dict のリスト。"""
     script = script_for(year)
     with httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=60,
                       follow_redirects=True) as c:
         table = {}
-        for g in GAKKI[which]:
-            url = f"{BASE}{script}?thisyear={year}&gakki={g}&school0=1&show=S2110000&big=B00000"
-            log(f"[lit] 時間割 gakki={g}")
+        for show in SHOW[which]:
+            url = f"{BASE}{script}?thisyear={year}&school0=1&show={show}&big=B00000"
+            log(f"[lit] 時間割 show={show}")
             found = parse_timetable(fetch(c, url))
             for k, v in found.items():
                 if k in table:
@@ -322,18 +323,19 @@ def to_site_course(c):
 
 if __name__ == "__main__":
     import sys, json, argparse
-    from config import EXPORT_DIR
+    from config import DATA_DIR
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--year", type=int, default=2026)
-    ap.add_argument("--set", default="autumn", choices=list(GAKKI))
+    ap.add_argument("--set", default="all", choices=list(SHOW))
     ap.add_argument("--pause", type=float, default=1.0)
     ap.add_argument("--limit", type=int)
     a = ap.parse_args()
     rows = crawl(a.year, a.set, a.pause, a.limit)
     site = [to_site_course(c) for c in rows]
-    EXPORT_DIR.mkdir(parents=True, exist_ok=True)
-    out = EXPORT_DIR / f"lit-courses-{a.year}.json"
+    # site_data は DATA_DIR から読む。EXPORT_DIR に書くと取り込まれない
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    out = DATA_DIR / f"lit-courses-{a.year}.json"
     out.write_text(json.dumps(site, ensure_ascii=False, separators=(",", ":")),
                    encoding="utf-8")
     print(f"[lit] {len(site)}件 -> {out}")

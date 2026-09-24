@@ -36,7 +36,7 @@ $env:SYLLABUS_EXPORT_DIR = 'C:\data\syllabus-exports'
 
 ```powershell
 python run.py init
-python run.py full --year 2026 --set phase1
+python run.py full --year 2026
 python run.py daily --year 2026
 python run.py weekly --year 2026
 python run.py extract --year 2026
@@ -49,7 +49,8 @@ python run.py summarize --year 2026 --dry-run
 - `full`: 一覧取得 → 本文取得 → 抽出 → レポート・CSV・JSON → サイト生成。
 - `daily`: 一覧取得 → 未取得本文のみ取得 → 抽出 → サイト生成。
 - `weekly`: 一覧取得 → 全本文の更新確認 → 抽出 → サイト生成 → 更新件数。
-- `--set`: `phase1`（後期＋通年）、`autumn`、`spring`、`full`（通年のみ）、`all`。
+- `--set`: `all`（全開講期。既定）、`phase1`（後期＋通年）、`autumn`、`spring`、`full`（通年のみ）。
+  一部の開講期だけ回しても、対象外の開講期の科目はサイトから消えない（開講期ごとに最後の巡回と比べる）。
 - `--workers`: 1〜5、既定4。本文取得の同時接続数。
 - `site`・`report`・`summarize` は学部のみが既定。`--all` で大学院・判定不能も含めます。
 - `summarize --dry-run` は件数・概算費用の確認です。対象があればトークン数確認APIに接続するため、API認証が必要です。
