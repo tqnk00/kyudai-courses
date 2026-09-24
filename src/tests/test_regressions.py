@@ -264,7 +264,14 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(data['meta']['term_groups'], ['春学期', '後期'])
         self.assertNotIn('<', payload)
         self.assertIn(attack, data['courses'][0]['t'])
-        self.assertEqual(data['courses'][0]['grraw'], '2年～5年')
+        # 詳細だけで使う項目はページ本体に入れず、科目コードで決まる分割ファイルに置く
+        first = data['courses'][0]
+        self.assertNotIn('grraw', first)
+        self.assertNotIn('pl', first)
+        det_dir = path.parent / data['meta']['detail_dir']
+        shard = json.loads((det_dir / f"{site_data.shard_of(first['c']):02d}.json").read_text(encoding='utf-8'))
+        self.assertEqual(shard[first['c']]['grraw'], '2年～5年')
+        self.assertEqual(len(list(det_dir.glob('*.json'))), data['meta']['detail_shards'])
         if os.environ.get('SYLLABUS_TEST_HTML'):
             Path(os.environ['SYLLABUS_TEST_HTML']).write_text(html, encoding='utf-8')
 

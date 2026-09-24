@@ -314,6 +314,9 @@
     color: var(--ink-faint); text-transform: uppercase;
   }
   .detail .body { color: var(--ink); line-height: 1.8; white-space: pre-wrap; }
+  .detail .body.loading { color: var(--ink-faint); }
+  .detail .body.loadfail { color: var(--amber); background: var(--amber-soft);
+                           padding: 8px 10px; border-radius: 8px; }
   /* 授業計画。回・テーマ・内容の3列 */
   .plan { display: grid; grid-template-columns: 2.2em 1fr; gap: 2px 10px;
           margin: 0; font-size: .96em; }
@@ -1241,21 +1244,71 @@
   // 開いている詳細の科目コード。絞り込みを変えても閉じないように覚えておく
   var openCodes = Object.create(null);
 
+  /* ---- 詳細の読み込み ----
+     授業計画・概要・成績評価などは、ページを軽くするため別ファイル（details-年度/NN.json）に
+     分けてある。科目コードから決まる1ファイルだけを、詳細を開いたときに取りに行く */
+  var DETAIL_DEFAULTS = {
+    d: "", pl: [], gr: [], gu: [], gx: [], gt: null, ep: "",
+    ev: [0, 0, 0, 0], grraw: "", rq: "", catr: "", ln: "", rmu: "", apu: ""
+  };
+  var shardCache = Object.create(null);
+  function shardOf(code) {
+    // site_data.shard_of と同じ FNV-1a
+    var h = 2166136261;
+    for (var i = 0; i < code.length; i++) { h = Math.imul(h ^ code.charCodeAt(i), 16777619) >>> 0; }
+    return h % META.detail_shards;
+  }
+  function fillDetail(c, got) {
+    META.detail_keys.forEach(function (k) {
+      c[k] = got && k in got ? got[k] : DETAIL_DEFAULTS[k];
+    });
+  }
+  function loadDetail(c) {
+    if (c._det) { return Promise.resolve(c); }
+    var n = shardOf(c.c);
+    if (!shardCache[n]) {
+      var url = META.detail_dir + "/" + (n < 10 ? "0" : "") + n + ".json";
+      shardCache[n] = fetch(url).then(function (r) {
+        if (!r.ok) { throw new Error(r.status); }
+        return r.json();
+      });
+    }
+    return shardCache[n].then(function (m) {
+      fillDetail(c, m[c.c]);
+      c._det = 1;
+      return c;
+    }, function () {
+      // 通信できない・ファイルを直接開いた、など。次に開いたときに取り直す
+      delete shardCache[n];
+      fillDetail(c, null);
+      c._detErr = 1;
+      return c;
+    });
+  }
+
   function openDetail(li, code) {
     var c = byCode(code);
     if (!c) { return; }
     var d = document.createElement("div");
     d.className = "detail";
-    d.innerHTML = detailHTML(c);
+    d.innerHTML = '<p class="body loading">読み込み中…</p>';
     li.appendChild(d);
-    var more = d.querySelector(".plan-more");
-    if (more) {
-      more.addEventListener("click", function () {
-        var wrap = this.parentNode;
-        this.previousElementSibling.outerHTML = planHTML(c, true);
-        wrap.removeChild(this);
-      });
-    }
+    loadDetail(c).then(function () {
+      if (!d.parentNode) { return; }   // 読み込む間に閉じられた
+      d.innerHTML = (c._detErr
+        ? '<p class="body loadfail">授業の概要・授業計画・成績評価を読み込めませんでした。' +
+          "通信状態を確かめて開き直すか、下の「公式シラバスを開く」から確認してください。</p>"
+        : "") + detailHTML(c);
+      c._detErr = 0;                   // _det は立てていないので、次に開いたときに取り直す
+      var more = d.querySelector(".plan-more");
+      if (more) {
+        more.addEventListener("click", function () {
+          var wrap = this.parentNode;
+          this.previousElementSibling.outerHTML = planHTML(c, true);
+          wrap.removeChild(this);
+        });
+      }
+    });
   }
 
   function drawList(list, title) {
@@ -1366,7 +1419,7 @@
       row("キャンパス", c.cp || "—"),
       row("使用言語", c.ln || "—"),
       row("担当教員", c.i.join("・") || "—"),
-      ["成績評価", ev, false],
+      row("成績評価", ev),
       // ナンバリングと更新日は履修選択の判断に使わないので表には出さない。
       // ナンバリングはキーワード検索の対象としては残してある
       row("科目区分", c.cat || "—")
@@ -1420,6 +1473,13 @@
     // 区分を統合した科目は、シラバスの元の表記も見せる（経済学部の学科ごとの扱いなど）
     if (c.catr) {
       rows.splice(at("科目区分") + 1, 0, row("シラバス表記", c.catr));
+    }
+    // 詳細ファイルを読めなかったときは、そこから来る行を出さない。
+    // 既定値の「指定なし」「—」が本当の値に見えてしまうため
+    if (c._detErr) {
+      rows = rows.filter(function (r) {
+        return ["対象学年", "必修選択", "使用言語", "成績評価"].indexOf(r.label) < 0;
+      });
     }
     var dl = rows.map(function (r) {
       var v = r.html ? String(r.value) : esc(String(r.value));

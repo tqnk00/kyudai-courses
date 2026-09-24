@@ -1,7 +1,7 @@
 # 九大 授業さがし（2026年度）
 
 九州大学のシラバスを、時間割のコマから探せるようにした1枚のWebページです。
-`index.html` だけで動きます。サーバーもデータベースも要りません。
+`index.html` と `details-2026/` を置くだけで動きます。サーバー側の処理もデータベースも要りません。
 
 **公開URL**: https://tqnk00.github.io/kyudai-courses/
 
@@ -51,13 +51,18 @@
 
 ```bash
 cp src/exports/kyudai-courses-2026.html index.html
-git add index.html && git commit -m "データ更新" && git push
+rm -rf details-2026 && cp -r src/exports/details-2026 .
+git add -A index.html details-2026 && git commit -m "データ更新" && git push
 ```
 
 ## 技術メモ
 
-- 単一のHTMLファイル（16MB、gzipで約3.3MB）。データはページ内にJSONとして埋め込み
-- 外部依存はGoogle Fontsのみ。読み込めない環境では代替フォントで表示
+- 一覧・検索・時間割に使うデータはページ内にJSONとして埋め込み（2.3MB、転送は約0.4MB）
+- 授業の概要・授業計画・成績評価などは `details-2026/` に64分割して置き、詳細を開いたときに
+  その科目の入った1ファイル（転送は約60KB）だけを読む。分割先は科目コードのハッシュ（FNV-1a）で決まる
+- `index.html` をファイルとして直接開くと、ブラウザの制限で分割ファイルを読めない。その場合、
+  詳細には読めなかった旨と公式シラバスへのリンクが出る（検索と時間割はそのまま使える）
+- 外部依存はGoogle FontsとGoatCounter（訪問数の計測）のみ。フォントが読み込めない環境では代替フォントで表示
 - お気に入りは `localStorage` に保存。端末のブラウザごとで、サーバーには送りません
 
 
@@ -67,6 +72,7 @@ git add index.html && git commit -m "データ更新" && git push
 
 ```
 index.html   配布しているページそのもの（GitHub Pages がこれを配信）
+details-2026/  詳細を開いたときに読む分割ファイル（index.html と一緒に置く）
 src/         作るためのコード一式
 src/data/    Campusmateに無い情報（文学部のシラバス、各学部の教室、事前申請）
 ```

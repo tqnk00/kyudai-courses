@@ -1,6 +1,7 @@
 """検索サイト用のデータ生成。
 
-course_structured / course_slots / syllabus_raw から、ページに埋め込む1個のJSONを作る。
+course_structured / course_slots / syllabus_raw から、ページに埋め込むJSONと、
+詳細を開いたときに読む分割ファイル（details-年度/NN.json）を作る。
 キー名は1〜3文字に詰めてある（2,190件ぶんなのでキー名だけで数十KB変わる）。
 """
 import sys, re, json, argparse
@@ -29,6 +30,23 @@ _SESSION_NO = re.compile(r"^\s*(\d{1,2})\s*$")
 # 内容セルの末尾に続く事前・事後学修の行。定型文が多いので内容には混ぜない
 _PREPOST = re.compile(r"^\s*(事前|事後|予習|復習|授業前|授業後|Moodle|moodle)")
 THEME_MAX, DETAIL_MAX = 120, 240
+
+# 詳細だけで使う項目と、その既定値。画面は既定値を補ってから描く
+DETAIL_DEFAULTS = {
+    "d": "", "pl": [], "gr": [], "gu": [], "gx": [], "gt": None, "ep": "",
+    "ev": [0, 0, 0, 0], "grraw": "", "rq": "", "catr": "", "ln": "", "rmu": "", "apu": "",
+}
+# 詳細ファイルの分割数。1つあたり gzip で数十KBになる。画面の shardOf と同じ計算で振り分ける
+DETAIL_SHARDS = 64
+
+
+def shard_of(code):
+    """FNV-1a。科目コードは連番に近く、単純な掛け算だと分割先が偏る（最小5件・最大183件）"""
+    h = 2166136261
+    for ch in code:
+        h = ((h ^ ord(ch)) * 16777619) & 0xFFFFFFFF
+    return h % DETAIL_SHARDS
+
 
 def outline_of(sec):
     for lb in OUTLINE_LABELS:
@@ -307,12 +325,44 @@ def build(year=YEAR, undergrad_only=True):
         meta["term_group_map"] = tgmap
         used = {c["tg"] for c in courses} | set(tgmap.values())
         meta["term_groups"] = [g for g, _ in TERM_GROUPS if g in used]
+
+        # 詳細を開いたときにしか使わない項目は、ページ本体から外して別ファイルに分ける。
+        # 授業計画・概要・成績評価だけで全体の8割（16MBのうち13MB）あり、
+        # 一覧と時間割を出すだけのために全部を読ませていた
+        dir_name = f"details-{year}"
+        meta["detail_dir"] = dir_name
+        meta["detail_shards"] = DETAIL_SHARDS
+        meta["detail_keys"] = list(DETAIL_DEFAULTS)
+        shards = [{} for _ in range(DETAIL_SHARDS)]
+        for c in courses:
+            c.pop("u", None)             # 更新日。画面では使っていない
+            det = {}
+            for k, empty in DETAIL_DEFAULTS.items():
+                v = c.pop(k, empty)
+                if v != empty:           # 既定値の項目は書かない（ファイルを小さくする）
+                    det[k] = v
+            if det:
+                shards[shard_of(c["c"])][c["c"]] = det
+
         data = {"meta": meta, "courses": courses}
         EXPORT_DIR.mkdir(parents=True, exist_ok=True)
         out = EXPORT_DIR / f"site-data-{year}.json"
         out.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")),
                        encoding="utf-8")
-        print(f"[site_data] {len(courses)}件 -> {out} ({out.stat().st_size/1e6:.2f} MB)")
+        # 前回の分割数が違っていても古いファイルが残らないよう、作り直す
+        det_dir = EXPORT_DIR / dir_name
+        if det_dir.exists():
+            for old in det_dir.glob("*.json"):
+                old.unlink()
+        det_dir.mkdir(parents=True, exist_ok=True)
+        det_size = 0
+        for n, shard in enumerate(shards):
+            p = det_dir / f"{n:02d}.json"
+            p.write_text(json.dumps(shard, ensure_ascii=False, separators=(",", ":")),
+                         encoding="utf-8")
+            det_size += p.stat().st_size
+        print(f"[site_data] {len(courses)}件 -> {out} ({out.stat().st_size/1e6:.2f} MB)"
+              f" ／ 詳細 {DETAIL_SHARDS}分割 -> {det_dir} ({det_size/1e6:.2f} MB)")
         return out
 
 
