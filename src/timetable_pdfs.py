@@ -43,12 +43,42 @@ PDFS = [
      "0570e827da344433b0778c45301dcc1b.pdf",
      "https://www.design.kyushu-u.ac.jp/curriculum/"),
 ]
+# 前期ぶん。後期と別のファイルになっている学部だけ。
+# 農学部は前期版が公開されていない（2026-09-23 時点。講義コードで引くので後期版だけでも前期の
+# 通年科目は拾える）。法・理・経済は1本のPDFに前期と後期のページが入っている
+PDFS += [
+    ("edu-2026-spring.pdf",
+     "https://www.education.kyushu-u.ac.jp/wp/wp-content/uploads/2026/06/"
+     "R8_jugyoujikanwari_zenki_as_of-_20260615.pdf",
+     "https://www.education.kyushu-u.ac.jp/schedules/"),
+    ("eng-eecs-a.pdf",
+     "https://www.eecs.kyushu-u.ac.jp/wp/wp-content/uploads/R8class_a2.pdf",
+     "https://www.eecs.kyushu-u.ac.jp/school.html"),
+    ("eng-eecs-b.pdf",
+     "https://www.eecs.kyushu-u.ac.jp/wp/wp-content/uploads/R8class_b3.pdf",
+     "https://www.eecs.kyushu-u.ac.jp/school.html"),
+    ("eng-civil-spring.pdf",
+     "https://civil.kyushu-u.ac.jp/civil_wp/wp-content/uploads/"
+     "Lecture2026J_springALL_20260327.pdf",
+     "https://civil.kyushu-u.ac.jp/student/schedule/"),
+    ("design-a-spring.pdf",
+     "https://www.design.kyushu-u.ac.jp/_cms_dir/wp-content/uploads/2026/05/"
+     "0466b6eba4012afc10ea87b71be3b1fd-1.pdf",
+     "https://www.design.kyushu-u.ac.jp/curriculum/"),
+]
 # 理学部は学科ごとに分かれている
 PDFS += [(f"sci-{name}.pdf",
           f"https://www.sci.kyushu-u.ac.jp/student/pdf/2026_st_{name}.pdf",
           "https://www.sci.kyushu-u.ac.jp/student/timetable.html")
          for name in ("math_4", "phys_4", "chem_3", "bio_4",
                       "geo_3", "info_4", "com")]
+
+# 共創学部。入学年度ごとの表（B1=1年、B2=2年、B3=3年以上）で、前期・後期の両方が入っている。
+# 教室は載っていない（シラバスで通知）ので、未掲載科目の照合にだけ使う
+KYOSO = "https://kyoso.kyushu-u.ac.jp/filebox/doc/curriculum/2026"
+PDFS += [(f"kyoso-{n}.pdf", f"{KYOSO}/2026_TimeTable_{n}.pdf",
+          "https://kyoso.kyushu-u.ac.jp/pages/students/study")
+         for n in ("B1", "B2", "B3")]
 
 # 基幹教育のB表。入学年度ごとに別の表になっていて、印が食い違うことがある
 CORE_B = "https://www.artsci.kyushu-u.ac.jp/campus_life/pdf"

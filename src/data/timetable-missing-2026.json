@@ -1,399 +1,113 @@
 [
  {
-  "title": "Education and politic",
-  "room": "A104",
-  "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
- },
- {
   "title": "教育哲学概論Ⅱ",
   "room": "A118",
   "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
+  "season": "autumn"
  },
  {
   "title": "教育哲学特論Ⅱ演習",
   "room": "B430（学習環境シミュレーション室）",
   "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
+  "season": "autumn"
  },
  {
   "title": "教育環境人間論",
   "room": "B103",
   "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
+  "season": "autumn"
  },
  {
   "title": "教育環境学研究法",
   "room": "B217",
   "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
+  "season": "autumn"
  },
  {
   "title": "教育環境学研究法演習",
   "room": "B217",
   "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
- },
- {
-  "title": "ローマ法Ⅰ",
-  "room": "B112",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "ローマ法Ⅱ",
-  "room": "B112",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "ローマ法演習",
-  "room": "演習室1",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "中国法演習",
-  "room": "演習室２",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "刑事政策",
-  "room": "E112",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "刑事政策演習",
-  "room": "演習室4",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "刑事訴訟法",
-  "room": "E109",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "刑事訴訟法実務特殊講義Ⅰ",
-  "room": "D108",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "刑事訴訟法演習",
-  "room": "演習室３",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "刑法演習",
-  "room": "D109",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "労働法演習",
-  "room": "E104",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "商法Ⅰ（会社法①）",
-  "room": "D105",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "商法・金融法・保険法概論",
-  "room": "D105",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "商法・金融法・保険法演習",
-  "room": "D108",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "商法演習",
-  "room": "E103",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "国際公法",
-  "room": "D105",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
+  "season": "autumn"
  },
  {
   "title": "国際取引法演習",
   "room": "D106",
   "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "地方自治法",
-  "room": "D107",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study",
+  "season": ""
  },
  {
   "title": "外交史演習",
   "room": "演習室5",
   "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "外国政治書講読（英語）",
-  "room": "D106",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "外国法律書講読（英語）",
-  "room": "E109",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "学術英語・テーマベース",
-  "room": "E109",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "情報法演習",
-  "room": "演習室３",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "憲法演習",
-  "room": "E102",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "政治史演習",
-  "room": "教員研究室",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "政治学Ⅰ",
-  "room": "D103",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "政治学史Ⅰ",
-  "room": "D105",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "政治学史演習",
-  "room": "演習室3",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "政治学演習",
-  "room": "演習室3",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "政治過程・政策過程論特別講義",
-  "room": "演習室1",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "本政治思想史演習",
-  "room": "演習室1",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民事判決読解特殊講義Ⅰ",
-  "room": "D106",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民事手続法演習",
-  "room": "E101",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民事訴訟法Ⅰ",
-  "room": "D105",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民事訴訟法実務特殊講義Ⅰ",
-  "room": "D108",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民事訴訟法演習",
-  "room": "演習室４",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民法Ⅲ（債権総論・担保物権法）",
-  "room": "B112",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民法・比較法演習",
-  "room": "演習室５",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "民法演習",
-  "room": "E104",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study",
+  "season": ""
  },
  {
   "title": "法と経済学",
   "room": "D105",
   "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "法史学入門",
-  "room": "D103",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "法史学基礎",
-  "room": "D103",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "法哲学演習",
-  "room": "演習室1",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "法哲学（法理学）",
-  "room": "E110",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "知的財産法",
-  "room": "E110",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study",
+  "season": "autumn"
  },
  {
   "title": "知的財産法演習",
   "room": "E104",
   "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "租税法演習",
-  "room": "E102",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "紛争管理論",
-  "room": "A117",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "紛争管理論演習",
-  "room": "D107",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "行政学演習",
-  "room": "演習室１",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "行政法Ⅱ（行政救済論）",
-  "room": "大講義室Ⅰ",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
- },
- {
-  "title": "行政法演習",
-  "room": "E103",
-  "faculty": "法学部",
-  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study"
+  "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study",
+  "season": "autumn"
  },
  {
   "title": "",
   "code": "26346215",
   "room": "",
   "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
+  "season": "autumn"
  },
  {
   "title": "",
   "code": "26346211",
   "room": "",
   "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
+  "season": "autumn"
  },
  {
   "title": "",
   "code": "26346201",
   "room": "",
   "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
+  "season": "autumn"
  },
  {
   "title": "",
   "code": "25533544",
   "room": "",
   "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
- },
- {
-  "title": "",
-  "code": "26345331",
-  "room": "",
-  "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
+  "season": "autumn"
  },
  {
   "title": "",
   "code": "26346340",
   "room": "",
   "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
+  "season": "autumn"
  },
  {
   "title": "",
   "code": "24346344",
   "room": "",
   "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
+  "season": "autumn"
  }
 ]

@@ -42,6 +42,10 @@ _COND_CLAUSE = re.compile(
     r"|出席率|出席回数|の出席が必要|以上の出席)", re.I)
 
 
+# 4つめの印。1 は受験条件（配点ではない）、2 は直前の方法と合算された配点
+COND, SHARED = 1, 2
+
+
 def _clean(text):
     return _TRIM.sub("", text or "").strip()
 
@@ -112,7 +116,7 @@ def parse(raw):
             pct, note = float(bare.group(1)), ""
         elif len(pcts) == 1:
             # 出席条件などの割合。配点ではないと分かっているので合計から外す
-            pct, note, cond = None, _clean(desc), 1
+            pct, note, cond = None, _clean(desc), COND
         else:
             # 割合が2つ以上ある説明は合算の根拠がない。数値は立てず全文を補足に回す
             pct, note = None, _clean(desc)
@@ -123,13 +127,35 @@ def parse(raw):
         rows.append([label, pct, note, cond] if cond else [label, pct, note])
 
     rows.sort(key=lambda r: METHODS.index(r[0]))
+    _merge_shared(rows)
     return {"rows": rows, "unused": unused, "extra": extra}
+
+
+def _merge_shared(rows):
+    """複数の方法が1つの配点を分け合っている行を、1回だけ数える形に直す。
+
+    「レポート、授業への貢献度、授業態度を合わせて 40%」は、表のセルが結合されて
+    いるため3行とも同じ説明文と同じ割合で入ってくる。そのまま足すと40%が3回数えられ、
+    合計が240%になる（鉄鋼製錬学）。説明文と割合がそろって同じ行は、最初の行だけに
+    割合を残し、残りは「合算」の印を付けて合計から外す。
+    """
+    first = {}
+    for r in rows:
+        if r[1] is None or not r[2] or (len(r) > 3 and r[3]):
+            continue
+        key = (r[1], r[2])
+        if key in first:
+            r[1] = None
+            del r[3:]
+            r.append(SHARED)
+        else:
+            first[key] = r
 
 
 def total_pct(rows):
     """全ての行に割合があるときだけ合計を返す。欠けているなら None。
 
-    受験条件の割合（出席率など）は配点ではないので、合計に入れず欠けとも数えない。
+    受験条件の割合（出席率など）と、他の方法と合算された行は、合計に入れず欠けとも数えない。
     """
     scored = [r for r in rows if len(r) < 4 or not r[3]]
     if not scored or any(r[1] is None for r in scored):

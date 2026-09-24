@@ -129,7 +129,7 @@ class 農学部の教室(unittest.TestCase):
         idx = {"26342323": {"c": "26342323", "t": "土壌物理学"}}
         line = "3 26342323 土壌物理学 岩田 幸良 229 田村 和彦 228 26342204 水理学Ⅰ"
         from unittest.mock import patch
-        with patch.object(TR, "lines_of", return_value=[line]):
+        with patch.object(TR, "lines_of", return_value=[(None, line)]):
             got, mention, disagree = TR.agr_rooms(idx)
         self.assertEqual(got["26342323"]["room"], "229")
 
@@ -137,10 +137,75 @@ class 農学部の教室(unittest.TestCase):
         idx = {"26342323": {"c": "26342323", "t": "土壌物理学"}}
         line = "3 26342323 まったく別の科目名 岩田 幸良 229"
         from unittest.mock import patch
-        with patch.object(TR, "lines_of", return_value=[line]):
+        with patch.object(TR, "lines_of", return_value=[(None, line)]):
             got, mention, disagree = TR.agr_rooms(idx)
         self.assertNotIn("26342323", got)
         self.assertEqual(disagree, 1)
+
+
+class 学期をまたぐ照合(unittest.TestCase):
+    """時間割PDFの前期ページと後期ページを取り違えない（法学部で前期18件が未掲載扱いになった）。"""
+
+    def test_ページの学期を見出しから読む(self):
+        self.assertEqual(TR.page_season(["令和８年度授業時間割 前期 （2026年４月～2026年９月）",
+                                         "◆：通年科目 〇：基幹教育科目"]), "spring")
+        self.assertEqual(TR.page_season(["令和８年度授業時間割 後期 （2026年10月～2027年３月）",
+                                         "◆：通年科目"]), "autumn")
+        # 3行目以降の凡例（前年度後期開始越年科目）は見ない
+        self.assertEqual(TR.page_season(["令和８年度授業時間割 前期", "凡例",
+                                         "◇：前年度後期開始越年科目"]), "spring")
+        self.assertIsNone(TR.page_season(["時間 1 2 3 4 5", "月 火 水"]))
+
+    def test_学期の違う同名科目には教室を付けない(self):
+        names = {TR.norm("民法演習"): [{"c": "A", "t": "民法演習", "season": "autumn"}]}
+        from unittest.mock import patch
+        with patch.object(TR, "lines_of", return_value=[("spring", "◆民法演習 津田 D108 ３・４")]):
+            got, _, _ = TR.by_room_marker(["law.pdf"], "法学部", TR.ROOM_LAW, names, "u")
+        self.assertEqual(got, {})
+        with patch.object(TR, "lines_of", return_value=[("autumn", "◆民法演習 津田 D108 ３・４")]):
+            got, _, _ = TR.by_room_marker(["law.pdf"], "法学部", TR.ROOM_LAW, names, "u")
+        self.assertEqual(got["A"]["room"], "D108")
+
+    def test_別学期の短い名前に吸われない(self):
+        # 後期ページの「国際政治学Ⅰ」の中に、前期の「政治学Ⅰ」も含まれている
+        names = {TR.norm("国際政治学Ⅰ"): [{"c": "A", "t": "国際政治学Ⅰ", "season": "autumn"}],
+                 TR.norm("政治学Ⅰ"): [{"c": "B", "t": "政治学Ⅰ", "season": "spring"}]}
+        line = "●租税法 山田 E104 ３・４ ●国際政治学Ⅰ 椛島洋美 D106 ３・４"
+        from unittest.mock import patch
+        with patch.object(TR, "lines_of", return_value=[("autumn", line)]):
+            got, _, _ = TR.by_room_marker(["law.pdf"], "法学部", TR.ROOM_LAW, names, "u")
+        self.assertEqual(got, {"A": {"room": "D106", "source_url": "u"}})
+
+    def test_終わりが同じなら長い名前を採る(self):
+        names = {TR.norm("比較政治学Ⅱ"): [{"c": "A"}], TR.norm("政治学Ⅱ"): [{"c": "B"}]}
+        self.assertEqual(TR.find_name("●比較政治学Ⅱ 出水 ", names), TR.norm("比較政治学Ⅱ"))
+
+    def test_法学部のゼミは担当教員で演習Ⅰに当てる(self):
+        # 時間割は「民事訴訟法演習 上田」、Campusmate は「演習Ⅰ」。同じ先生の民事訴訟法Ⅰもある
+        names = {TR.norm("演習Ⅰ"): [{"c": "S1", "t": "演習Ⅰ", "i": ["上田 竹志"], "season": None},
+                                    {"c": "S2", "t": "演習Ⅰ", "i": ["西 英昭"], "season": None},
+                                    {"c": "S3", "t": "演習Ⅰ", "i": ["西村 友海"], "season": None}],
+                 TR.norm("民事訴訟法Ⅰ"): [{"c": "L1", "t": "民事訴訟法Ⅰ", "i": ["上田 竹志"],
+                                            "season": "spring"}]}
+        self.assertEqual(TR.by_instructor("民事訴訟法演習", "◆民事訴訟法演習 上田 ", names)["c"], "S1")
+        # 1文字の姓は「西村」に当てない
+        self.assertEqual(TR.by_instructor("中国法演習", "◆中国法演習 西 ", names)["c"], "S2")
+        # 担当のゼミが無い先生は当てない（未掲載に回る）
+        self.assertIsNone(TR.by_instructor("外交史演習", "◆外交史演習 中島 ", names))
+
+    def test_通年科目はどちらの学期のページとも合う(self):
+        self.assertTrue(TR.fits({"season": None}, "spring"))
+        self.assertTrue(TR.fits({"season": "spring"}, None))
+        self.assertFalse(TR.fits({"season": "autumn"}, "spring"))
+
+    def test_他学部にある科目は未掲載にしない(self):
+        known = {TR.norm("学術英語・テーマベース"), TR.norm("Education and Politics Ⅰ")}
+        self.assertTrue(TR.is_known("学術英語・テーマベース", known))
+        # PDFで末尾が切れた名前も、長ければ前方一致で同じ科目とみなす
+        self.assertTrue(TR.is_known("Education and politic", known))
+        self.assertFalse(TR.is_known("ローマ法Ⅰ", known))
+        # 短い名前の前方一致は採らない（「政治学」が「政治学史」に当たらないように）
+        self.assertFalse(TR.is_known("政治学", {TR.norm("政治学史Ⅰ")}))
 
 
 if __name__ == "__main__":

@@ -84,7 +84,7 @@ def main():
     ap.add_argument("job", choices=["init", "daily", "weekly", "full", "extract",
                                     "summarize", "report", "changes", "site", "rooms"])
     ap.add_argument("--year", type=int, default=YEAR)
-    ap.add_argument("--set", default="phase1", choices=list(sweep.SETS))
+    ap.add_argument("--set", default="all", choices=list(sweep.SETS))
     ap.add_argument("--workers", type=positive_int, choices=range(1, 6), default=4)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--all", action="store_true")
