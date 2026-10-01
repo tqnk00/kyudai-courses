@@ -3,12 +3,17 @@ from pathlib import Path
 import os
 
 DB_PATH = Path(os.environ.get("SYLLABUS_DB_PATH", Path.home() / "syllabus-db" / "kyudai.db")).expanduser()
-EXPORT_DIR = Path(os.environ.get("SYLLABUS_EXPORT_DIR", Path(__file__).resolve().parent / "exports")).expanduser()
+# 作業用の置き場。DBと同じ場所で、OneDrive の外にある。ビルド出力（十数MB）と
+# 時間割PDF（十数MB）を OneDrive 配下に置くと、作り直すたびに同期が走って遅くなる
+WORK_DIR = DB_PATH.parent
+EXPORT_DIR = Path(os.environ.get("SYLLABUS_EXPORT_DIR", WORK_DIR / "exports")).expanduser()
 # 外から持ってきた素材の置き場。Campusmateに無い情報（文学部のシラバス、各学部の
-# 時間割表から取った教室、基幹教育B表の事前申請）はここに置く。
+# 時間割表から取った教室、基幹教育B表の事前申請）はここに置く。履歴に入れるのでリポジトリの中。
 # EXPORT_DIR は毎回作り直せる出力専用にしたいので、入力を混ぜない。
 DATA_DIR = Path(os.environ.get("SYLLABUS_DATA_DIR", Path(__file__).resolve().parent / "data")).expanduser()
-PDF_DIR = DATA_DIR / "pdf"
+PDF_DIR = Path(os.environ.get("SYLLABUS_PDF_DIR", WORK_DIR / "pdf")).expanduser()
+# 公開リポジトリの直下。index.html と details-年度/ を置く場所
+SITE_DIR = Path(__file__).resolve().parent.parent
 
 USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36")

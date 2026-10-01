@@ -321,9 +321,28 @@ def to_site_course(c):
     }
 
 
-if __name__ == "__main__":
-    import sys, json, argparse
+def build(year=2026, which="all", pause=1.0, limit=None):
+    """文学部のシラバスを取り直して data/lit-courses-<year>.json を書き出す。
+
+    1件も取れなかったときは書き出さない（サイト側の障害で、手元の正しいデータを空にしないため）。
+    """
+    import json
     from config import DATA_DIR
+    rows = crawl(year, which, pause, limit)
+    if not rows:
+        raise RuntimeError("文学部の科目が1件も取れませんでした。前回のデータを残します")
+    site = [to_site_course(c) for c in rows]
+    # site_data は DATA_DIR から読む。EXPORT_DIR に書くと取り込まれない
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    out = DATA_DIR / f"lit-courses-{year}.json"
+    out.write_text(json.dumps(site, ensure_ascii=False, separators=(",", ":")),
+                   encoding="utf-8")
+    print(f"[lit] {len(site)}件 -> {out}")
+    return len(site)
+
+
+if __name__ == "__main__":
+    import sys, argparse
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--year", type=int, default=2026)
@@ -331,11 +350,4 @@ if __name__ == "__main__":
     ap.add_argument("--pause", type=float, default=1.0)
     ap.add_argument("--limit", type=int)
     a = ap.parse_args()
-    rows = crawl(a.year, a.set, a.pause, a.limit)
-    site = [to_site_course(c) for c in rows]
-    # site_data は DATA_DIR から読む。EXPORT_DIR に書くと取り込まれない
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    out = DATA_DIR / f"lit-courses-{a.year}.json"
-    out.write_text(json.dumps(site, ensure_ascii=False, separators=(",", ":")),
-                   encoding="utf-8")
-    print(f"[lit] {len(site)}件 -> {out}")
+    build(a.year, a.set, a.pause, a.limit)

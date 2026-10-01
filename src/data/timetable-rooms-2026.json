@@ -19,7 +19,15 @@
   "room": "B102",
   "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
  },
+ "26072053": {
+  "room": "B217",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
  "26072056": {
+  "room": "B103",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26072063": {
   "room": "B103",
   "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
  },
@@ -43,7 +51,7 @@
   "room": "B106",
   "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
  },
- "26072058": {
+ "26072062": {
   "room": "D108",
   "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
  },
@@ -75,6 +83,10 @@
   "room": "B208",
   "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
  },
+ "26074053": {
+  "room": "B430（学習環境シミュレーション室）",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
  "26074051": {
   "room": "A117",
   "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
@@ -89,6 +101,10 @@
  },
  "26074058": {
   "room": "A101",
+  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
+ },
+ "26075052": {
+  "room": "B217",
   "source_url": "https://www.education.kyushu-u.ac.jp/schedules/"
  },
  "26075051": {
@@ -411,6 +427,10 @@
   "room": "講義棟302",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
  },
+ "26226104": {
+  "room": "W1-B-505",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
  "26224027": {
   "room": "講義棟302",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
@@ -703,10 +723,6 @@
   "room": "講義棟301",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
  },
- "26222009": {
-  "room": "W1-B-505",
-  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
- },
  "26222030": {
   "room": "W1-C-201",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
@@ -717,6 +733,14 @@
  },
  "26222042": {
   "room": "講義棟301",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222035": {
+  "room": "講義棟301",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26222031": {
+  "room": "W1-B-314",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
  },
  "26222043": {
@@ -1015,8 +1039,20 @@
   "room": "W1-B-50４",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
  },
+ "26221011": {
+  "room": "W1-B-505",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221041": {
+  "room": "W1-B-504",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
  "26221012": {
   "room": "W1-B-505",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221054": {
+  "room": "W1-B-313",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
  },
  "26221058": {
@@ -1025,6 +1061,10 @@
  },
  "26221015": {
   "room": "W1-B-313",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221053": {
+  "room": "W1-B-504",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
  },
  "26221013": {
@@ -1057,6 +1097,10 @@
  },
  "26221026": {
   "room": "W1-C-502",
+  "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
+ },
+ "26221001": {
+  "room": "W1-B-505",
   "source_url": "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
  },
  "26341210": {
@@ -1185,6 +1229,14 @@
  },
  "26340211": {
   "room": "232",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346215": {
+  "room": "327",
+  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
+ },
+ "26346211": {
+  "room": "329",
   "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
  },
  "26346208": {
@@ -2543,20 +2595,32 @@
   "room": "工学部第8",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
+ "26251307": {
+  "room": "シス情209",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251258": {
+  "room": "シス情302",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251293": {
+  "room": "シス情210",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26251321": {
+  "room": "創作工房",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
  "26258080": {
   "room": "工学部第7",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
- "26251395": {
+ "26251360": {
   "room": "工学部第8",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
  "26251357": {
   "room": "工学部第16",
-  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
- },
- "26251386": {
-  "room": "工学部第2",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
  "26251399": {
@@ -2575,6 +2639,10 @@
   "room": "シス情210",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
+ "26251389": {
+  "room": "工学部第4",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
  "26251383": {
   "room": "創作工房",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
@@ -2587,20 +2655,24 @@
   "room": "工学部第8",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
+ "26251308": {
+  "room": "シス情209",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
  "26251295": {
   "room": "シス情210",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
- "26251396": {
-  "room": "工学部第4",
+ "26251322": {
+  "room": "創作工房",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
  "26251359": {
   "room": "工学部第1",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
- "26251387": {
-  "room": "工学部第2",
+ "26251298": {
+  "room": "工学部第7",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
  "26251355": {
@@ -2615,12 +2687,24 @@
   "room": "シス情210",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
+ "26251390": {
+  "room": "工学部第4",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
  "26251384": {
   "room": "創作工房",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
+ "26254775": {
+  "room": "工14",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
  "26254751": {
   "room": "工7",
+  "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
+ },
+ "26254733": {
+  "room": "工9",
   "source_url": "https://www.eecs.kyushu-u.ac.jp/school.html"
  },
  "26251156": {
@@ -2766,21 +2850,21 @@
     "faculty": "教育学部",
     "how": "【教室】",
     "detected": 90,
-    "resolved": 59,
+    "resolved": 63,
     "dropped_ambiguous": 4
    },
    {
     "faculty": "理学部",
     "how": "W1-C-501等",
     "detected": 397,
-    "resolved": 206,
+    "resolved": 213,
     "dropped_ambiguous": 0
    },
    {
     "faculty": "農学部",
     "how": "講義コード＋番号",
-    "detected": 245,
-    "resolved": 123,
+    "detected": 248,
+    "resolved": 125,
     "dropped_ambiguous": 16
    },
    {
@@ -2801,7 +2885,7 @@
     "faculty": "工学部",
     "how": "（工学部第7）等",
     "detected": 314,
-    "resolved": 55,
+    "resolved": 63,
     "dropped_ambiguous": 9
    },
    {

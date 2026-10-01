@@ -7,34 +7,6 @@
   "season": "autumn"
  },
  {
-  "title": "教育哲学特論Ⅱ演習",
-  "room": "B430（学習環境シミュレーション室）",
-  "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
-  "season": "autumn"
- },
- {
-  "title": "教育環境人間論",
-  "room": "B103",
-  "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
-  "season": "autumn"
- },
- {
-  "title": "教育環境学研究法",
-  "room": "B217",
-  "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
-  "season": "autumn"
- },
- {
-  "title": "教育環境学研究法演習",
-  "room": "B217",
-  "faculty": "教育学部",
-  "source_url": "https://www.education.kyushu-u.ac.jp/schedules/",
-  "season": "autumn"
- },
- {
   "title": "国際取引法演習",
   "room": "D106",
   "faculty": "法学部",
@@ -60,22 +32,6 @@
   "room": "E104",
   "faculty": "法学部",
   "source_url": "https://www.law.kyushu-u.ac.jp/faculty/study",
-  "season": "autumn"
- },
- {
-  "title": "",
-  "code": "26346215",
-  "room": "",
-  "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
-  "season": "autumn"
- },
- {
-  "title": "",
-  "code": "26346211",
-  "room": "",
-  "faculty": "農学部",
-  "source_url": "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf",
   "season": "autumn"
  },
  {

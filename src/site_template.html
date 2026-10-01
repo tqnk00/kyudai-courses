@@ -134,7 +134,7 @@
     border: 1px solid var(--line); border-radius: 999px;
     padding: 4px 12px; min-height: 31px; transition: background .12s, color .12s;
   }
-  .chip:hover { background: var(--surface-2); }
+  @media (hover: hover) { .chip:hover { background: var(--surface-2); } }
   .chip[aria-pressed="true"] {
     background: var(--accent); border-color: var(--accent);
     color: var(--accent-ink); font-weight: 600;
@@ -145,8 +145,7 @@
     background: none; border: none; text-decoration: underline;
     text-underline-offset: 3px; padding: 8px 2px;
   }
-  .reset:hover { color: var(--ink); }
-
+  @media (hover: hover) { .reset:hover { color: var(--ink); } }
   /* --- 本体 2カラム --- */
   .board { display: grid; grid-template-columns: minmax(0,1fr) 400px; gap: 16px;
            margin-top: 10px; align-items: start; }
@@ -201,7 +200,7 @@
     display: flex; flex-direction: column; gap: 1px;
     transition: background .12s;
   }
-  .cell:hover:not(.empty) { background: var(--accent-soft); }
+  @media (hover: hover) { .cell:hover:not(.empty) { background: var(--accent-soft); } }
   .cell.empty { cursor: default; background: var(--surface-2); }
   .cell[aria-pressed="true"] {
     background: var(--accent-soft);
@@ -250,15 +249,18 @@
     flex: 1 1 auto; min-width: 0; font: inherit; text-align: left; cursor: pointer;
     color: var(--ink); background: none; border: 0; padding: 11px 6px 11px 16px; display: block;
   }
-  .rhead:hover { background: var(--surface-2); }
+  @media (hover: hover) { .rhead:hover { background: var(--surface-2); } }
   .fav {
     flex: 0 0 auto; width: 42px; font: inherit; font-size: 17px; line-height: 1;
     cursor: pointer; background: none; border: 0; color: var(--line);
     display: flex; align-items: flex-start; justify-content: center; padding: 11px 0 0;
     transition: color .12s, transform .12s;
   }
-  .fav:hover { color: var(--amber); transform: scale(1.15); }
+  @media (hover: hover) { .fav:hover { color: var(--amber); transform: scale(1.15); } }
   .fav[aria-pressed="true"] { color: var(--amber); }
+  /* 上の :hover はマウスのある端末だけに効かせてある。スマホではタップしたあとも :hover が
+     残り、お気に入りを外した星が色付き・拡大のまま見えていた */
+  button, .chip, .cell { touch-action: manipulation; }
   .rhead .rt { font-size: 13.5px; font-weight: 600; line-height: 1.45; }
   .missing {
     margin: 26px 0 0; padding: 12px 14px; border: 1px solid var(--line);
@@ -293,6 +295,12 @@
   .tag.ol  { background: var(--teal-soft); color: var(--teal); }
   /* 詳細の文字サイズ。子要素は em なので、ここを変えると中身ごと拡大する */
   .detail { padding: 2px 16px 16px; font-size: 12.5px; color: var(--ink-mute); }
+  /* 「文字を大きく」。以前は開いた詳細の中だけが対象で、詳細を開いていないと
+     何も変わらず、押しても効かないように見えた（スマホで顕著）。一覧も大きくする */
+  .field[hidden] { display: none; }
+  .results.big .rhead .rt { font-size: 17px; }
+  .results.big .rhead .rm { font-size: 13.5px; }
+  .results.big .tag { font-size: 12.5px; }
   .results.big .detail { font-size: 16px; }
   .results.big .detail .dl { gap: 5px 14px; }
   .zoombtn {
@@ -300,7 +308,7 @@
     background: var(--surface-2); color: var(--ink-mute);
     border: 1px solid var(--line); border-radius: 6px; padding: 2px 9px; font-weight: 600;
   }
-  .zoombtn:hover { color: var(--ink); }
+  @media (hover: hover) { .zoombtn:hover { color: var(--ink); } }
   .zoombtn[aria-pressed="true"] {
     background: var(--accent-soft); color: var(--accent); border-color: var(--accent);
   }
@@ -421,8 +429,7 @@
     background: var(--surface-2); color: var(--accent); border: 0;
     border-top: 1px solid var(--line-soft); padding: 10px 16px; font-weight: 600;
   }
-  .morebtn:hover { background: var(--accent-soft); }
-
+  @media (hover: hover) { .morebtn:hover { background: var(--accent-soft); } }
   /* ===== 時間割ページ（お気に入りを組んだ画面）===== */
   .ttapp { display: none; }
   body.tt .ttapp { display: block; }
@@ -443,8 +450,7 @@
     background: var(--surface); color: var(--ink); border: 1px solid var(--line);
     border-radius: 8px; font-weight: 600;
   }
-  .ttback:hover { background: var(--surface-2); }
-
+  @media (hover: hover) { .ttback:hover { background: var(--surface-2); } }
   .ttgrid { display: grid; gap: 4px; background: none; }
   .ttgrid .hd { font-family: var(--f-display); font-size: 13px; text-align: center;
                 color: var(--ink-mute); padding: 2px 0 4px; }
@@ -457,7 +463,7 @@
     padding: 7px 8px; display: flex; flex-direction: column; gap: 3px;
     transition: background .12s, border-color .12s;
   }
-  .ttcell:hover { border-color: var(--line); }
+  @media (hover: hover) { .ttcell:hover { border-color: var(--line); } }
   .ttcell.filled {
     background: hsl(var(--tt-h, 210) 60% 46% / .14);
     border-color: hsl(var(--tt-h, 210) 55% 46% / .5);
@@ -527,7 +533,7 @@
     background: none; border: 0; border-bottom: 1px solid var(--line-soft);
     padding: 10px 4px; color: var(--ink);
   }
-  .sheet .addlist li button:hover { background: var(--surface-2); }
+  @media (hover: hover) { .sheet .addlist li button:hover { background: var(--surface-2); } }
   .sheet .addlist .t2 { font-size: 13px; font-weight: 600; display: block; }
   .sheet .addlist .m2 { font-size: 11px; color: var(--ink-mute); }
   .sheet input[type=search] {
@@ -535,6 +541,20 @@
     border: 1px solid var(--line); border-radius: 8px;
     background: var(--surface); color: var(--ink);
   }
+  .sheet .sharenote { margin: 0 0 10px; font-size: 12.5px; color: var(--ink-mute); line-height: 1.7; }
+  .sheet .shareqr { display: flex; justify-content: center; margin: 4px 0 12px; min-height: 0; }
+  .sheet .shareqr svg { width: 196px; height: 196px; background: #fff; border-radius: 8px; }
+  .sheet input.shareurl {
+    width: 100%; font: inherit; font-family: var(--f-mono); font-size: 11.5px; padding: 8px 10px;
+    border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px;
+    background: var(--surface-2); color: var(--ink);
+  }
+  .sheet .acts .primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  .sheet .implist { list-style: none; margin: 0 0 12px; padding: 0; max-height: 34vh; overflow-y: auto;
+                    border: 1px solid var(--line-soft); border-radius: 8px; }
+  .sheet .implist li { padding: 7px 10px; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+  .sheet .implist li:last-child { border-bottom: 0; }
+  .sheet .implist .m2 { display: block; font-size: 11px; color: var(--ink-mute); }
   .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.28); z-index: 49; }
   .backdrop[hidden] { display: none; }
 
@@ -549,6 +569,19 @@
   .sources ul { margin: 6px 0; padding-left: 1.2em; }
   .sources a { color: inherit; word-break: break-all; }
   .foot code { font-family: var(--f-mono); font-size: 11px; }
+
+  /* --- 指で操作する端末（スマホ・タブレット）--- 末尾に置いて、上の指定より優先させる --- */
+  @media (hover: none), (max-width: 767px) {
+    /* iPhone は文字が16px未満の入力欄にフォーカスすると、画面を勝手に拡大する */
+    .field select, .field input[type=search],
+    .sheet input[type=search], .sheet input.shareurl { font-size: 16px; }
+    /* 指で押す場所は高さ38px以上に */
+    .chip, .controls .chip { min-height: 38px; padding: 6px 13px; }
+    .tray button { min-height: 38px; }
+    .controls .reset { padding: 11px 4px; }
+    .zoombtn { padding: 8px 12px; font-size: 12px; }
+    .sheet .sh .x { padding: 8px 10px; }
+  }
 </style>
 </head>
 <body>
@@ -588,6 +621,12 @@
     <div class="field sel">
       <span class="lbl">キャンパス</span>
       <select id="camp" aria-label="キャンパス"></select>
+    </div>
+    <div class="field" id="apfield" hidden>
+      <span class="lbl">事前申請</span>
+      <div class="chips">
+        <button class="chip" id="apbtn" type="button" aria-pressed="false">要事前申請だけ</button>
+      </div>
     </div>
     <div class="field grow always">
       <span class="lbl">科目名・教員・キーワード</span>
@@ -633,6 +672,7 @@
         <button type="button" class="chip" data-sem="autumn">後期</button>
       </span>
       <span class="spacer"></span>
+      <button type="button" class="ttback" id="ttshare">共有・ほかの端末で開く</button>
       <button type="button" class="ttback" id="ttback">授業さがしに戻る</button>
     </div>
     <div class="ttgrid" id="ttgrid"></div>
@@ -732,7 +772,7 @@
   }
 
   // terms は開講期チップの選択集合。空なら全部の開講期を出す
-  var state = { terms: {}, fac: "", cat: "", grade: 0, camp: "", text: "", words: [],
+  var state = { terms: {}, fac: "", cat: "", grade: 0, camp: "", ap: false, text: "", words: [],
                 cell: null, tray: false, fav: false, cap: LIST_CAP, view: "search" };
   // 表示順はチップの並び（後期・秋学期・冬学期・通年ほか）に揃える
   // 前期と後期の両方を載せているので、何も指定がなければ今の学期（と通年）から始める。
@@ -788,7 +828,7 @@
 
   /* ---- 絞り込みの状態をURLに残す ----
      「この条件で見て」とリンクで渡せるようにする。値は既定と違うものだけ書く */
-  var pendingPush = false;
+  var pendingPush = false, pendingShare = null;
   function stateToHash() {
     // 開講期は常に書く。無指定は「今の学期」と読むので、全部のときは all と明示する
     var p = [], t = termsOn();
@@ -797,6 +837,7 @@
     if (state.cat) { p.push("c=" + encodeURIComponent(state.cat)); }
     if (state.grade) { p.push("g=" + state.grade); }
     if (state.camp) { p.push("p=" + encodeURIComponent(state.camp)); }
+    if (state.ap) { p.push("a=1"); }
     if (state.text) { p.push("q=" + encodeURIComponent(state.text)); }
     if (state.view === "tt") { p.push("view=tt"); }
     if (pref.zoom) { p.push("z=1"); }
@@ -835,6 +876,7 @@
     state.cat = q.c || "";
     state.grade = /^[1-6]$/.test(q.g || "") ? +q.g : 0;
     state.camp = META.campuses.indexOf(q.p) >= 0 ? q.p : "";
+    state.ap = q.a === "1";
     state.text = q.q || "";
     state.words = state.text ? norm(state.text).split(/\s+/).filter(Boolean) : [];
     state.fav = q.v === "fav";
@@ -843,6 +885,8 @@
     state.cap = LIST_CAP;
     state.view = q.view === "tt" ? "tt" : "search";
     document.body.classList.toggle("tt", state.view === "tt");
+    // 共有された時間割。s=コード.コード… で届く。取り込むかどうかは開いた人に選ばせる
+    if (q.s) { pendingShare = q.s.split(".").filter(function (x) { return /^[0-9A-Za-z]+$/.test(x); }); }
     // 文字の大きさはURLでも渡せる。指定があればそれを優先し、端末にも覚えさせる
     if (q.z === "1" || q.z === "0") {
       var z = q.z === "1";
@@ -858,6 +902,7 @@
     render();
     if (state.view === "tt") { drawTT(); }
     syncSticky();
+    consumeShare();
   });
 
   /* ---- お気に入り ----
@@ -874,9 +919,12 @@
 
   function favCodes() { return Object.keys(favs); }
   function isFav(code) { return !!favs[code]; }
+  function saveFavs() {
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favCodes())); } catch (e) {}
+  }
   function toggleFav(code) {
     if (favs[code]) { delete favs[code]; } else { favs[code] = 1; }
-    try { localStorage.setItem(FAV_KEY, JSON.stringify(favCodes())); } catch (e) {}
+    saveFavs();
   }
   function syncFavUI() {
     var n = favCodes().length;
@@ -974,6 +1022,16 @@
   el("camp").addEventListener("change", function () {
     state.camp = this.value; state.cap = LIST_CAP; render();
   });
+  // 事前申請が要る科目だけに絞る。履修登録より前に締め切られるので、まとめて確認できるように
+  (function () {
+    var n = COURSES.filter(function (c) { return c.ap; }).length;
+    if (!n) { return; }
+    el("apfield").hidden = false;
+    el("apbtn").addEventListener("click", function () {
+      state.ap = !state.ap; state.cell = null; state.tray = false; state.cap = LIST_CAP;
+      pendingPush = true; render();
+    });
+  }());
 
   // 一覧は300件ずつ。押すたびに続きを出す
   el("rmore").addEventListener("click", function () {
@@ -995,7 +1053,7 @@
     var def = Object.keys(defaultTerms()).sort().join(",");
     var termN = termsOn().slice().sort().join(",") === def ? 0 : termsOn().length;
     var n = termN + (state.fac ? 1 : 0) + (state.cat ? 1 : 0)
-          + (state.grade ? 1 : 0) + (state.camp ? 1 : 0);
+          + (state.grade ? 1 : 0) + (state.camp ? 1 : 0) + (state.ap ? 1 : 0);
     return n;
   }
 
@@ -1013,7 +1071,7 @@
   });
   el("reset").addEventListener("click", function () {
     clearTimeout(timer);
-    state = { terms: defaultTerms(), fac: "", cat: "", grade: 0, camp: "", text: "", words: [],
+    state = { terms: defaultTerms(), fac: "", cat: "", grade: 0, camp: "", ap: false, text: "", words: [],
               cell: null, tray: false, fav: false, cap: LIST_CAP, view: state.view };
     el("fac").value = ""; el("camp").value = ""; el("q").value = "";
     openCodes = Object.create(null);
@@ -1065,6 +1123,7 @@
     if (state.fac && c.f !== state.fac) return false;
     if (state.grade && c.g.indexOf(state.grade) < 0) return false;
     if (state.camp && c.cp !== state.camp) return false;
+    if (state.ap && !c.ap) return false;
     if (!passesTerm(c)) return false;
     if (!passesText(c)) return false;
     return true;
@@ -1073,6 +1132,7 @@
   /* ---- 描画 ---- */
   function render() {
     drawChips();
+    el("apbtn").setAttribute("aria-pressed", String(state.ap));
     drawCategories();
     var na = activeCount();
     el("filtercnt").textContent = na ? na + "件の条件" : "";
@@ -1361,6 +1421,9 @@
         var on = isFav(code);
         this.setAttribute("aria-pressed", String(on));
         this.title = on ? "お気に入りから外す" : "お気に入りに追加";
+        var c = byCode(code);
+        this.setAttribute("aria-label", (c ? c.t : "") + "をお気に入り" + (on ? "から外す" : "に追加"));
+        this.blur();   // タップ後にフォーカスの枠が残らないように
         syncFavUI();
         // お気に入り一覧を見ている最中に外したら、その場から消す
         if (state.fav) { render(); }
@@ -1873,6 +1936,140 @@
     });
   }
 
+  /* ===== 時間割の共有 =====
+     サーバを持たないので、お気に入りの科目コードをURLに載せて渡す。
+     PC→スマホはQRコード、スマホ→PCは端末の共有機能かコピーで自分宛てに送る */
+  function shareURL() {
+    var codes = favCodes().filter(function (x) { return /^[0-9A-Za-z]+$/.test(x); }).sort();
+    return location.href.split("#")[0] + "#view=tt&s=" + codes.join(".");
+  }
+  // QRコードの生成だけ外部のライブラリを使う。共有を開いたときに初めて読み込み、
+  // 中身が変わっていたら（integrity が合わなければ）ブラウザが実行しない
+  var qrLoading = null;
+  function loadQR() {
+    if (window.qrcode) { return Promise.resolve(); }
+    if (!qrLoading) {
+      qrLoading = new Promise(function (ok, ng) {
+        var sc = document.createElement("script");
+        sc.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js";
+        sc.integrity = "sha384-8FWZA6BGMXhsfO+BLtrJK0We6gg5o1JyO8xQm6peWDEUs17ACA5ziE/NIAkl9z2k";
+        sc.crossOrigin = "anonymous";
+        sc.onload = ok;
+        sc.onerror = function () { qrLoading = null; ng(); };
+        document.head.appendChild(sc);
+      });
+    }
+    return qrLoading;
+  }
+  function sheetShare() {
+    var n = favCodes().length;
+    if (!n) {
+      openSheet('<div class="sh"><h3>時間割を共有</h3>' +
+        '<button type="button" class="x" data-close="1">閉じる</button></div>' +
+        '<p class="sharenote">まだ科目がありません。空いているコマを押して追加するか、' +
+        "授業さがしで ★ を付けてから共有してください。</p>");
+      bindSheet();
+      return;
+    }
+    var url = shareURL();
+    openSheet('<div class="sh"><h3>時間割を共有</h3><span class="when">' + n + " 科目</span>" +
+      '<button type="button" class="x" data-close="1">閉じる</button></div>' +
+      '<p class="sharenote">下のリンクを開いた端末に、この時間割（前期・後期のお気に入りすべて）を' +
+      "取り込めます。自分のスマホやPCへ移すときも、友だちに見せるときも同じです。</p>" +
+      '<div class="shareqr" id="shareqr"></div>' +
+      '<input type="text" class="shareurl" id="shareurl" readonly value="' + esc(url) + '">' +
+      '<div class="acts">' +
+      '<button type="button" class="primary" id="sharecopy">リンクをコピー</button>' +
+      (navigator.share ? '<button type="button" id="sharesend">ほかのアプリで送る</button>' : "") +
+      "</div>" +
+      '<p class="sharenote" style="margin-top:12px"><b>PC → スマホ</b>：上のQRコードをスマホのカメラで読み取る。<br>' +
+      "<b>スマホ → PC</b>：リンクを自分宛てのメールやLINEに送り、PCで開く。<br>" +
+      "時間割を変えたら、もう一度ここからリンクを作り直してください（自動では同期されません）。</p>");
+    bindSheet();
+    el("shareurl").addEventListener("focus", function () { this.select(); });
+    el("sharecopy").addEventListener("click", function () {
+      var btn = this;
+      function done() { btn.textContent = "コピーしました"; }
+      function fallback() {
+        var inp = el("shareurl");
+        inp.focus(); inp.select();
+        try { document.execCommand("copy"); done(); } catch (e) { btn.textContent = "長押しでコピーしてください"; }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, fallback);
+      } else { fallback(); }
+    });
+    if (el("sharesend")) {
+      el("sharesend").addEventListener("click", function () {
+        navigator.share({ title: "九大 授業さがし の時間割", url: url }).catch(function () {});
+      });
+    }
+    loadQR().then(function () {
+      var box = el("shareqr");
+      if (!box) { return; }           // 読み込む間に閉じられた
+      var qr = window.qrcode(0, "M");
+      qr.addData(url);
+      qr.make();
+      box.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 8, scalable: true });
+    }, function () { /* QRが出せなくてもリンクは使える */ });
+  }
+  el("ttshare").addEventListener("click", sheetShare);
+
+  // 共有リンクを開いたとき。勝手に上書きせず、中身を見せてから選んでもらう
+  function sheetImport(codes) {
+    var got = [], seen = {};
+    codes.forEach(function (x) {
+      var c = byCode(x);
+      if (c && !seen[x]) { seen[x] = 1; got.push(c); }
+    });
+    var lost = codes.length - got.length, mine = favCodes();
+    var same = got.length === mine.length && got.every(function (c) { return isFav(c.c); });
+    var out = '<div class="sh"><h3>共有された時間割</h3><span class="when">' + got.length + " 科目</span>" +
+      '<button type="button" class="x" data-close="1">閉じる</button></div>';
+    if (!got.length) {
+      out += '<p class="sharenote">リンクに入っている科目が、このページのデータに見つかりませんでした。</p>';
+      openSheet(out); bindSheet(); return;
+    }
+    out += '<ul class="implist">' + got.map(function (c) {
+      return "<li>" + esc(c.t) + '<span class="m2">' + esc(slotLabel(c)) +
+        (c.i.length ? " ／ " + esc(c.i.slice(0, 2).join("・")) : "") + "</span></li>";
+    }).join("") + "</ul>";
+    if (lost) {
+      out += '<p class="sharenote">ほかに ' + lost + " 科目は、このページのデータに無いため取り込めません。</p>";
+    }
+    if (same) {
+      out += '<p class="sharenote">この端末の時間割と同じ内容です。</p>' +
+        '<div class="acts"><button type="button" class="primary" data-close="1">閉じる</button></div>';
+    } else if (!mine.length) {
+      out += '<div class="acts"><button type="button" class="primary" data-imp="replace">この端末の時間割にする</button>' +
+        '<button type="button" data-close="1">取り込まない</button></div>';
+    } else {
+      out += '<p class="sharenote">この端末にはすでに ' + mine.length + " 科目の時間割があります。</p>" +
+        '<div class="acts"><button type="button" class="primary" data-imp="replace">入れ替える</button>' +
+        '<button type="button" data-imp="add">今の時間割に追加する</button>' +
+        '<button type="button" data-close="1">取り込まない</button></div>';
+    }
+    openSheet(out);
+    bindSheet();
+    Array.prototype.forEach.call(el("sheet").querySelectorAll("[data-imp]"), function (b) {
+      b.addEventListener("click", function () {
+        if (this.getAttribute("data-imp") === "replace") { favs = Object.create(null); }
+        got.forEach(function (c) { favs[c.c] = 1; });
+        saveFavs();
+        syncFavUI();
+        setView("tt", false);
+      });
+    });
+  }
+
+  function consumeShare() {
+    if (!pendingShare) { return; }
+    var shared = pendingShare;
+    pendingShare = null;
+    syncHash();              // s= をURLから外す。再読み込みで何度も聞かないように
+    sheetImport(shared);
+  }
+
   function setView(v, push) {
     state.view = v;
     document.body.classList.toggle("tt", v === "tt");
@@ -1889,6 +2086,7 @@
   render();
   if (state.view === "tt") { drawTT(); }
   syncSticky();
+  consumeShare();
 })();
 </script>
 

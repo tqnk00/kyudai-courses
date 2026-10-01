@@ -4,7 +4,7 @@ desktop.ini
 
 __pycache__/
 *.pyc
+# 以前はビルド出力と時間割PDFをここに置いていた。今は既定でリポジトリの外
+# （~/syllabus-db/exports と ~/syllabus-db/pdf）。環境変数で戻したとき用に残してある
 src/exports/
-# 各学部の時間割表PDF。11MBあり学期ごとに差し替わるので履歴に入れない。
-# `python run.py rooms --refresh` で取り直せる（取得先は src/timetable_pdfs.py）
 src/data/pdf/
