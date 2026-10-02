@@ -25,6 +25,7 @@
 | | `timetable_pdfs.py` | 各学部の時間割PDFの在りか（URL・掲載ページ・学期）と取得 |
 | | `timetable_rooms.py` `timetable_econ.py` | PDFから「科目 → 教室」と、シラバスが無い科目を拾う |
 | | `core_btable.py` | 基幹教育のB表から教室と事前申請の印を拾う |
+| | `class_days.py` | 公式の授業日程（`config.CALENDAR`）から、開講期×曜日ごとの授業日を出す。カレンダー書き出し用 |
 | サイトを作る | `site_data.py` | DB と `data/*.json` を合わせ、ページ用のJSONと詳細の分割ファイルを作る |
 | | `build_site.py` `site_template.html` | ページの組み立てと、画面そのもの |
 | その他の出力 | `report.py` | 実測レポートと CSV / JSON の出力（サイトには使わない） |
@@ -86,6 +87,11 @@ py -m unittest discover -s tests
 画面の確認は `tests/browser_all.cjs`（Chrome / Edge / Safari相当、iPhone / iPad / Android の8種類の画面）。
 
 ## 年度を変えるとき
+
+授業日程（カレンダー書き出し用）は `config.CALENDAR` に年度ごとに写す。全学の日程を土台に、
+学部ごとの違いを差分で書く。写したら `tests/test_class_days.py` が「月〜金がどれも15回・
+クォーターは8回」になるかを確かめる（祝日や振替の写し忘れがあると回数が合わない）。
+各学部の授業日程表の在りかは `config.py` の `source` にある。
 
 `config.YEAR` と `--year` で大半は切り替わるが、時間割PDFは年度がファイル名とURLに入っている。
 `timetable_pdfs.py` の `PDFS` と `SEASON`、それを名前で引いている `timetable_rooms.py` `timetable_econ.py`

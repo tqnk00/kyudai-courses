@@ -103,9 +103,8 @@
     border-radius: 7px; padding: 5px 9px; min-height: 31px;
     max-width: 100%;
   }
-  #fac { max-width: 160px; }
-  #cat { max-width: 200px; }
-  #camp { max-width: 150px; }
+  /* 選択欄の幅は固定する。中身に合わせると、選ぶたびに幅が変わって隣の項目が動く */
+  .field.sel select { width: 190px; }
   .field input[type=search] { min-width: 170px; }
   .chips { display: flex; gap: 4px; flex-wrap: wrap; }
   .chip {
@@ -529,6 +528,17 @@
     background: var(--surface-2); color: var(--ink);
   }
   .sheet .acts .primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  .sheet .callist { list-style: none; margin: 8px 0 0; padding: 0; }
+  .sheet .callist li { display: flex; align-items: center; gap: 10px; padding: 8px 2px;
+                       border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+  .sheet .callist li span { flex: 1 1 auto; min-width: 0; }
+  .sheet .callist li a { flex: 0 0 auto; font-size: 12px; font-weight: 600; color: var(--accent);
+                         text-decoration: none; border: 1px solid var(--line); border-radius: 8px;
+                         padding: 7px 10px; }
+  .sheet details.calmore { margin-top: 12px; font-size: 12.5px; color: var(--ink-mute); }
+  .sheet details.calmore summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
+  .sheet ol.calsteps { margin: 6px 0 0; padding-left: 1.4em; font-size: 12.5px;
+                       color: var(--ink-mute); line-height: 1.8; }
   .sheet .implist { list-style: none; margin: 0 0 12px; padding: 0; max-height: 34vh; overflow-y: auto;
                     border: 1px solid var(--line-soft); border-radius: 8px; }
   .sheet .implist li { padding: 7px 10px; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
@@ -588,6 +598,10 @@
     <div class="field sel">
       <span class="lbl">学部</span>
       <select id="fac" aria-label="学部"></select>
+    </div>
+    <div class="field sel">
+      <span class="lbl">学科・コース</span>
+      <select id="dept" aria-label="学科・コース" disabled></select>
     </div>
     <div class="field sel">
       <span class="lbl">科目区分</span>
@@ -650,6 +664,7 @@
         <button type="button" class="chip" data-sem="autumn">後期</button>
       </span>
       <span class="spacer"></span>
+      <button type="button" class="ttback" id="ttcal" hidden>カレンダーに入れる</button>
       <button type="button" class="ttback" id="ttshare">共有・ほかの端末で開く</button>
       <button type="button" class="ttback" id="ttback">授業さがしに戻る</button>
     </div>
@@ -750,7 +765,7 @@
   }
 
   // terms は開講期チップの選択集合。空なら全部の開講期を出す
-  var state = { terms: {}, fac: "", cat: "", grade: 0, camp: "", ap: false, text: "", words: [],
+  var state = { terms: {}, fac: "", dept: "", cat: "", grade: 0, camp: "", ap: false, text: "", words: [],
                 cell: null, tray: false, fav: false, cap: LIST_CAP, view: "search" };
   // 表示順はチップの並び（後期・秋学期・冬学期・通年ほか）に揃える
   // 前期と後期の両方を載せているので、何も指定がなければ今の学期（と通年）から始める。
@@ -829,6 +844,7 @@
     var p = [], t = termsOn();
     p.push("t=" + (t.length ? encodeURIComponent(t.join(",")) : "all"));
     if (state.fac) { p.push("f=" + encodeURIComponent(state.fac)); }
+    if (state.dept) { p.push("d=" + encodeURIComponent(state.dept)); }
     if (state.cat) { p.push("c=" + encodeURIComponent(state.cat)); }
     if (state.grade) { p.push("g=" + state.grade); }
     if (state.camp) { p.push("p=" + encodeURIComponent(state.camp)); }
@@ -868,6 +884,7 @@
     }
     // 知らない値が入っていても壊れないよう、選択肢にあるものだけ採る
     state.fac = META.faculties.indexOf(q.f) >= 0 ? q.f : "";
+    state.dept = q.d || "";
     state.cat = q.c || "";
     state.grade = /^[1-6]$/.test(q.g || "") ? +q.g : 0;
     state.camp = META.campuses.indexOf(q.p) >= 0 ? q.p : "";
@@ -981,8 +998,40 @@
   selectFrom(el("fac"), "すべての学部", META.faculties);
   selectFrom(el("camp"), "すべてのキャンパス", META.campuses);
   el("fac").addEventListener("change", function () {
-    state.fac = this.value; state.cat = ""; state.cap = LIST_CAP; render();
+    state.fac = this.value; state.dept = ""; state.cat = ""; state.cap = LIST_CAP; render();
   });
+  el("dept").addEventListener("change", function () {
+    state.dept = this.value; state.cat = ""; state.cap = LIST_CAP; render();
+  });
+
+  // 学科・コース。学部ごとに顔ぶれが違うので、選ばれている学部のものだけ出す。
+  // 欄そのものは常に出しておく（学部を選ぶたびに出たり消えたりすると、隣の項目が動く）
+  var DEPTS = Object.create(null);   // 学部 -> {学科名: 件数}
+  COURSES.forEach(function (c) {
+    (c.dp || []).forEach(function (d) {
+      var m = DEPTS[c.f] || (DEPTS[c.f] = Object.create(null));
+      m[d] = (m[d] || 0) + 1;
+    });
+  });
+  function drawDepartments() {
+    var sel = el("dept"), m = DEPTS[state.fac] || {};
+    var names = Object.keys(m).sort(function (a, b) { return m[b] - m[a] || a.localeCompare(b, "ja"); });
+    if (state.dept && names.indexOf(state.dept) < 0) { state.dept = ""; }
+    sel.innerHTML = "";
+    var o0 = document.createElement("option");
+    o0.value = "";
+    o0.textContent = !state.fac ? "学部を選ぶと選べます"
+      : names.length ? "すべての学科・コース" : "（区分なし）";
+    sel.appendChild(o0);
+    names.forEach(function (n) {
+      var o = document.createElement("option");
+      o.value = n; o.textContent = n + "（" + m[n] + "）";
+      sel.appendChild(o);
+    });
+    sel.disabled = !names.length;
+    sel.value = state.dept;
+  }
+
   el("cat").addEventListener("change", function () {
     state.cat = this.value; state.cap = LIST_CAP; render();
   });
@@ -1047,7 +1096,7 @@
     // 開講期は既定（今の学期）のままなら条件として数えない
     var def = Object.keys(defaultTerms()).sort().join(",");
     var termN = termsOn().slice().sort().join(",") === def ? 0 : termsOn().length;
-    var n = termN + (state.fac ? 1 : 0) + (state.cat ? 1 : 0)
+    var n = termN + (state.fac ? 1 : 0) + (state.dept ? 1 : 0) + (state.cat ? 1 : 0)
           + (state.grade ? 1 : 0) + (state.camp ? 1 : 0) + (state.ap ? 1 : 0);
     return n;
   }
@@ -1066,7 +1115,7 @@
   });
   el("reset").addEventListener("click", function () {
     clearTimeout(timer);
-    state = { terms: defaultTerms(), fac: "", cat: "", grade: 0, camp: "", ap: false, text: "", words: [],
+    state = { terms: defaultTerms(), fac: "", dept: "", cat: "", grade: 0, camp: "", ap: false, text: "", words: [],
               cell: null, tray: false, fav: false, cap: LIST_CAP, view: state.view };
     el("fac").value = ""; el("camp").value = ""; el("q").value = "";
     openCodes = Object.create(null);
@@ -1116,6 +1165,7 @@
   // 学年やキーワードで絞ったときも表示される件数が実際と合う
   function passesExceptCategory(c) {
     if (state.fac && c.f !== state.fac) return false;
+    if (state.dept && (c.dp || []).indexOf(state.dept) < 0) return false;
     if (state.grade && c.g.indexOf(state.grade) < 0) return false;
     if (state.camp && c.cp !== state.camp) return false;
     if (state.ap && !c.ap) return false;
@@ -1127,6 +1177,7 @@
   /* ---- 描画 ---- */
   function render() {
     drawChips();
+    drawDepartments();
     el("apbtn").setAttribute("aria-pressed", String(state.ap));
     drawCategories();
     var na = activeCount();
@@ -1990,6 +2041,188 @@
     }, function () { /* QRが出せなくてもリンクは使える */ });
   }
   el("ttshare").addEventListener("click", sheetShare);
+
+  /* ===== カレンダーへの書き出し =====
+     いま表示している学期の時間割を、カレンダー用のファイル（.ics）にする。
+     授業日は生成側（class_days.py）が公式の授業日程から作った日付の並び（META.calendar.days）。
+     祝日・休業は除かれ、振替授業日（木曜に月曜の授業、など）は入っている */
+  var CAL = META.calendar;
+  var WEEKDAY_JS = ["日", "月", "火", "水", "木", "金", "土"];
+  function ymd(iso) { return iso.replace(/-/g, ""); }
+  function hms(t) { return t.replace(":", "") + "00"; }
+  function weekdayOf(iso) {
+    var p = iso.split("-");
+    return WEEKDAY_JS[new Date(+p[0], +p[1] - 1, +p[2]).getDay()];
+  }
+  function addDays(iso, n) {
+    var p = iso.split("-"), d = new Date(+p[0], +p[1] - 1, +p[2] + n);
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  }
+  // 書き出す予定の並び。1コマ（科目×曜日時限×開講期）が1件。
+  // dates は実際に授業がある日、regular はそのうち本来の曜日の日、swaps は振替授業日
+  function calendarItems() {
+    var items = [], skipped = 0, seen = {};
+    ttCourses().forEach(function (c) {
+      c.sl.forEach(function (s) {
+        if (!inSem(c, s)) { return; }
+        var g = slotGroup(c, s), time = CAL.periods[s[2]];
+        // 通年の科目は、表示している学期の授業期間で出す
+        if (!CAL.days[g]) { g = ttSem === "spring" ? "前期" : "後期"; }
+        // 授業日程は学部で少し違う。違いのある学部は、その学部の日付を使う
+        var days = (CAL.by_faculty[c.f] || CAL).days;
+        var dates = (days[g] || {})[s[1]];
+        if (!time || !dates || !dates.length) { skipped++; return; }
+        var key = c.c + "|" + g + "|" + s[1] + s[2];
+        if (seen[key]) { return; }
+        seen[key] = 1;
+        var regular = dates.filter(function (d) { return weekdayOf(d) === s[1]; });
+        items.push({
+          c: c, term: g, day: s[1], period: s[2], time: time, dates: dates, regular: regular,
+          swaps: dates.filter(function (d) { return weekdayOf(d) !== s[1]; })
+        });
+      });
+    });
+    return { items: items, skipped: skipped };
+  }
+  function icsText(v) {
+    return String(v).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,")
+      .replace(/\r?\n/g, "\\n");
+  }
+  // 1行は75バイトまで。日本語は1文字3バイトなので、文字数ではなくバイト数で折る
+  function icsFold(line) {
+    var out = "", cur = "", bytes = 0;
+    for (var i = 0; i < line.length; i++) {
+      var ch = line.charAt(i), code = line.charCodeAt(i);
+      var b = code < 0x80 ? 1 : code < 0x800 ? 2 : 3;
+      if (bytes + b > 73) { out += cur + "\r\n "; cur = ""; bytes = 1; }
+      cur += ch; bytes += b;
+    }
+    return out + cur;
+  }
+  function eventLines(it, date, extra) {
+    var c = it.c, where = [c.rm, c.cp].filter(Boolean).join(" ／ ");
+    var desc = [it.term + " " + it.day + it.period + "限", c.i.join("・"), "講義コード " + c.c,
+                officialURL(c)].filter(Boolean).join("\n");
+    return ["BEGIN:VEVENT",
+      "UID:" + c.c + "-" + it.term + "-" + it.day + it.period + "-" + ymd(date) + "@kyudai-courses",
+      "DTSTAMP:" + ymd(META.generated_at.slice(0, 10)) + "T000000Z",
+      "DTSTART;TZID=Asia/Tokyo:" + ymd(date) + "T" + hms(it.time[0]),
+      "DTEND;TZID=Asia/Tokyo:" + ymd(date) + "T" + hms(it.time[1]),
+      "SUMMARY:" + icsText(c.t)]
+      .concat(where ? ["LOCATION:" + icsText(where)] : [])
+      .concat(["DESCRIPTION:" + icsText(desc)], extra || [], ["END:VEVENT"]);
+  }
+  function buildICS(items) {
+    var L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//kyudai-courses//timetable//JA",
+             "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+             "X-WR-CALNAME:" + icsText("九大 時間割 " + (ttSem === "spring" ? "前期" : "後期")),
+             "X-WR-TIMEZONE:Asia/Tokyo",
+             "BEGIN:VTIMEZONE", "TZID:Asia/Tokyo", "BEGIN:STANDARD", "DTSTART:19700101T000000",
+             "TZOFFSETFROM:+0900", "TZOFFSETTO:+0900", "TZNAME:JST", "END:STANDARD", "END:VTIMEZONE"];
+    items.forEach(function (it) {
+      if (it.regular.length) {
+        // 毎週の繰り返しを1件にまとめ、授業の無い週（祝日・休業・振替で別の曜日になる日）を除く
+        var first = it.regular[0], last = it.regular[it.regular.length - 1];
+        var have = {}, skip = [];
+        it.regular.forEach(function (d) { have[d] = 1; });
+        for (var d = first; d <= last; d = addDays(d, 7)) {
+          if (!have[d]) { skip.push(ymd(d) + "T" + hms(it.time[0])); }
+        }
+        // UNTIL は協定世界時で書く決まり。日本時間の最終日の終わり = 同じ日の 14:59:59Z
+        var extra = ["RRULE:FREQ=WEEKLY;UNTIL=" + ymd(last) + "T145959Z"];
+        if (skip.length) { extra.push("EXDATE;TZID=Asia/Tokyo:" + skip.join(",")); }
+        L = L.concat(eventLines(it, first, extra));
+      }
+      // 振替授業日は、繰り返しとは別の1回きりの予定として足す
+      it.swaps.forEach(function (d) { L = L.concat(eventLines(it, d)); });
+    });
+    L.push("END:VCALENDAR");
+    return L.map(icsFold).join("\r\n") + "\r\n";
+  }
+  // Google カレンダーの「予定を作成」画面を、毎週の繰り返しつきで開くリンク。
+  // こちらは祝日・休業・振替を表せないので、1科目だけ手早く入れたいとき用
+  function googleLink(it) {
+    var first = it.regular[0] || it.dates[0], last = it.dates[it.dates.length - 1], c = it.c;
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent(c.t) +
+      "&dates=" + ymd(first) + "T" + hms(it.time[0]) + "/" + ymd(first) + "T" + hms(it.time[1]) +
+      "&ctz=Asia/Tokyo" +
+      "&recur=" + encodeURIComponent("RRULE:FREQ=WEEKLY;UNTIL=" + ymd(last) + "T145959Z") +
+      (c.rm ? "&location=" + encodeURIComponent(c.rm) : "") +
+      "&details=" + encodeURIComponent(c.i.join("・") + "\n" + officialURL(c));
+  }
+  // 学部による日程の違いと、学部の日程表で確かめられていない学部を知らせる
+  function calendarNotes(items) {
+    var facs = [];
+    items.forEach(function (it) { if (it.c.f && facs.indexOf(it.c.f) < 0) { facs.push(it.c.f); } });
+    var out = "";
+    facs.forEach(function (f) {
+      var d = CAL.by_faculty[f];
+      if (d && d.note) {
+        out += '<p class="sharenote"><b>' + esc(f) + "</b>は全学と日程が違います: " + esc(d.note) +
+          "。この学部の科目は、学部の日程で入れています。</p>";
+      }
+    });
+    var unsure = facs.filter(function (f) { return CAL.verified.indexOf(f) < 0; });
+    if (unsure.length) {
+      out += '<p class="sharenote"><b>' + esc(unsure.join("・")) + "</b>は、学部独自の授業日程を確認できていません。" +
+        "全学の日程で入れているので、休講日や振替が違う場合があります。</p>";
+    }
+    return out;
+  }
+
+  function sheetCalendar() {
+    var got = calendarItems(), items = got.items, sem = ttSem === "spring" ? "前期" : "後期";
+    var head = '<div class="sh"><h3>カレンダーに入れる</h3><span class="when">' + sem + " " +
+      items.length + " コマ</span>" +
+      '<button type="button" class="x" data-close="1">閉じる</button></div>';
+    if (!items.length) {
+      openSheet(head + '<p class="sharenote">' + sem + "の時間割に、曜日と時限の決まった科目がありません。" +
+        "上のボタンで前期・後期を切り替えるか、科目を追加してください。</p>");
+      bindSheet();
+      return;
+    }
+    var n = items.reduce(function (a, it) { return a + it.dates.length; }, 0);
+    openSheet(head +
+      '<p class="sharenote">' + sem + "の時間割を、九大の授業日程どおりの日付で書き出します（のべ " + n +
+      " 回）。祝日・九大祭・冬季休業の日は入らず、振替授業日（別の曜日の授業を行う日）は入ります。" +
+      "試験・補講・集中講義は入りません。</p>" +
+      '<div class="acts"><button type="button" class="primary" id="calsave">カレンダー用ファイルを保存</button></div>' +
+      '<ol class="calsteps"><li>上のボタンでファイル（.ics）を保存する</li>' +
+      "<li><b>Google カレンダー</b>はパソコンで開き、右上の歯車 → 設定 → 「インポート / エクスポート」で、保存したファイルを選ぶ</li>" +
+      "<li>iPhone は保存したファイルを開くと、そのままカレンダーに追加できます</li></ol>" +
+      (got.skipped ? '<p class="sharenote" style="margin-top:10px">時刻の分からないコマ ' + got.skipped +
+        " 件は入れていません。</p>" : "") +
+      '<details class="calmore"><summary>1科目ずつ Google カレンダーに追加する</summary>' +
+      '<p class="sharenote">毎週の繰り返しとして追加します。こちらは祝日や休業の日も予定が入るので、' +
+      "正確に入れたいときは上のファイルを使ってください。</p>" +
+      '<ul class="callist">' + items.map(function (it) {
+        return "<li><span>" + esc(it.c.t) + '<br><small>' + esc(it.term + " " + it.day + it.period + "限 " +
+          it.time[0] + "〜" + it.time[1]) + "</small></span>" +
+          '<a href="' + esc(googleLink(it)) + '" target="_blank" rel="noopener">追加</a></li>';
+      }).join("") + "</ul></details>" +
+      calendarNotes(items) +
+      '<p class="sharenote" style="margin-top:12px">時刻は標準の時限（1限 8:40〜）です。授業日程の出典: ' +
+      '<a href="' + esc(CAL.source) + '" target="_blank" rel="noopener">九州大学の授業日程</a>。' +
+      "休講や教室変更は反映されないので、公式の連絡を確認してください。</p>");
+    bindSheet();
+    el("calsave").addEventListener("click", function () {
+      var blob = new Blob([buildICS(items)], { type: "text/calendar;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "kyudai-timetable-" + META.year + "-" + (ttSem === "spring" ? "zenki" : "kouki") + ".ics";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+      this.textContent = "保存しました";
+    });
+  }
+  // 授業日程を写していない年度のデータでは、ボタンごと出さない
+  if (CAL) {
+    el("ttcal").hidden = false;
+    el("ttcal").addEventListener("click", sheetCalendar);
+  }
 
   // 共有リンクを開いたとき。勝手に上書きせず、中身を見せてから選んでもらう
   function sheetImport(codes) {

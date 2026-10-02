@@ -13,6 +13,7 @@ course_structured / course_slots / syllabus_raw から、ページに埋め込�
     sl  コマの並び [学期, 曜日, 時限]                      iv  集中講義か  ol 遠隔ありか
     kw  キーワード              n   ナンバリング           su  シラバスのURL（文学部だけ）
     rm  教室                    kl  担当クラス             ap  事前申請の印 {入学年度: 印}
+    dp  学科・コース・分野（並び。対象が決まっている科目だけ）
   詳細の分割ファイルに入るもの（DETAIL_DEFAULTS。画面は詳細を開いたときに読む）
     d   概要                    pl  授業計画 [回, テーマ, 内容]
     gr  成績評価の行 [方法, 割合, 補足, 印]   gu 実施しない方法   gx どの方法にも付かない注意書き
@@ -21,10 +22,11 @@ course_structured / course_slots / syllabus_raw から、ページに埋め込�
     grraw 対象学年の原文        rq  必修選択               catr 科目区分の原文
     ln  使用言語                rmu 教室の出典URL          apu  事前申請の出典URL
 """
-import sys, re, json, argparse
+import sys, re, json, argparse, collections, unicodedata
 import db as DB
 import extract as EX
 import grading as GR
+import class_days
 from config import (KYUSHU, EXPORT_DIR, DATA_DIR, YEAR, TERM_GROUPS, CATEGORY_OTHER,
                     FACULTY_ORDER, SPRING_GROUPS, AUTUMN_GROUPS)
 
@@ -184,6 +186,38 @@ def is_stale(kaiko_cd, last_seen, latest):
         return False
     return last_seen < min(times)
 
+# 対象学部等の原文から、学科・コース・分野・専攻の名前を拾う。
+#   「電気情報工学科（EC） / Department of ...」→ 電気情報工学科
+#   「融合基礎工学科（機械電気コース）」→ 融合基礎工学科, 機械電気コース
+#   「医学部保健学科看護学専攻（...）」→ 看護学専攻（学部名と同じ部分は落とす）
+#   「Ⅰ群 / Group Ⅰ（EE)」→ Ⅰ群（工学部の1・2年次の区分）
+_DEPT = re.compile(r"[ⅠⅡⅢⅣⅤⅥ]群|[一-龥ぁ-んァ-ヶー－-]+?(?:学科|コース|分野|専攻)")
+# 件数がこれ未満の名前は選択肢にしない。表記ゆれや記入ミスが選択肢に並ぶのを防ぐ
+DEPT_MIN_COUNT = 5
+
+
+def departments_of(faculty, raw):
+    out = []
+    for t in _DEPT.findall(raw or ""):
+        t = unicodedata.normalize("NFKC", t) if "群" not in t else t   # Ⅰ群 はローマ数字のまま
+        t = re.sub(r"[－-]", "ー", t)              # 「コ－ス」の表記ゆれ
+        t = re.sub(r"^.*?学部", "", t)             # 「薬学部臨床薬学科」→「臨床薬学科」
+        if not t or faculty.endswith(t) or t == "各コース" or t in out:
+            continue
+        out.append(t)
+    return out
+
+
+def prune_departments(courses):
+    """学部の中で件数の少ない学科名を落とし、空になった科目からは dp を外す。"""
+    count = collections.Counter((c["f"], d) for c in courses for d in c.get("dp", ()))
+    for c in courses:
+        if "dp" in c:
+            c["dp"] = [d for d in c["dp"] if count[(c["f"], d)] >= DEPT_MIN_COUNT]
+            if not c["dp"]:
+                del c["dp"]
+
+
 # ---- build() の各段 ---------------------------------------------------------
 # build() は下の関数を順に呼ぶだけ。科目1件の形は KEYS（このファイルの先頭）を参照
 
@@ -229,7 +263,7 @@ def campusmate_course(r, sl):
     # 和英併記を落としただけの正規化は「シラバス表記」に出さない（実測606/946件が該当）
     if EX.normalize_category(catr) == (r["category"] or ""):
         catr = ""
-    return {
+    course = {
         "c": r["course_code"],
         "t": r["title"] or "",
         "s": r["subtitle"] if r["subtitle"] and r["subtitle"] != r["title"] else "",
@@ -259,6 +293,10 @@ def campusmate_course(r, sl):
         "d": outline_of(sec),
         "n": r["numbering"] or "",
     }
+    dp = departments_of(r["faculty"] or "", r["faculty_raw"])
+    if dp:
+        course["dp"] = dp
+    return course
 
 
 def lit_course(c):
@@ -276,7 +314,7 @@ def lit_course(c):
     # 文学部は「秋クォータ」表記。Campusmate 側の「秋学期」に寄せてチップを共通にする
     term = (c.get("term") or "").replace("クォータ", "学期")
     room = c.get("room") or ""
-    return {
+    course = {
         "c": c["course_code"],
         "t": c.get("title") or "",
         "s": c.get("subtitle") or "",
@@ -307,6 +345,10 @@ def lit_course(c):
         "su": c.get("url") or "",
         "rm": room,
     }
+    # 専門分野（心理・哲学…）。時間割ページの欄に入っている
+    if c.get("dept"):
+        course["dp"] = [c["dept"]]
+    return course
 
 
 def merge_lit(courses, year):
@@ -402,6 +444,8 @@ def build_meta(con, courses, year, undergrad_only):
     # 前期側・後期側の開講期。画面の「今の学期」と時間割ページの切り替えが使う
     meta["seasons"] = {"spring": [g for g, _ in TERM_GROUPS if g in SPRING_GROUPS],
                        "autumn": [g for g, _ in TERM_GROUPS if g in AUTUMN_GROUPS]}
+    # 授業日（祝日・休業を除き、振替授業日を入れた日付の並び）。カレンダーへの書き出し用
+    meta["calendar"] = class_days.for_site(year)
     return meta
 
 
@@ -458,6 +502,7 @@ def build(year=YEAR, undergrad_only=True):
         merge_lit(courses, year)
         merge_core_b(courses, year)
         merge_rooms(courses, year)
+        prune_departments(courses)
         meta = build_meta(con, courses, year, undergrad_only)
         shards = split_details(courses, meta, year)
         return write_out(meta, courses, shards, year)

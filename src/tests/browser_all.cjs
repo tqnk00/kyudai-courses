@@ -366,6 +366,116 @@ const TESTS = {
     return `${all} -> 事前申請 ${n}`;
   },
 
+  async '17 カレンダーへの書き出し（.ics）'(browser, t) {
+    // 後期・月2（秋と冬のクォーター）と、後期・水2 の科目
+    const favs = ['26220041', '26220042', '26153601'];
+    const { page } = await fresh(browser, t, {
+      url: URL0 + '#view=tt',
+      init: `localStorage.setItem('${FAV_KEY}', '${JSON.stringify(favs)}')`,
+    });
+    await page.waitForSelector('#ttgrid .ttcell');
+    await act(t, page.locator('.ttsem [data-sem="autumn"]'));
+    await act(t, page.locator('#ttcal'));
+    await page.waitForSelector('#sheet:not([hidden]) #calsave');
+    const head = await page.locator('#sheet .sh').innerText();
+    if (!/後期\s*3\s*コマ/.test(head)) throw new Error('コマ数が違う: ' + head);
+    // 保存されるファイルの中身を取り出す
+    const ics = await page.evaluate(() => new Promise(ok => {
+      const orig = URL.createObjectURL;
+      URL.createObjectURL = b => { b.text().then(ok); return orig.call(URL, b); };
+      document.getElementById('calsave').click();
+    }));
+    const ev = ics.split('BEGIN:VEVENT').slice(1);
+    if (!ics.startsWith('BEGIN:VCALENDAR') || !ics.trim().endsWith('END:VCALENDAR')) throw new Error('形式が不正');
+    const long = ics.split('\r\n').filter(l => new TextEncoder().encode(l).length > 75);
+    if (long.length) throw new Error('75バイトを超える行がある: ' + long[0]);
+    const unfold = e => e.replace(/\r\n /g, '');
+    // 秋・月2: 10/5 開始。10/12（祝日）・11/2（九大祭）・11/23（祝日）は除く。振替 11/5・11/26 は別の予定
+    const aki = ev.map(unfold).find(e => /SUMMARY:物理数学ⅡA/.test(e) && /RRULE/.test(e));
+    if (!aki) throw new Error('秋学期の繰り返し予定が無い');
+    if (!aki.includes('DTSTART;TZID=Asia/Tokyo:20261005T103000')) throw new Error('開始日時が違う');
+    if (!aki.includes('DTEND;TZID=Asia/Tokyo:20261005T120000')) throw new Error('終了時刻が違う');
+    if (!aki.includes('RRULE:FREQ=WEEKLY;UNTIL=20261130T145959Z')) throw new Error('繰り返しの終わりが違う: ' + (aki.match(/RRULE.*/) || [''])[0]);
+    const ex = (aki.match(/EXDATE[^\r]*/) || [''])[0];
+    for (const d of ['20261012', '20261102', '20261123']) if (!ex.includes(d)) throw new Error('休みの日が除かれていない: ' + d + ' / ' + ex);
+    for (const d of ['20261105', '20261126']) {
+      if (!ev.some(e => /SUMMARY:物理数学ⅡA/.test(e) && e.includes('DTSTART;TZID=Asia/Tokyo:' + d + 'T103000') && !/RRULE/.test(e)))
+        throw new Error('振替授業日の予定が無い: ' + d);
+    }
+    // 冬・月2 は 1/12（火。月曜授業の日）が別の予定で入る
+    if (!ev.some(e => /SUMMARY:物理数学ⅡB/.test(e) && e.includes(':20270112T103000'))) throw new Error('冬学期の振替 1/12 が無い');
+    // 後期・水2（法学部の科目）: 休みの週を除いて15回になる。法学部は定期試験の週を飛ばし、
+    // 補習期間の 2/10 が15回目（全学の日程なら 2/3 まで）
+    const sui = ev.map(unfold).find(e => /SUMMARY:政治学Ⅱ/.test(e) && /RRULE/.test(e));
+    const nEx = ((sui.match(/EXDATE[^\r]*/) || [''])[0].match(/\d{8}T/g) || []).length;
+    const until = sui.match(/UNTIL=(\d{4})(\d{2})(\d{2})/);
+    if (until[0] !== 'UNTIL=20270210') throw new Error('法学部の最終回が 2/10 でない: ' + until[0]);
+    const weeks = Math.round((Date.UTC(+until[1], +until[2] - 1, +until[3]) - Date.UTC(2026, 9, 7)) / 6048e5) + 1;
+    if (weeks - nEx !== 15) throw new Error(`水曜の回数が15でない: ${weeks} 週 - 除外 ${nEx}`);
+    const g = await page.locator('#sheet .callist a').first().getAttribute('href');
+    if (!g.startsWith('https://calendar.google.com/calendar/render?action=TEMPLATE&text=') || !/recur=RRULE/.test(g)) throw new Error('Googleカレンダーのリンクが不正');
+    if (page.__errors.length) throw new Error(page.__errors.join(' | '));
+    return `予定 ${ev.length} 件（繰り返し ${ev.filter(e => /RRULE/.test(e)).length}・振替 ${ev.filter(e => !/RRULE/.test(e)).length}）`;
+  },
+
+  async '18 学科・コースで絞る／選んでも欄が動かない'(browser, t) {
+    const { page } = await fresh(browser, t, { url: URL0 + '#t=all' });
+    const pos = () => page.evaluate(() => ['fac', 'dept', 'cat', 'camp', 'gchips', 'q'].map(id => {
+      const r = document.getElementById(id).getBoundingClientRect();
+      return id + ':' + Math.round(r.left) + ',' + Math.round(r.top) + ',' + Math.round(r.width);
+    }).join(' '));
+    const before = await pos();
+    if (!(await page.locator('#dept').isDisabled())) throw new Error('学部を選ぶ前から学科が選べる');
+    await page.locator('#fac').selectOption('工学部');
+    await page.waitForTimeout(300);
+    const fac = num(await page.locator('#rcount').textContent());
+    const opts = await page.locator('#dept option').allTextContents();
+    if (opts.length < 10 || !opts.some(o => o.startsWith('電気情報工学科'))) throw new Error('工学部の学科が出ない: ' + opts.slice(0, 4));
+    await page.locator('#dept').selectOption('電気情報工学科');
+    await page.waitForTimeout(300);
+    const dep = num(await page.locator('#rcount').textContent());
+    if (!(dep > 50 && dep < fac)) throw new Error(`学科で絞れていない: ${fac} -> ${dep}`);
+    await page.locator('#cat').selectOption({ index: 1 });
+    await page.waitForTimeout(300);
+    // 長い名前を選んでも、ほかの欄の位置と幅が変わらないこと
+    const after = await pos();
+    if (after !== before) throw new Error('選ぶと欄が動く:\n      前 ' + before + '\n      後 ' + after);
+    const h = decodeURIComponent(await page.evaluate(() => location.hash));
+    if (!h.includes('d=電気情報工学科')) throw new Error('URLに学科が残らない');
+    await page.locator('#fac').selectOption('法学部');
+    await page.waitForTimeout(300);
+    if (await page.locator('#dept').inputValue() !== '') throw new Error('学部を変えても学科が残る');
+    if (page.__errors.length) throw new Error(page.__errors.join(' | '));
+    return `工学部 ${fac} -> 電気情報工学科 ${dep} / 学科 ${opts.length - 1} 種`;
+  },
+
+  async '19 カレンダー: 学部ごとの授業日程'(browser, t) {
+    // 工学部の後期（セメスター）科目は 1/27 まで。全学は 2/3 まで
+    const { page } = await fresh(browser, t, { url: URL0 + '#t=all' });
+    const code = await page.evaluate(() => {
+      const d = JSON.parse(document.getElementById('data').textContent);
+      const c = d.courses.find(c => c.f === '工学部' && c.tg === '後期' && c.sl.length === 1 && c.sl[0][1] === '水' && /^[1-5]$/.test(c.sl[0][2]));
+      return c && c.c;
+    });
+    if (!code) return '対象の科目なし';
+    await page.evaluate(([k, c]) => localStorage.setItem(k, JSON.stringify([c])), [FAV_KEY, code]);
+    await page.goto(URL0 + '#view=tt'); await page.reload({ waitUntil: 'load' });
+    await page.waitForSelector('#ttgrid .ttcell');
+    await act(t, page.locator('.ttsem [data-sem="autumn"]'));
+    await act(t, page.locator('#ttcal'));
+    await page.waitForSelector('#sheet:not([hidden]) #calsave');
+    const note = await page.locator('#sheet').innerText();
+    if (!note.includes('工学部は全学と日程が違います')) throw new Error('学部の日程の違いが案内されない');
+    const ics = await page.evaluate(() => new Promise(ok => {
+      const orig = URL.createObjectURL;
+      URL.createObjectURL = b => { b.text().then(ok); return orig.call(URL, b); };
+      document.getElementById('calsave').click();
+    }));
+    if (!ics.includes('RRULE:FREQ=WEEKLY;UNTIL=20270127T145959Z')) throw new Error('工学部の授業終了日が 1/27 になっていない: ' + (ics.match(/RRULE.*/) || [''])[0]);
+    if (page.__errors.length) throw new Error(page.__errors.join(' | '));
+    return '工学部 水曜 1/27 まで';
+  },
+
   async '13 ダークモード'(browser, t) {
     const { ctx, page } = await fresh(browser, t, { ctx: { colorScheme: 'dark' } });
     const c = await page.evaluate(() => {
@@ -439,7 +549,8 @@ const TESTS = {
     try {
       browser = await t.type.launch({ headless: true, ...t.launch });
     } catch (e) {
-      rec(t, '起動', false, e.message.split('\n')[0]);
+      // そのブラウザが入っていない（Safari相当は npx playwright install webkit が要る）。失敗とは数えない
+      console.log(`${t.name}: 起動できないので飛ばす`);
       continue;
     }
     for (const [name, fn] of Object.entries(TESTS)) {

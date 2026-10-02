@@ -249,6 +249,7 @@ def crawl(year=YEAR, which="all", pause=1.0, limit=None, log=print, cache_dir=No
                 course["slots"] = [(course.get("term") or "", d, p)
                                    for d, p in sorted(set(tt["slots"]))]
             course["room"] = tt["room"] or course.get("room")
+            course["dept"] = tt.get("dept") or ""      # 専門分野（心理・哲学…）。絞り込みに使う
             out.append(course)
             if i % 25 == 0:
                 log(f"  {i}/{len(nums)}")
