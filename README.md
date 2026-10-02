@@ -82,7 +82,8 @@
 index.html   配布しているページそのもの（GitHub Pages がこれを配信）
 details-2026/  詳細を開いたときに読む分割ファイル（index.html と一緒に置く）
 update.bat   データ更新用。ダブルクリックで取り直しから公開の確認まで進む
-src/         作るためのコード一式
+src/         作るためのコード一式（読む順番と各ファイルの役割は src/README.md）
+docs/history/ 過去のレビューと設計の記録
 src/data/    Campusmateに無い情報（文学部のシラバス、各学部の教室、事前申請）
 ```
 

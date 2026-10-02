@@ -211,7 +211,6 @@ _ENROLL_YEAR = re.compile(r"\d{4}\s*年")          # 「2023年以前入学者�
 _OR_MORE = re.compile(r"([1-6])\s*年生?以上")
 _RANGE_SEP = re.compile(r"[-~〜～–—]|\.\.")   # 「1年～4年」の区切り。間に注釈が挟まる
 MAX_GRADE = 6
-ALL_GRADES = "1,2,3,4"   # 既定は4年制。5・6年次は生値に現れたときだけ付く
 # 6年制。ここの科目は「2年生以上」「全学年」が6年次まで届く
 SIX_YEAR_FACULTIES = ("医学部医学科", "歯学部", "薬学部")
 

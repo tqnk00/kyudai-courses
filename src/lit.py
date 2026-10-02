@@ -7,11 +7,12 @@ Campusmate ではなく文学部独自のCGI（Shift_JIS）で、シラバスと
   1. 時間割ページ … 曜日時限・教室・科目IDの一覧。コマの情報はここにしかない
   2. 個別ページ   … 科目ごとのシラバス本文（1件あたり約11KB）
 
-取れない項目は空にする。Campusmate 側と同じ列に詰めて course_structured へ入れる。
+取れない項目は空にする。DBには入れず、サイト用の形（site_data.lit_course）にして
+data/lit-courses-<年度>.json に保存し、サイト生成のときに Campusmate の科目と合流する。
 """
 import re, time, pathlib, html as H
 import httpx
-from config import USER_AGENT
+from config import USER_AGENT, YEAR
 
 BASE = "https://www3.lit.kyushu-u.ac.jp/~syllabus/cgi-bin/"
 FACULTY = "文学部"
@@ -25,8 +26,6 @@ SHOW = {"spring": ["S1110000"], "autumn": ["S2110000"], "all": ["S1110000", "S21
 
 _TAGS = re.compile(r"<[^>]+>")
 _CELL = re.compile(r"<td[^>]*>(.*?)</td>", re.S | re.I)
-_LINK = re.compile(r'num=([0-9A-Za-z]+)[^"]*"[^>]*>(.*?)</a>', re.S | re.I)
-_PERIOD = re.compile(r"^\s*(\d)\s*\(")          # 「1 (8:40 - 10:10)」
 _DAYS = ["月", "火", "水", "木", "金", "土", "日"]
 
 
@@ -34,17 +33,6 @@ def fetch(client, url):
     r = client.get(url)
     r.raise_for_status()
     return r.content.decode("cp932", "replace")
-
-
-def to_lines(raw_html: str):
-    """HTMLを行の並びに落とす。Campusmate 側の extract_body と同じ考え方。"""
-    t = re.sub(r"<script.*?</script>|<style.*?</style>|<!--.*?-->", "", raw_html,
-               flags=re.S | re.I)
-    t = re.sub(r"<br\s*/?>", "\n", t, flags=re.I)
-    t = re.sub(r"</(td|tr|div|p|table|h[1-6]|li)>", "\n", t, flags=re.I)
-    t = _TAGS.sub("", t)
-    t = H.unescape(t).replace("　", " ")
-    return [re.sub(r"\s+", " ", l).strip() for l in t.split("\n")]
 
 
 # ---- 時間割ページ --------------------------------------------------------
@@ -222,7 +210,7 @@ def parse_course(raw_html: str, num: str, year: int):
 
 # ---- 取得 ----------------------------------------------------------------
 
-def crawl(year=2026, which="all", pause=1.0, limit=None, log=print, cache_dir=None):
+def crawl(year=YEAR, which="all", pause=1.0, limit=None, log=print, cache_dir=None):
     """時間割 -> 個別ページの順に取る。戻り値は course の dict のリスト。"""
     script = script_for(year)
     with httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=60,
@@ -270,58 +258,7 @@ def crawl(year=2026, which="all", pause=1.0, limit=None, log=print, cache_dir=No
     return out
 
 
-# ---- 既存フォーマットへの変換 --------------------------------------------
-
-def to_site_course(c):
-    """site_data が作るのと同じ形の dict にする。取れない項目は空にする。"""
-    import extract as EX
-    import grading as GR
-
-    # ルーブリックの記号は読めないので落とす。評価方法の名前だけ残す
-    grading_text = re.sub(r"U_[A-Za-z0-9\-]+\s*\[[^\]]*\]|観点→成績評価方法↓?|→|↓", " ",
-                          c.get("grading") or "")
-    grading_text = re.sub(r"\s+", " ", grading_text).strip()
-    flags, _ = EX.eval_flags(grading_text)
-    g = GR.parse(grading_text)
-    # 文学部は「秋クォータ」表記。Campusmate 側の「秋学期」に寄せてチップを共通にする
-    term = (c.get("term") or "").replace("クォータ", "学期")
-    room = c.get("room") or ""
-    plan = [[n, t] for n, t in (c.get("plan") or [])]
-    return {
-        "c": c["course_code"],
-        "t": c.get("title") or "",
-        "s": c.get("subtitle") or "",
-        "f": FACULTY,
-        "g": [int(x) for x in EX.grades_of(c.get("target_grade") or "", FACULTY).split(",") if x],
-        "grraw": c.get("target_grade") or "",
-        "cr": c.get("credits"),
-        "rq": c.get("required") or "",
-        "tm": term,
-        "tg": EX.term_group_of(term),
-        "cat": c.get("category") or "",
-        "catr": "",
-        "cp": "伊都地区" if room or c.get("course_name") else "",
-        "ln": c.get("language") or "",
-        "i": [x for x in [(c.get("instructors") or "").strip()] if x],
-        "sl": [[term, d, p] for _t, d, p in (c.get("slots") or [])],
-        "iv": 1 if "集中" in term else 0,
-        "ol": 0,
-        "ev": [flags["eval_exam"], flags["eval_report"], flags["eval_quiz"], flags["eval_attend"]],
-        "gr": g["rows"], "gu": g["unused"], "gx": g["extra"],
-        "gt": GR.total_pct(g["rows"]),
-        "ep": "" if g["rows"] else grading_text,
-        "pl": plan,
-        "kw": " ".join((c.get("keywords") or "").split())[:120],
-        "d": " ".join((c.get("outline") or "").split())[:1200],
-        "n": c.get("numbering") or "",
-        "u": "",
-        # 文学部は科目ごとにURLが違うので、ここに持たせる
-        "su": c.get("url") or "",
-        "rm": room,
-    }
-
-
-def build(year=2026, which="all", pause=1.0, limit=None):
+def build(year=YEAR, which="all", pause=1.0, limit=None):
     """文学部のシラバスを取り直して data/lit-courses-<year>.json を書き出す。
 
     1件も取れなかったときは書き出さない（サイト側の障害で、手元の正しいデータを空にしないため）。
@@ -331,7 +268,8 @@ def build(year=2026, which="all", pause=1.0, limit=None):
     rows = crawl(year, which, pause, limit)
     if not rows:
         raise RuntimeError("文学部の科目が1件も取れませんでした。前回のデータを残します")
-    site = [to_site_course(c) for c in rows]
+    import site_data          # サイト用の形を決めるのは site_data 側
+    site = [site_data.lit_course(c) for c in rows]
     # site_data は DATA_DIR から読む。EXPORT_DIR に書くと取り込まれない
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     out = DATA_DIR / f"lit-courses-{year}.json"
@@ -345,7 +283,7 @@ if __name__ == "__main__":
     import sys, argparse
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
-    ap.add_argument("--year", type=int, default=2026)
+    ap.add_argument("--year", type=int, default=YEAR)
     ap.add_argument("--set", default="all", choices=list(SHOW))
     ap.add_argument("--pause", type=float, default=1.0)
     ap.add_argument("--limit", type=int)

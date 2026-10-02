@@ -22,7 +22,6 @@ import grading
 import report
 import site_data
 import build_site
-import summarize
 import sweep
 
 UID = config.KYUSHU['university_id']
@@ -194,18 +193,6 @@ class DatabaseTests(unittest.TestCase):
         with db.session() as con:
             self.assertEqual(con.execute('SELECT COUNT(*) FROM course_slots').fetchone()[0], 2)
 
-    def test_summary_null_and_model_changes_regenerated(self):
-        self.seed()
-        extract.run(2027)
-        with db.session() as con:
-            con.execute('INSERT INTO course_summary(university_id,year,course_code) VALUES (?,?,?)', (UID, 2027, 'TEST001'))
-            self.assertEqual(len(summarize.targets(con, 2027)), 1)
-            con.execute('UPDATE course_summary SET source_sha256=(SELECT body_sha256 FROM syllabus_raw), prompt_version=?,model=?', (summarize.PROMPT_VERSION, 'old-model'))
-            self.assertEqual(len(summarize.targets(con, 2027)), 1)
-            con.execute('UPDATE course_summary SET model=?', (summarize.MODEL,))
-            self.assertEqual(summarize.targets(con, 2027), [])
-            self.assertEqual(summarize.targets(con, 2027, limit=0), [])
-
     def test_stale_summary_not_exported(self):
         self.seed()
         extract.run(2027)
@@ -239,15 +226,6 @@ class DatabaseTests(unittest.TestCase):
         with db.session() as con:
             self.assertEqual(con.execute('SELECT n_error FROM crawl_runs').fetchone()[0], 1)
             self.assertEqual(con.execute('SELECT body FROM syllabus_raw').fetchone()[0], BODY)
-
-    def test_summary_invalid_json_types(self):
-        self.seed()
-        payloads = ['[]', '{"summary": 1, "topics": []}', '{"summary":"a", "topics":[2]}', '{"summary":"ok", "topics":["topic"]}']
-        results = [NS(custom_id='TEST001', result=NS(type='succeeded', message=NS(stop_reason='end_turn', content=[NS(type='text', text=p)]))) for p in payloads]
-        batches = NS(retrieve=lambda _: NS(processing_status='ended'), results=lambda _: results)
-        fake = NS(Anthropic=lambda: NS(messages=NS(batches=batches)))
-        with patch.dict(sys.modules, {'anthropic': fake}), db.session() as con:
-            self.assertEqual(summarize.collect(con, 2027, ['batch'], {'TEST001': 'hash'}), (1, 3))
 
     def test_end_to_end_html_and_json_injection(self):
         attack = '\"><img src=x onerror=alert(1)><!--<script></script>'

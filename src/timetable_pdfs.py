@@ -4,7 +4,7 @@ Campusmateのシラバスには教室がほとんど入っていない（本文�
 足りないぶんは各学部が公開している時間割表から補うので、その在りかをここに置く。
 学期ごとに差し替わるファイル名なので、URLが404になったら学部のページを見て直す。
 
-  python run.py rooms            data/pdf に無いものだけ取ってくる
+  python run.py rooms            PDF_DIR（既定 ~/syllabus-db/pdf）に無いものだけ取ってくる
   python run.py rooms --refresh  全部取り直す
 """
 import httpx
@@ -94,8 +94,21 @@ PDFS += [
 ]
 
 
+# 保存名 → 掲載ページ。教室の出典リンクにもこれを使う（URLの置き場はこのファイルだけ）
+PAGE = {name: page for name, _, page in PDFS}
+
+# 見出しから学期が読めないPDF（土木は表だけ）の学期。ファイルごとに決まっている
+SEASON = {
+    "edu-2026.pdf": "autumn", "edu-2026-spring.pdf": "spring",
+    "eng-eecs-a.pdf": "spring", "eng-eecs-b.pdf": "spring",
+    "eng-eecs-c.pdf": "autumn", "eng-eecs-d.pdf": "autumn",
+    "eng-civil.pdf": "autumn", "eng-civil-spring.pdf": "spring",
+    "design-a.pdf": "autumn", "design-a-spring.pdf": "spring",
+}
+
+
 def fetch(refresh=False):
-    """PDFを data/pdf に落とす。取れなかったものは名前を返して先へ進む。
+    """PDFを PDF_DIR に落とす。取れなかったものは名前を返して先へ進む。
 
     学期ごとにファイル名が変わるので、1本落とせなくても他を止めない。
     """

@@ -30,12 +30,6 @@ KYUSHU = {
                    "?value(risyunen)={year}&value(semekikn)=1"
                    "&value(kougicd)={code}&value(crclumcd)={crclumcd}"),
     "crclumcd": "ZZ",                      # 九大の汎用値
-    "course_code_re": r"\b2\d{7}[a-zA-Z]?\b",  # 末尾英字サフィックス込み
-    "requires_login": False,
-    # 検索条件は必須。開講時期(kaikoCd)を軸にスイープする
-    "required_search_field": "value(kaikoCd)",
-    "body_start": "科目名称",
-    "body_end": "合理的配慮について",
 }
 
 # 開講時期コード（仕様書2.3）
@@ -124,6 +118,11 @@ TERM_GROUPS = [
     ("冬学期",    ["冬学期", "後期後半"]),
     ("通年・その他", ["通年", "通年集中"]),
 ]
+
+# 前期側・後期側の開講期のまとまり。「通年・その他」はどちらにも入らない。
+# 時間割PDFのページと科目の学期を合わせるとき、画面で今の学期を選ぶときに使う
+SPRING_GROUPS = {"前期", "春学期", "夏学期"}
+AUTUMN_GROUPS = {"後期", "秋学期", "冬学期"}
 
 # 学府（大学院）を示す語。対象学部等がこれに当たるものを除外する
 GRADUATE_MARKERS = ("学府", "大学院", "府共通", "専門職")

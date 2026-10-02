@@ -1,6 +1,6 @@
 """実測値のレポートとエクスポート（仕様書6章「検証すべき数値」）。
 
-DB本体は OneDrive 外に置き、成果物だけ OneDrive 配下へ書き出す（仕様書1章）。
+DB本体も成果物も OneDrive の外（EXPORT_DIR。既定 ~/syllabus-db/exports）に置く。
 """
 import sys, csv, json, argparse, datetime as dt
 import db as DB
@@ -126,7 +126,7 @@ def csv_cell(value):
 
 
 def export(year=YEAR, undergrad_only=True):
-    """履修選択に使える形で CSV / JSON を OneDrive 配下へ出す。"""
+    """履修選択に使える形で CSV / JSON を EXPORT_DIR へ出す。"""
     with DB.session() as con:
         DB.assert_extracted(con, UID, year)
         EXPORT_DIR.mkdir(parents=True, exist_ok=True)

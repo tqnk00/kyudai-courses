@@ -15,19 +15,17 @@ import pdfplumber
 
 import db as DB
 import extract as EX
-from config import KYUSHU, DATA_DIR, PDF_DIR, YEAR
+import timetable_pdfs as PDFS
+from config import KYUSHU, DATA_DIR, PDF_DIR, YEAR, SPRING_GROUPS, AUTUMN_GROUPS
 
 UID = KYUSHU["university_id"]
 
-EDU_URL = "https://www.education.kyushu-u.ac.jp/schedules/"
-SCI_URL = "https://www.sci.kyushu-u.ac.jp/student/timetable.html"
-AGR_URL = "https://ag.kyushu-u.ac.jp/jpn-under_class2026.pdf"
-ECON_URL = "https://www.econ.kyushu-u.ac.jp/student/schedule"
-LAW_URL = "https://www.law.kyushu-u.ac.jp/faculty/study"
-ENG_EECS_URL = "https://www.eecs.kyushu-u.ac.jp/school.html"
-ENG_CIVIL_URL = "https://civil.kyushu-u.ac.jp/student/schedule/"
-DESIGN_URL = "https://www.design.kyushu-u.ac.jp/curriculum/"
-KYOSO_URL = "https://kyoso.kyushu-u.ac.jp/pages/students/study"
+# 照合のしきい値。どれも実際のPDFを見て決めた値
+MIN_NAME_LEN = 4      # これより短い科目名（「英語」など）は、どこにでも当たるので探さない
+TAIL_WINDOW = 12      # 直前の行から探すときは、行末からこの文字数以内で終わる名前だけ
+PREFIX_MIN_LEN = 8    # 末尾が切れた名前を前方一致で同じ科目とみなす最短の長さ
+PARTIAL_MIN_LEN = 5   # 頭が欠けた名前を部分一致で同じ科目とみなす最短の長さ
+MISSING_TITLE_LEN = (4, 26)   # 未掲載の候補にする題名の長さ。外れるものは切り出しの失敗
 
 CODE = re.compile(r"(2\d{7})")
 ROOM_EDU = re.compile(r"【([^】]{1,24})】")
@@ -56,8 +54,6 @@ def norm(s):
 # 学期のまとまり。時間割PDFは前期と後期でページが分かれていることが多く（法・理・経済）、
 # 同じ名前の科目が前期と後期の両方にある（民事訴訟法Ⅰ／Ⅱ、通年の演習など）。
 # ページの学期と科目の学期が合うものだけを突き合わせる
-SPRING_GROUPS = {"前期", "春学期", "夏学期"}
-AUTUMN_GROUPS = {"後期", "秋学期", "冬学期"}
 _PAGE_SPRING = re.compile(r"前期|前学期|春学期|夏学期")
 _PAGE_AUTUMN = re.compile(r"後期|後学期|秋学期|冬学期")
 
@@ -135,29 +131,19 @@ def find_name(seg, names, tail_only=False):
         return None
     best, best_end = None, -1
     for name in names:
-        if len(name) < 4:        # 「英語」等の短い名前は誤爆するので使わない
+        if len(name) < MIN_NAME_LEN:
             continue
         at = n.rfind(name)
         if at < 0:
             continue
-        if tail_only and at + len(name) < len(n) - 12:
-            continue            # 直前の行を見るときは、末尾寄りのものだけ
+        if tail_only and at + len(name) < len(n) - TAIL_WINDOW:
+            continue
         # 教室に近い（名前の終わりが後ろにある）ものを採る。終わりが同じなら長いほう。
         # 「国際政治学Ⅰ」の中に「政治学Ⅰ」も見つかるが、同じ位置で終わるので長いほうが勝つ
         end = at + len(name)
         if end > best_end or (end == best_end and len(name) > len(best)):
             best, best_end = name, end
     return best
-
-
-# 見出しから学期が読めないPDF（土木は表だけ）の学期。ファイルごとに決まっている
-FILE_SEASON = {
-    "edu-2026.pdf": "autumn", "edu-2026-spring.pdf": "spring",
-    "eng-eecs-a.pdf": "spring", "eng-eecs-b.pdf": "spring",
-    "eng-eecs-c.pdf": "autumn", "eng-eecs-d.pdf": "autumn",
-    "eng-civil.pdf": "autumn", "eng-civil-spring.pdf": "spring",
-    "design-a.pdf": "autumn", "design-a-spring.pdf": "spring",
-}
 
 
 def lines_of(path):
@@ -169,7 +155,7 @@ def lines_of(path):
         out = []
         for page in pdf.pages:
             lines = (page.extract_text() or "").split("\n")
-            season = page_season(lines) or FILE_SEASON.get(path)
+            season = page_season(lines) or PDFS.SEASON.get(path)
             out += [(season, ln) for ln in lines]
     return out
 
@@ -184,17 +170,63 @@ def is_known(title, known):
     n = norm(title)
     if n in known:
         return True
-    if len(n) >= 8 and any(k.startswith(n) for k in known):
+    if len(n) >= PREFIX_MIN_LEN and any(k.startswith(n) for k in known):
         return True
     # 升の中で折り返されて頭が欠けることもある（「デザイン学Ａ」→「ザイン学Ａ」）
-    return len(n) >= 5 and any(n in k for k in known)
+    return len(n) >= PARTIAL_MIN_LEN and any(n in k for k in known)
 
 
-def by_room_marker(files, faculty, rx, names, url, tail_only=False, extra=None, known=()):
-    """教室の表記を目印に、その手前の文字列から科目名を当てる。
+def match_course(seg, prev_seg, here, tail_only):
+    """教室の手前の文字列 seg から科目を当てる。(科目, 同名が複数あったか, 切り出した題名) を返す。
+
+    当て方は3段。上から順に試し、1件に決まったところで終わる。
+      1. seg（無ければ直前の行の末尾。セルが折り返されるため）に科目名がそのまま含まれている
+      2. 題名らしい部分を切り出し、頭の余分な語を1つずつ落として一致するものを探す
+      3. 名前では当たらないので、末尾の教員名で引く（法学部のゼミ。by_instructor）
+    """
+    key = find_name(seg, here, tail_only) or find_name(prev_seg, here, tail_only=True)
+    title = ""
+    if not key:
+        title = guess_title(seg)
+        # 隣の升の教員名が頭に残ることがあるので、頭から1語ずつ削って試す
+        for cand in (title, *(title.split(" ", i)[-1] for i in range(1, 3))):
+            if norm(cand) in here:
+                key, title = norm(cand), cand
+                break
+    if not key:
+        return by_instructor(title, seg, here), False, title
+    cands = here[key]
+    return (cands[0] if len(cands) == 1 else None), len(cands) > 1, title
+
+
+def note_missing(title, room, faculty, url, season, extra, known):
+    """どの科目にも当たらなかった題名を、Campusmate に無い科目の候補として extra に控える。"""
+    t = title
+    # 隣の升から教員名・曜日・学年が頭に残っていれば落とす
+    t = re.sub(r"^(?:[月火水木金土日]|[0-9０-９２３４・]+|[◆♦■□〇●○◇]"
+               r"|（[^）]*）|課題発見科目|高年次)[\s　]*", "", t).strip()
+    t = re.sub(r"^[一-龥]{2,4}[\s　]+(?=.{5,})", "", t).strip()
+    t = re.sub(r"[\s　][一-龥]{2,3}$", "", t).strip()
+    t = re.sub(r"^[◆♦■□〇●○◇]\s*", "", t).strip()
+    lo, hi = MISSING_TITLE_LEN
+    if not lo <= len(t) <= hi or is_known(t, known):
+        return
+    # 題名ではないもの。「(lectures)」のような注記と、半角カナだけの教員名（ｳﾞｨｯｶｰｽﾞ）も含む
+    if re.search(r"補講枠|時間割|教室|曜日|コース$|参照|^同上|^～|^[0-9]|^[（(]|^[ｦ-ﾟ]+$", t):
+        return
+    m = extra.setdefault(norm(t), {"title": t, "room": room, "faculty": faculty,
+                                   "source_url": url, "season": season or ""})
+    # 前期と後期の両方のページに出る（通年の演習など）なら学期は付けない
+    if m["season"] != (season or ""):
+        m["season"] = ""
+
+
+def by_room_marker(files, faculty, rx, names, url=None, tail_only=False, extra=None, known=()):
+    """教室の表記（rx）を目印に、その手前の文字列から科目を当てて教室を付ける。
 
     extra を渡すと、Campusmateに無い科目の候補もそこに溜める。
     known は全学部の科目名（norm済み）。ここにある名前は未掲載に入れない。
+    出典のURLは、そのPDFの掲載ページ（timetable_pdfs.PAGE）。url を渡せばそちらを使う。
     """
     if extra is None:
         extra = {}
@@ -211,6 +243,7 @@ def by_room_marker(files, faculty, rx, names, url, tail_only=False, extra=None, 
 
     got, mention, amb = {}, 0, 0
     for f in files:
+        src = url or PDFS.PAGE[f]
         prev_seg = ""
         for season, line in lines_of(f):
             here = in_season(season)
@@ -223,48 +256,13 @@ def by_room_marker(files, faculty, rx, names, url, tail_only=False, extra=None, 
                 if not room or NOT_ROOM.search(room):
                     continue
                 mention += 1
-                # その行で見つからなければ、直前の行の末尾も見る（セルが折り返される）
-                key = find_name(seg, here, tail_only) or \
-                    find_name(prev_seg, here, tail_only=True)
-                if not key:
-                    # 名前らしき部分を切り出して、もう一度だけ突き合わせてみる
-                    t = guess_title(seg)
-                    # 隣の升の教員名が頭に残ることがあるので、頭から1語ずつ削って試す
-                    for cand in (t, *(t.split(" ", i)[-1] for i in range(1, 3))):
-                        if norm(cand) in here:
-                            key, t = norm(cand), cand
-                            break
-                if not key:
-                    # 名前が違っても担当教員で当たることがある。法学部のゼミは時間割では
-                    # 「民法演習 津田」、Campusmate では「演習Ⅰ」（副題で区別）として載っている
-                    hit = by_instructor(t, seg, here)
-                    if hit:
-                        got.setdefault(hit["c"], {"room": room, "source_url": url})
-                        continue
-                if not key:
-                    # それでも無ければ、Campusmateに載っていない科目の候補として控える
-                    # 隣の升から教員名・曜日・学年が頭に残っていれば落とす
-                    t = re.sub(r"^(?:[月火水木金土日]|[0-9０-９２３４・]+|[◆♦■□〇●○◇]"
-                               r"|（[^）]*）|課題発見科目|高年次)[\s　]*", "", t).strip()
-                    t = re.sub(r"^[一-龥]{2,4}[\s　]+(?=.{5,})", "", t).strip()
-                    t = re.sub(r"[\s　][一-龥]{2,3}$", "", t).strip()
-                    t = re.sub(r"^[◆♦■□〇●○◇]\s*", "", t).strip()
-                    if 4 <= len(t) <= 26 and not is_known(t, known) and not re.search(
-                            r"補講枠|時間割|教室|曜日|コース$|参照|^同上|^～|^[0-9]"
-                            # 「(lectures)」のような注記と、半角カナだけの教員名（ｳﾞｨｯｶｰｽﾞ）
-                            r"|^[（(]|^[ｦ-ﾟ]+$", t):
-                        m = extra.setdefault(norm(t), {"title": t, "room": room,
-                                                       "faculty": faculty, "source_url": url,
-                                                       "season": season or ""})
-                        # 前期と後期の両方のページに出る（通年の演習など）なら学期は付けない
-                        if m["season"] != (season or ""):
-                            m["season"] = ""
-                    continue
-                cands = here[key]
-                if len(cands) == 1:
-                    got.setdefault(cands[0]["c"], {"room": room, "source_url": url})
-                else:
+                course, ambiguous, title = match_course(seg, prev_seg, here, tail_only)
+                if course:
+                    got.setdefault(course["c"], {"room": room, "source_url": src})
+                elif ambiguous:
                     amb += 1
+                else:
+                    note_missing(title, room, faculty, src, season, extra, known)
             prev_seg = line
     return got, mention, amb
 
@@ -350,7 +348,7 @@ def kyoso_missing(known, missing):
                     continue
                 n += 1
                 mm = missing.setdefault(norm(t), {"title": t, "room": "", "faculty": "共創学部",
-                                                  "source_url": KYOSO_URL, "season": season or ""})
+                                                  "source_url": PDFS.PAGE[f], "season": season or ""})
                 if mm["season"] != (season or ""):
                     mm["season"] = ""
     return n
@@ -385,7 +383,8 @@ def agr_rooms(idx):
                     r"[^\s]{1,5}\s+[^\s]{1,6}", head.strip()):
                 disagree += 1
                 continue
-            got.setdefault(code, {"room": clean_room(m.group(2)), "source_url": AGR_URL})
+            got.setdefault(code, {"room": clean_room(m.group(2)),
+                                  "source_url": PDFS.PAGE["agr-2026.pdf"]})
     return got, mention, disagree
 
 
@@ -414,13 +413,14 @@ def econ_rooms(by_fac):
                 cands = [c for c in cands
                          if any(f and f in "".join(c.get("i") or []) for f in fam)] or cands
         if len(cands) == 1:
-            got[cands[0]["c"]] = {"room": room, "source_url": ECON_URL}
+            got[cands[0]["c"]] = {"room": room, "source_url": PDFS.PAGE["econ-2026.pdf"]}
         elif cands:
             amb += 1
     return got, len(tt), amb
 
 
-def run(con, year=YEAR):
+def match_all(con, year=YEAR):
+    """全学部の時間割PDFを読み、(科目索引, 教室, 学部ごとの集計, 未掲載の候補) を返す。"""
     idx, by_fac = load_courses(con, year)
     rooms, stats = {}, []
 
@@ -428,12 +428,12 @@ def run(con, year=YEAR):
     missing = {}
     known = {name for fac in by_fac.values() for name in fac}
     g, n, a = by_room_marker(["edu-2026.pdf", "edu-2026-spring.pdf"], "教育学部", ROOM_EDU,
-                             by_fac["教育学部"], EDU_URL, extra=missing, known=known)
+                             by_fac["教育学部"], extra=missing, known=known)
     rooms.update(g); stats.append(("教育学部", "【教室】", n, len(g), a))
 
     sci = [f"sci-{x}.pdf" for x in
            ("math_4", "phys_4", "chem_3", "bio_4", "geo_3", "info_4", "com")]
-    g, n, a = by_room_marker(sci, "理学部", ROOM_SCI, by_fac["理学部"], SCI_URL)
+    g, n, a = by_room_marker(sci, "理学部", ROOM_SCI, by_fac["理学部"])
     rooms.update(g); stats.append(("理学部", "W1-C-501等", n, len(g), a))
 
     g, n, dis = agr_rooms(idx)
@@ -443,16 +443,16 @@ def run(con, year=YEAR):
     rooms.update(g); stats.append(("経済学部", "専用パーサ", n, len(g), a))
 
     g, n, a = by_room_marker(["law-2026.pdf"], "法学部", ROOM_LAW,
-                             by_fac["法学部"], LAW_URL, extra=missing, known=known)
+                             by_fac["法学部"], extra=missing, known=known)
     rooms.update(g); stats.append(("法学部", "B112/演習室2等", n, len(g), a))
 
     g, n, a = by_room_marker(["eng-eecs-c.pdf", "eng-eecs-d.pdf", "eng-civil.pdf",
                               "eng-eecs-a.pdf", "eng-eecs-b.pdf", "eng-civil-spring.pdf"],
-                             "工学部", ROOM_PAREN, by_fac["工学部"], ENG_EECS_URL)
+                             "工学部", ROOM_PAREN, by_fac["工学部"])
     rooms.update(g); stats.append(("工学部", "（工学部第7）等", n, len(g), a))
 
     g, n, a = by_room_marker(["design-a.pdf", "design-a-spring.pdf"], "芸術工学部", ROOM_PAREN,
-                             by_fac["芸術工学部"], DESIGN_URL)
+                             by_fac["芸術工学部"])
     rooms.update(g); stats.append(("芸術工学部", "（室番号）", n, len(g), a))
 
     stats.append(("基幹教育科目", "記載なし", 0, 0, 0))
@@ -465,13 +465,14 @@ def run(con, year=YEAR):
             if code not in idx:
                 missing.setdefault("code:" + code, {
                     "title": "", "code": code, "room": "",
-                    "faculty": "農学部", "source_url": AGR_URL, "season": season or ""})
+                    "faculty": "農学部", "source_url": PDFS.PAGE["agr-2026.pdf"],
+                    "season": season or ""})
     return idx, rooms, stats, missing
 
 
 def build(con, year=YEAR):
     """PDFを読んで data/ に教室と未掲載科目のJSONを書き出す。"""
-    idx, rooms, stats, missing = run(con, year)
+    idx, rooms, stats, missing = match_all(con, year)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     # 同名が複数あって決められなかった件数も残す。捨てた数が見えないと、
     # あとで詰めるときの手がかりが無くなる

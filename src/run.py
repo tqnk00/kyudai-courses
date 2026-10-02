@@ -5,7 +5,6 @@
   python run.py weekly       本文の全件巡回で差分検出 + 抽出（重い。週次・深夜）
   python run.py full         初回一式（sweep -> detail -> extract -> report -> export）
   python run.py extract      再抽出のみ（ネットワークアクセスなし）
-  python run.py summarize    AI要約（差分のみ）。--dry-run で件数とコストの見積もり
   python run.py report       実測レポート + エクスポート
   python run.py site         検索サイトのHTMLを組み立てる（ネットワークアクセスなし）
   python run.py rooms        各学部の時間割表PDFを取り直し、教室と事前申請を作り直す
@@ -181,12 +180,11 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("job", choices=["init", "daily", "weekly", "full", "extract",
-                                    "summarize", "report", "changes", "site", "rooms",
+                                    "report", "changes", "site", "rooms",
                                     "deploy", "update"])
     ap.add_argument("--year", type=int, default=YEAR)
     ap.add_argument("--set", default="all", choices=list(sweep.SETS))
     ap.add_argument("--workers", type=positive_int, choices=range(1, 6), default=4)
-    ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--refresh", action="store_true",
                     help="rooms: PDFを全部取り直す（既定は未取得のものだけ）")
@@ -212,26 +210,18 @@ def main():
         report.report(a.year); report.export(a.year, not a.all); return
     if a.job == "changes":
         changes(a.year, a.days); return
-    if a.job == "summarize":
-        import summarize
-        summarize.run(a.year, not a.all, None, a.dry_run); return
 
+    # daily / weekly / full は同じ流れ。違うのは「本文を全部取り直すか」と、前後に足す出力だけ
     with keep_awake():
-        if a.job == "daily":
-            sweep.run(a.year, a.set)
-            fetch_then_extract(a.year, a.workers)   # 未取得＝新規開講のみ
-            build_site.build(a.year, not a.all)
-        elif a.job == "weekly":
-            sweep.run(a.year, a.set)
-            fetch_then_extract(a.year, a.workers, refetch=True)
-            build_site.build(a.year, not a.all)
-            changes(a.year, 7)
-        elif a.job == "full":
-            sweep.run(a.year, a.set)
-            fetch_then_extract(a.year, a.workers)
+        sweep.run(a.year, a.set)
+        # daily と full は未取得（＝新規開講）だけ。weekly は全件を取り直して差分を見る
+        fetch_then_extract(a.year, a.workers, refetch=(a.job == "weekly"))
+        if a.job == "full":
             report.report(a.year)
             report.export(a.year, not a.all)
-            build_site.build(a.year, not a.all)
+        build_site.build(a.year, not a.all)
+        if a.job == "weekly":
+            changes(a.year, 7)
 
 
 if __name__ == "__main__":

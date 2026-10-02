@@ -1,99 +1,104 @@
-# src — 授業さがし を作るコード
+# 九州大学シラバスDB — レビュー修正版
 
-公式サイトから情報を取って SQLite に貯め、そこから静的なページを書き出す。
-使い方（更新のしかた）は一つ上の [README.md](../README.md) を参照。ここはコードを読む人向け。
+提供されたソースZIPをレビューし、検索失敗の検出、抽出、HTML表示とエクスポートを修正しました。
+変更の詳細・検証結果・制限は [REVIEW.md](REVIEW.md) を参照してください。
+DBや収集済みデータ、別途作成された仕様書は、このソース配布には含まれていません。
 
-## 読む順番
+## セットアップ
 
-1. `run.py` の `update()` … ふだんの更新で何がどの順に動くかが分かる
-2. `site_data.py` … サイトに載せるデータの形を決めている。先頭のコメントに項目名の対応表（`c` `t` `tg` …）
-3. `build_site.py` … 上のデータを `site_template.html` に流し込むだけ
-4. `site_template.html` … 画面。末尾の初期化（`applyHash(); render();`）から `render()` を追うと全体が見える
-5. 取得まわりは必要になってから
+Python 3.10以降を使用します。Windows PowerShellの例です。
 
-## ファイルの役割
-
-| まとまり | ファイル | 役割 |
-|---|---|---|
-| 入口と設定 | `run.py` | ジョブの入口。`update` `daily` `rooms` `site` `deploy` など |
-| | `config.py` | 年度、置き場、開講期や科目区分のまとめ方 |
-| | `db.py` `power.py` | SQLite の定義と接続、処理中のスリープ抑止 |
-| Campusmate から取る | `campusmate.py` `sweep.py` | 開講期ごとの一覧を取る |
-| | `detail.py` | 科目ごとのシラバス本文を取る |
-| | `extract.py` `grading.py` | 本文から項目（学部・学年・コマ・成績評価）を抜き出す |
-| Campusmate 以外から取る | `lit.py` | 文学部のシラバス（別サイト）。DBには入れず `data/lit-courses-年度.json` に保存 |
-| | `timetable_pdfs.py` | 各学部の時間割PDFの在りか（URL・掲載ページ・学期）と取得 |
-| | `timetable_rooms.py` `timetable_econ.py` | PDFから「科目 → 教室」と、シラバスが無い科目を拾う |
-| | `core_btable.py` | 基幹教育のB表から教室と事前申請の印を拾う |
-| サイトを作る | `site_data.py` | DB と `data/*.json` を合わせ、ページ用のJSONと詳細の分割ファイルを作る |
-| | `build_site.py` `site_template.html` | ページの組み立てと、画面そのもの |
-| その他の出力 | `report.py` | 実測レポートと CSV / JSON の出力（サイトには使わない） |
-| テスト | `tests/test_*.py` | 一時DBと模擬応答で動く。実サイトには触れない |
-| | `tests/browser_all.cjs` | 実ブラウザで画面を操作する確認（先頭のコメントに準備と実行の方法） |
-
-## データの流れ
-
-```
-Campusmate ─ sweep ─ detail ─ extract ─→ SQLite ─┐
-文学部サイト ─ lit ───────────→ data/lit-courses-年度.json ─┤
-時間割PDF ─ timetable_* / core_btable ─→ data/*.json ───────┼─ site_data ─ build_site ─→ index.html
-                                                              │                          └ details-年度/NN.json
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe run.py init
 ```
 
-文学部と時間割PDFの情報は SQLite を通らず、`data/` の JSON からサイト生成のときに合流する。
-`data/` の JSON は履歴に入れてあり、`run.py rooms` と `lit.py` で作り直せる。
+以下の例の `python` は、その仮想環境のPythonに読み替えてください。
+通常の収集・抽出・サイト生成にはhttpxだけが必要です。AI要約を使う場合のみ
+`python -m pip install -r requirements-ai.txt` を実行し、`ANTHROPIC_API_KEY` を設定します。
+AI要約の実行は外部APIへの本文送信と課金を伴います。
 
-## 置き場
+DBの既定値は `Path.home() / "syllabus-db" / "kyudai.db"` です。
+元の利用者のWindows環境では従来と同じ場所になります。
+出力はソースと同じディレクトリの `exports/` です。変更する場合は実行前に設定します。
 
-| もの | 既定の場所 | 環境変数 |
-|---|---|---|
-| DB | `~/syllabus-db/kyudai.db` | `SYLLABUS_DB_PATH` |
-| ビルド出力 | `~/syllabus-db/exports/` | `SYLLABUS_EXPORT_DIR` |
-| 時間割PDF | `~/syllabus-db/pdf/` | `SYLLABUS_PDF_DIR` |
-| 取り込みデータ | `src/data/`（リポジトリの中） | `SYLLABUS_DATA_DIR` |
+```powershell
+$env:SYLLABUS_DB_PATH = 'C:\data\syllabus-db\kyudai.db'
+$env:SYLLABUS_EXPORT_DIR = 'C:\data\syllabus-exports'
+```
 
-DB・出力・PDFは合わせて数十MBあり、OneDrive 配下に置くと作り直すたびに同期が走るので外に出してある。
+既存の環境への適用は、収集処理を停止してDBをバックアップしたうえでソースを差し替え、
+`python run.py extract --year 2026` と `python run.py site --year 2026` を実行してください。
+保存済み本文から再抽出するため、再クロールは不要です。
 
 ## コマンド
 
-Windows では `python` ではなく `py` を使う（`python` はストア版の空の実行ファイルに当たることがある）。
-
-```
-py run.py update            ふだんの更新。取り直し → 生成 → 配置 → テスト → 公開するか確認
-py run.py daily             一覧を取り直し、新しい科目の本文だけ取る → 抽出 → サイト生成
-py run.py weekly            全科目の本文を取り直して差分を見る（重い）
-py run.py rooms --refresh   時間割PDFを取り直し、教室と事前申請を作り直す
-py lit.py                   文学部を取り直す
-py run.py site              サイト生成だけ（通信なし）
-py run.py deploy            生成物を公開リポジトリの直下に置く（push はしない）
-py run.py extract           保存済みの本文から抽出し直す（通信なし）
-py run.py report            実測レポートと CSV / JSON
-py run.py changes --days 14 直近の本文の変化の件数
+```powershell
+python run.py init
+python run.py full --year 2026
+python run.py daily --year 2026
+python run.py weekly --year 2026
+python run.py extract --year 2026
+python run.py report --year 2026
+python run.py site --year 2026
+python run.py changes --year 2026 --days 14
+python run.py summarize --year 2026 --dry-run
 ```
 
+- `full`: 一覧取得 → 本文取得 → 抽出 → レポート・CSV・JSON → サイト生成。
+- `daily`: 一覧取得 → 未取得本文のみ取得 → 抽出 → サイト生成。
+- `weekly`: 一覧取得 → 全本文の更新確認 → 抽出 → サイト生成 → 更新件数。
 - `--set`: `all`（全開講期。既定）、`phase1`（後期＋通年）、`autumn`、`spring`、`full`（通年のみ）。
-  一部の開講期だけ回しても、対象外の開講期の科目はサイトから消えない（開講期ごとに最後の巡回と比べる）
-- `--workers`: 1〜5、既定4。本文取得の同時接続数
-- `site`・`report` は学部のみが既定。`--all` で大学院・判定不能も含める
+  一部の開講期だけ回しても、対象外の開講期の科目はサイトから消えない（開講期ごとに最後の巡回と比べる）。
+- `--workers`: 1〜5、既定4。本文取得の同時接続数。
+- `site`・`report`・`summarize` は学部のみが既定。`--all` で大学院・判定不能も含めます。
+- `summarize --dry-run` は件数・概算費用の確認です。対象があればトークン数確認APIに接続するため、API認証が必要です。
+
+年度を変えるときは `--year` を指定すればよく、config.pyの編集は不要です。
+
+```powershell
+python run.py full --year 2027 --set spring
+```
+
+一覧または本文取得に失敗した場合、非正常終了にして後続のサイト生成を停止します。
+取得成功分は保存されます。エラー原因を解消して同じコマンドを再実行してください。
+既存HTMLは最後に正常生成された内容のままです。
+
+## 検索サイト
+
+`exports/kyudai-courses-<年度>.html` をブラウザで開いて使用できます。
+UTF-8の単一HTMLにデータが埋め込まれ、サーバーやDBを参照せずに検索できます。
+Google Fontsを取得できない場合は代替フォントで表示します。
+公開・配信は別途行ってください。この修正版の作成時には公開していません。
+
+学期チップはデータに含まれる学期のみを表示します。年度・対象範囲は実データから表示します。
+「サイト生成日」はHTMLの生成日です。各科目の「シラバス更新」は元データの更新日です。
+学年未記載の科目は従来どおり1〜4年の検索対象になります。詳細には学年の原文を表示します。
+学部/大学院・遠隔授業・評価方法などの規則判定は、必ず公式シラバスでも確認してください。
 
 ## テスト
 
+```powershell
+python -X utf8 -m unittest discover -s tests -v
 ```
-py -m unittest discover -s tests
+
+26件のテストは一時DBと模擬応答を使用し、実際のDB・大学サイト・課金APIにアクセスしません。
+ブラウザ検証は任意です。Node.js、Playwright、Microsoft Edgeがある環境で次を実行できます。
+
+```powershell
+$env:SYLLABUS_TEST_HTML = Join-Path (Get-Location) 'test-preview.html'
+python -X utf8 tests/test_regressions.py DatabaseTests.test_end_to_end_html_and_json_injection
+node tests/browser_checks.cjs $env:SYLLABUS_TEST_HTML test-preview.png
 ```
 
-一時DBと模擬応答を使い、実際のDB・大学サイトにはアクセスしない。
-画面の確認は `tests/browser_all.cjs`（Chrome / Edge / Safari相当、iPhone / iPad / Android の8種類の画面）。
+ブラウザテストのデータは、特殊文字の安全性を検証するための架空科目です。履修情報として使わないでください。
 
-## 年度を変えるとき
+## 提供時の実装記録
 
-`config.YEAR` と `--year` で大半は切り替わるが、時間割PDFは年度がファイル名とURLに入っている。
-`timetable_pdfs.py` の `PDFS` と `SEASON`、それを名前で引いている `timetable_rooms.py` `timetable_econ.py`
-`core_btable.py` のファイル名を新年度のものに直すこと。
-
-過去のレビューと設計の記録は [../docs/history/](../docs/history/) にある。
-
----
+以下は元READMEの実測記録です。件数・時間・未実行項目は提供時点の記載であり、
+今回のレビューで実サイトの再取得により確認した数値ではありません。
+参照される仕様書は提供ZIPに含まれていません。
 
 ## 仕様書からの変更点（実測で判明したこと）
 
@@ -196,3 +201,15 @@ py -m unittest discover -s tests
 - スキーマ変更は `db.py` の `MIGRATIONS` に追記すれば既存DBに反映される
 - **本文ハッシュの安定性を確認済み**: 同じ20件を取り直したところ `body_sha256` は全件一致した。
   仕様書2.6の「抽出後の本文はバイト単位で一致する」は成り立っている
+
+---
+
+## 残っていること
+
+- **AI要約（実装順序6）が未実行**。`ANTHROPIC_API_KEY` が未設定で `ant` CLI も入っていない。
+  `summarize.py` は書けているので、認証を通せば `python run.py summarize --dry-run` で
+  件数とコストを見てから実行できる
+- **2回目のクロール（実装順序7）**。1週間後に `python run.py weekly` を実行し、
+  `python run.py changes` で更新件数を実測する。頻度の階層化はその数字を見てから決める
+- **判定不能283件** の学部／大学院の切り分け（上記5）
+- **Phase 2**（時間割PDF）は未着手

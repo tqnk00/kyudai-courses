@@ -35,7 +35,7 @@
     --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
+    :root {
       --ink:        #e4e9f0;
       --ink-mute:   #9aa6b8;
       --ink-faint:  #6d7a8d;
@@ -55,26 +55,6 @@
       --focus:      #6aa9e0;
       --fc-l:       74%;
     }
-  }
-  :root[data-theme="dark"] {
-    --ink:        #e4e9f0;
-    --ink-mute:   #9aa6b8;
-    --ink-faint:  #6d7a8d;
-    --paper:      #11151b;
-    --surface:    #181d25;
-    --surface-2:  #1f2630;
-    --line:       #2c3540;
-    --line-soft:  #232b35;
-    --accent:     #6aa9e0;
-    --accent-ink: #0b1620;
-    --accent-soft:#1c2c3c;
-    --amber:      #d9a552;
-    --amber-soft: #2e2718;
-    --teal:       #62bdb2;
-    --teal-soft:  #16292a;
-    --shadow:     0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
-    --focus:      #6aa9e0;
-    --fc-l:       74%;
   }
 
   * { box-sizing: border-box; }
@@ -370,8 +350,6 @@
     text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px;
   }
   .empty-note { padding: 26px 16px; color: var(--ink-faint); font-size: 13px; text-align: center; }
-  .cap-note { padding: 10px 16px; color: var(--ink-faint); font-size: 11.5px;
-              border-top: 1px solid var(--line-soft); }
 
   /* --- スマホ（〜560px）--- 時間割を横スクロールなしで画面に収める --- */
   @media (max-width: 560px) {
@@ -408,7 +386,8 @@
     .foot { font-size: 11px; }
   }
 
-  /* 狭い画面では絞り込みバーが画面の半分近くを占めるので、追従をやめて折り畳む */
+  /* 狭い画面では絞り込みバーが画面の半分近くを占めるので、追従をやめ、畳めるようにする。
+     最初は開いた状態（data-collapsed="false"）。畳むかどうかは見る人が「絞り込みを閉じる」で選ぶ */
   @media (max-width: 767px) {
     .controls { position: static; }
     .controls[data-collapsed="true"] .field,
@@ -659,7 +638,6 @@
       <ul class="rlist" id="rlist"></ul>
       <div class="empty-note" id="rempty" hidden>条件に合う科目がありません。</div>
       <button class="morebtn" id="rmore" type="button" hidden></button>
-      <div class="cap-note" id="rcap" hidden></div>
     </div>
   </div>
 
@@ -777,13 +755,25 @@
   // 表示順はチップの並び（後期・秋学期・冬学期・通年ほか）に揃える
   // 前期と後期の両方を載せているので、何も指定がなければ今の学期（と通年）から始める。
   // 全部を重ねると、同じコマに前期と後期の科目が混ざって時間割として読めない
-  var SPRING_TERMS = ["前期", "春学期", "夏学期"];
-  var AUTUMN_TERMS = ["後期", "秋学期", "冬学期"];
-  function defaultTerms() {
+  var SPRING_TERMS = META.seasons.spring, AUTUMN_TERMS = META.seasons.autumn;
+  // 前期側でも後期側でもない開講期（通年・その他）。どちらの学期にも出す
+  var YEARLONG_TERMS = META.term_groups.filter(function (g) {
+    return SPRING_TERMS.indexOf(g) < 0 && AUTUMN_TERMS.indexOf(g) < 0;
+  });
+  // 4〜8月は前期、それ以外は後期として扱う
+  function currentSeason() {
     var m = new Date().getMonth() + 1;
-    var want = (m >= 4 && m <= 8 ? SPRING_TERMS : AUTUMN_TERMS).concat(["通年・その他"]);
+    return m >= 4 && m <= 8 ? "spring" : "autumn";
+  }
+  // その学期に出す開講期の並び（通年ものを含む）
+  function seasonTerms(season) {
+    return (season === "spring" ? SPRING_TERMS : AUTUMN_TERMS).concat(YEARLONG_TERMS);
+  }
+  function defaultTerms() {
     var out = {};
-    want.forEach(function (g) { if (META.term_groups.indexOf(g) >= 0) { out[g] = 1; } });
+    seasonTerms(currentSeason()).forEach(function (g) {
+      if (META.term_groups.indexOf(g) >= 0) { out[g] = 1; }
+    });
     return out;
   }
   function termsOn() {
@@ -791,8 +781,13 @@
   }
 
   var el = function (id) { return document.getElementById(id); };
+  // root の中で sel に合う要素すべてに fn を当てる
+  function each(root, sel, fn) {
+    Array.prototype.forEach.call(root.querySelectorAll(sel), fn);
+  }
 
-  /* ---- 表示の好み。URLではなく端末に残す（見ている人の設定で、共有するものではない） ---- */
+  /* ---- 表示の好み（文字の大きさ・学部の色分け）。見ている人の設定なので端末に残す。
+     文字の大きさだけは URL の z=1 でも渡せる（大きい字で見てほしい相手に送れるように） ---- */
   var PREF_KEY = "kyudai-pref-" + META.year;
   var pref = { zoom: false, color: false };
   try {
@@ -1039,7 +1034,7 @@
     render();
   });
 
-  // 狭い画面では絞り込みを畳んでおく。時間割が最初の画面に入るようにする
+  // 狭い画面で絞り込みを開け閉めする。最初は開いている
   el("filtertoggle").addEventListener("click", function () {
     var box = el("controls");
     var open = box.getAttribute("data-collapsed") === "true";
@@ -1265,7 +1260,7 @@
       }
     }
     g.innerHTML = html.join("");
-    Array.prototype.forEach.call(g.querySelectorAll(".cell[data-k]"), function (b) {
+    each(g, ".cell[data-k]", function (b) {
       b.addEventListener("click", function () {
         var k = this.getAttribute("data-k");
         state.cell = (state.cell === k && !state.tray) ? null : k;
@@ -1307,10 +1302,8 @@
   /* ---- 詳細の読み込み ----
      授業計画・概要・成績評価などは、ページを軽くするため別ファイル（details-年度/NN.json）に
      分けてある。科目コードから決まる1ファイルだけを、詳細を開いたときに取りに行く */
-  var DETAIL_DEFAULTS = {
-    d: "", pl: [], gr: [], gu: [], gx: [], gt: null, ep: "",
-    ev: [0, 0, 0, 0], grraw: "", rq: "", catr: "", ln: "", rmu: "", apu: ""
-  };
+  // 項目と既定値は生成側（site_data.DETAIL_DEFAULTS）が決める。ここに同じ表を持たない
+  var DETAIL_DEFAULTS = META.detail_defaults;
   var shardCache = Object.create(null);
   function shardOf(code) {
     // site_data.shard_of と同じ FNV-1a
@@ -1319,7 +1312,7 @@
     return h % META.detail_shards;
   }
   function fillDetail(c, got) {
-    META.detail_keys.forEach(function (k) {
+    Object.keys(DETAIL_DEFAULTS).forEach(function (k) {
       c[k] = got && k in got ? got[k] : DETAIL_DEFAULTS[k];
     });
   }
@@ -1388,7 +1381,6 @@
     more.hidden = rest <= 0;
     more.textContent = "残り " + rest.toLocaleString() + " 件のうち "
       + Math.min(rest, LIST_CAP) + " 件を表示";
-    el("rcap").hidden = true;
 
     var ul = el("rlist");
     ul.innerHTML = capped.map(function (c) {
@@ -1414,7 +1406,7 @@
         "</div></li>";
     }).join("");
 
-    Array.prototype.forEach.call(ul.querySelectorAll(".fav"), function (b) {
+    each(ul, ".fav", function (b) {
       b.addEventListener("click", function () {
         var code = this.getAttribute("data-f");
         toggleFav(code);
@@ -1430,7 +1422,7 @@
       });
     });
 
-    Array.prototype.forEach.call(ul.querySelectorAll(".rhead"), function (b) {
+    each(ul, ".rhead", function (b) {
       b.addEventListener("click", function () {
         var li = this.closest("li"), code = this.getAttribute("data-c");
         if (li.querySelector(".detail")) {
@@ -1460,90 +1452,80 @@
     return index[code];
   }
 
+  // 公式シラバスのURL。文学部は科目ごとに違うので su に持っている
+  function officialURL(c) {
+    return c.su || META.detail_url.replace("{code}", encodeURIComponent(c.c));
+  }
+
+  // 教室の行。出どころは文学部のシラバスと、各学部が公開している時間割表（rmu）。
+  // 戻り値はHTML。PDF由来の文字列はここでエスケープする
+  function roomHTML(c) {
+    var room = esc(c.rm);
+    if (c.rmu) {
+      // 基幹教育はB表、ほかの学部は各学部の時間割表から取っている
+      var label = c.rmu.indexOf("artsci") >= 0 ? "基幹教育院のB表より" : "学部の時間割表より";
+      room += ' <a class="src" href="' + esc(c.rmu) + '" target="_blank" ' +
+              'rel="noopener">' + label + "</a>";
+    }
+    return room;
+  }
+
+  // 基幹教育の事前申請の行（HTML）。抽選があるので、履修登録より前に手続きがいる
+  var APPLY_NOTES = [
+    ["○", "○ 受講したい場合はMoodleから期限までに事前申請が必要。" +
+          "抽選で通った人だけ履修登録されます（自分での登録は不要）。"],
+    ["●", "● 受講したい場合はCampusmate‑Jで履修登録しておく。" +
+          "人数によっては抽選があり、漏れると登録が消えます。"],
+    ["※", "※ 教員が抽選します。申請は○の科目と同じMoodleページから。" +
+          "やり方がシラバス指定の科目もあるので備考を確認してください。"]
+  ];
+  function applyHTML(c) {
+    var years = Object.keys(c.ap), marks = {};
+    years.forEach(function (y) {
+      c.ap[y].split("").forEach(function (ch) { marks[ch] = 1; });
+    });
+    var txt = years.map(function (y) {
+      return esc(c.ap[y]) + "（" + esc(y) + "）";
+    }).join(" ／ ");
+    APPLY_NOTES.forEach(function (n) {
+      if (marks[n[0]]) { txt += '<br><span class="apnote">' + n[1] + "</span>"; }
+    });
+    if (c.apu) {
+      txt += ' <a class="src" href="' + esc(c.apu) + '" target="_blank" ' +
+             'rel="noopener">基幹教育院のB表より</a>';
+    }
+    return txt;
+  }
+
   function detailHTML(c) {
     var evNames = ["試験", "レポート", "小テスト", "出席・平常点"];
     var ev = c.ev.map(function (v, i) { return v ? evNames[i] : null; })
                  .filter(Boolean).join("・") || "記載なし";
-    // 1行は {label, value, num, html}。num は数字として右寄せ、
-    // html は「こちらで組み立てたHTMLをそのまま入れる」印。
-    // 以前は [label, value, true, false] の配列で、位置を間違える事故が続いた
-    function row(label, value, opt) {
-      return Object.assign({label: label, value: value, num: false, html: false},
-                           opt || {});
+    // 詳細ファイルを読めたか。読めなかったときは、そこから来る行を出さない
+    // （既定値の「指定なし」「—」が本当の値に見えてしまうため）
+    var loaded = !c._detErr;
+    // 行は表示する順に足す。1行は {label, value, num, html}。num は数字として右寄せ、
+    // html は「こちらで組み立てたHTMLをそのまま入れる」印
+    var rows = [];
+    function add(label, value, opt) {
+      rows.push(Object.assign({label: label, value: value, num: false, html: false}, opt || {}));
     }
-    function at(label) {
-      return rows.findIndex(function (r) { return r.label === label; });
-    }
-    var rows = [
-      row("対象学年", c.grraw || "指定なし（学年フィルタでは1〜4年として扱います）"),
-      row("単位", c.cr == null ? "—" : c.cr, {num: true}),
-      row("必修選択", c.rq || "—"),
-      row("開講", c.sl.length ? slotLabel(c) : (c.tm || "—")),
-      row("キャンパス", c.cp || "—"),
-      row("使用言語", c.ln || "—"),
-      row("担当教員", c.i.join("・") || "—"),
-      row("成績評価", ev),
-      // ナンバリングと更新日は履修選択の判断に使わないので表には出さない。
-      // ナンバリングはキーワード検索の対象としては残してある
-      row("科目区分", c.cat || "—")
-    ];
-    // 教室が分かっている科目は開講のすぐ下に出す。
-    // 出どころは文学部のシラバスと、各学部が公開している時間割表（rmu）
-    if (c.rm) {
-      // この行は生HTMLとして入れるので、PDF由来の文字列は自分でエスケープする
-      var room = esc(c.rm);
-      if (c.rmu) {
-        // 基幹教育はB表、ほかの学部は各学部の時間割表から取っている
-        var label = c.rmu.indexOf("artsci") >= 0 ? "基幹教育院のB表より" : "学部の時間割表より";
-        room += ' <a class="src" href="' + esc(c.rmu) + '" target="_blank" ' +
-                'rel="noopener">' + label + "</a>";
-      }
-      rows.splice(at("開講") + 1, 0,
-                  row("教室", room, {html: true}));   // room は上でエスケープ済み
-    }
-    // 基幹教育の事前申請。抽選があるので、履修登録より前に手続きがいる
-    if (c.ap) {
-      var years = Object.keys(c.ap);
-      var marks = {};
-      years.forEach(function (y) {
-        c.ap[y].split("").forEach(function (ch) { marks[ch] = 1; });
-      });
-      var txt = years.map(function (y) {
-        return esc(c.ap[y]) + "（" + esc(y) + "）";
-      }).join(" ／ ");
-      if (marks["○"]) {
-        txt += '<br><span class="apnote">○ 受講したい場合はMoodleから期限までに事前申請が必要。' +
-               "抽選で通った人だけ履修登録されます（自分での登録は不要）。</span>";
-      }
-      if (marks["●"]) {
-        txt += '<br><span class="apnote">● 受講したい場合はCampusmate‑Jで履修登録しておく。' +
-               "人数によっては抽選があり、漏れると登録が消えます。</span>";
-      }
-      if (marks["※"]) {
-        txt += '<br><span class="apnote">※ 教員が抽選します。申請は○の科目と同じMoodleページから。' +
-               "やり方がシラバス指定の科目もあるので備考を確認してください。</span>";
-      }
-      if (c.apu) {
-        txt += ' <a class="src" href="' + esc(c.apu) + '" target="_blank" ' +
-               'rel="noopener">基幹教育院のB表より</a>';
-      }
-      rows.splice(at("開講") + 1, 0, row("事前申請", txt, {html: true}));
-    }
-    // 担当クラスが決まっている科目（基幹教育）は、誰向けの枠かを出す
-    if (c.kl) {
-      rows.push(row("担当クラス", c.kl));
-    }
+    if (loaded) { add("対象学年", c.grraw || "指定なし（学年フィルタでは1〜4年として扱います）"); }
+    add("単位", c.cr == null ? "—" : c.cr, {num: true});
+    if (loaded) { add("必修選択", c.rq || "—"); }
+    add("開講", c.sl.length ? slotLabel(c) : (c.tm || "—"));
+    if (c.ap) { add("事前申請", applyHTML(c), {html: true}); }
+    if (c.rm) { add("教室", roomHTML(c), {html: true}); }
+    add("キャンパス", c.cp || "—");
+    if (loaded) { add("使用言語", c.ln || "—"); }
+    add("担当教員", c.i.join("・") || "—");
+    if (loaded) { add("成績評価", ev); }
+    // ナンバリングは履修選択の判断に使わないので表には出さない（キーワード検索の対象ではある）
+    add("科目区分", c.cat || "—");
     // 区分を統合した科目は、シラバスの元の表記も見せる（経済学部の学科ごとの扱いなど）
-    if (c.catr) {
-      rows.splice(at("科目区分") + 1, 0, row("シラバス表記", c.catr));
-    }
-    // 詳細ファイルを読めなかったときは、そこから来る行を出さない。
-    // 既定値の「指定なし」「—」が本当の値に見えてしまうため
-    if (c._detErr) {
-      rows = rows.filter(function (r) {
-        return ["対象学年", "必修選択", "使用言語", "成績評価"].indexOf(r.label) < 0;
-      });
-    }
+    if (c.catr) { add("シラバス表記", c.catr); }
+    // 担当クラスが決まっている科目（基幹教育）は、誰向けの枠かを出す
+    if (c.kl) { add("担当クラス", c.kl); }
     var dl = rows.map(function (r) {
       var v = r.html ? String(r.value) : esc(String(r.value));
       return "<dt>" + esc(r.label) + "</dt>" +
@@ -1558,9 +1540,8 @@
       out += "<h4>授業計画 全" + c.pl.length + "回</h4>" + planHTML(c);
     }
     out += gradeHTML(c);
-    var src = c.su || META.detail_url.replace("{code}", encodeURIComponent(c.c));
     out += '<span class="src">出典: ' + (c.su ? "九州大学 文学部シラバス" : "九州大学シラバス（Campusmate）") +
-      '</span> <a class="src" target="_blank" rel="noopener" href="' + esc(src) +
+      '</span> <a class="src" target="_blank" rel="noopener" href="' + esc(officialURL(c)) +
       '">公式シラバスを開く</a>';
     return out;
   }
@@ -1682,13 +1663,8 @@
      科目名・教員・教室・シラバスへのリンクと、追加削除だけに絞る */
   var TT_PERIODS = 6;
   // 前期と後期は別の時間割として見せる。重ねると同じコマに別の学期の科目が並ぶ
-  var ttSem = (function () {
-    var m = new Date().getMonth() + 1;
-    return m >= 4 && m <= 8 ? "spring" : "autumn";
-  }());
-  function semGroups() {
-    return (ttSem === "spring" ? SPRING_TERMS : AUTUMN_TERMS).concat(["通年・その他"]);
-  }
+  var ttSem = currentSeason();
+  function semGroups() { return seasonTerms(ttSem); }
   function inSem(c, s) { return semGroups().indexOf(slotGroup(c, s)) >= 0; }
   // 学期の前半・後半のクォーター。後期なら秋学期・冬学期、前期なら春学期・夏学期
   function semQuarters() {
@@ -1698,7 +1674,7 @@
     if (c.sl.length) { return c.sl.some(function (s) { return inSem(c, s); }); }
     return courseGroups(c).some(function (g) { return semGroups().indexOf(g) >= 0; });
   }
-  Array.prototype.forEach.call(document.querySelectorAll(".ttsem [data-sem]"), function (b) {
+  each(document, ".ttsem [data-sem]", function (b) {
     b.addEventListener("click", function () {
       ttSem = this.getAttribute("data-sem");
       closeSheet(); drawTT();
@@ -1751,7 +1727,7 @@
 
   function drawTT() {
     var courses = ttCourses(), buckets = ttBuckets();
-    Array.prototype.forEach.call(document.querySelectorAll(".ttsem [data-sem]"), function (b) {
+    each(document, ".ttsem [data-sem]", function (b) {
       b.setAttribute("aria-pressed", String(b.getAttribute("data-sem") === ttSem));
     });
     var maxP = TT_PERIODS;
@@ -1821,7 +1797,7 @@
       }
     }
     g.innerHTML = html.join("");
-    Array.prototype.forEach.call(g.querySelectorAll(".ttcell"), function (b) {
+    each(g, ".ttcell", function (b) {
       b.addEventListener("click", function () {
         var k = this.getAttribute("data-tk"), q = this.getAttribute("data-q");
         var code = this.getAttribute("data-code");
@@ -1864,7 +1840,7 @@
           "同時には受けられないので、取らない科目は「時間割から外す」で外してください。</p>"
         : "");
     list.forEach(function (c) {
-      var src = c.su || META.detail_url.replace("{code}", encodeURIComponent(c.c));
+      var src = officialURL(c);
       out += '<div style="margin-bottom:14px">' +
         '<h3 style="margin:0 0 6px;font-size:14px">' + esc(c.t) + "</h3>" +
         '<dl class="kv">' +
@@ -1919,16 +1895,16 @@
 
   function bindSheet() {
     var sh = el("sheet");
-    Array.prototype.forEach.call(sh.querySelectorAll("[data-close]"), function (b) {
+    each(sh, "[data-close]", function (b) {
       b.addEventListener("click", closeSheet);
     });
-    Array.prototype.forEach.call(sh.querySelectorAll("[data-drop]"), function (b) {
+    each(sh, "[data-drop]", function (b) {
       b.addEventListener("click", function () {
         toggleFav(this.getAttribute("data-drop"));
         closeSheet(); syncFavUI(); drawTT();
       });
     });
-    Array.prototype.forEach.call(sh.querySelectorAll("[data-add]"), function (b) {
+    each(sh, "[data-add]", function (b) {
       b.addEventListener("click", function () {
         toggleFav(this.getAttribute("data-add"));
         closeSheet(); syncFavUI(); drawTT();
@@ -2051,7 +2027,7 @@
     }
     openSheet(out);
     bindSheet();
-    Array.prototype.forEach.call(el("sheet").querySelectorAll("[data-imp]"), function (b) {
+    each(el("sheet"), "[data-imp]", function (b) {
       b.addEventListener("click", function () {
         if (this.getAttribute("data-imp") === "replace") { favs = Object.create(null); }
         got.forEach(function (c) { favs[c.c] = 1; });

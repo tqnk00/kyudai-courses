@@ -32,8 +32,12 @@ const TARGETS = [
 const results = [];
 function rec(t, test, ok, msg) { results.push({ target: t.name, test, ok, msg: msg || '' }); }
 
+// 開いた画面は、テストが途中で失敗しても必ず閉じる（下の実行ループの finally）
+const openContexts = [];
+
 async function fresh(browser, t, opts = {}) {
   const ctx = await browser.newContext({ ...t.ctx, locale: 'ja-JP', ...(opts.ctx || {}) });
+  openContexts.push(ctx);
   const page = await ctx.newPage();
   page.__errors = [];
   page.on('pageerror', e => page.__errors.push('pageerror: ' + e.message));
@@ -62,7 +66,6 @@ const TESTS = {
     const pressed = await page.locator('#qchips .chip[aria-pressed="true"]').allTextContents();
     if (pressed.length < 3) throw new Error('今の学期が選ばれていない: ' + pressed.join(','));
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return total + '件 / 既定 ' + pressed.join('・');
   },
 
@@ -79,7 +82,6 @@ const TESTS = {
     const hash = decodeURIComponent(await page.evaluate(() => location.hash));
     if (!hash.includes('q=統計')) throw new Error('URLに検索語が残っていない: ' + hash);
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return `${all} -> 統計 ${one} -> 統計 力学 ${two}`;
   },
 
@@ -104,7 +106,6 @@ const TESTS = {
     const facVal = await page.locator('#fac').inputValue();
     if (facVal !== '') throw new Error('解除しても学部が残る');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return `全${all} -> 工学部${fac} -> 区分${cat} -> 3年${g3}`;
   },
 
@@ -129,7 +130,6 @@ const TESTS = {
     const txt = await page.locator('#rlist').innerText();
     if (txt.includes('その他その他')) throw new Error('「その他その他」が出ている');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return 'コマ ' + k + ' / 戻る / 集中講義';
   },
 
@@ -158,7 +158,6 @@ const TESTS = {
     await page.waitForTimeout(300);
     if (await page.locator('.detail').count()) throw new Error('もう一度押しても閉じない');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return '概要・計画・成績・リンク OK';
   },
 
@@ -196,7 +195,6 @@ const TESTS = {
     await page.waitForTimeout(400);
     if (await page.locator('.rhead').count() !== 0) throw new Error('お気に入り一覧で外しても残る');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return '登録・解除・再読み込み・お気に入り一覧';
   },
 
@@ -213,7 +211,6 @@ const TESTS = {
     await page.waitForTimeout(300);
     if (await star.getAttribute('aria-pressed') !== 'true') throw new Error('保存できないと登録もできない');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return '保存は不可でも画面は動く';
   },
 
@@ -248,7 +245,6 @@ const TESTS = {
     await act(t, page.locator('#ttback'));
     await page.waitForFunction(() => !document.body.classList.contains('tt'));
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return '追加・詳細シート・外す・前期切替・戻る';
   },
 
@@ -273,7 +269,6 @@ const TESTS = {
     await act(t, page.locator('.ttcell.dup').first());
     await page.waitForSelector('#sheet:not([hidden]) .dupnote');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return '半分表示・重複3・注意書き';
   },
 
@@ -296,7 +291,6 @@ const TESTS = {
     const label = await page.locator('#sharecopy').textContent();
     if (!/コピーしました|長押し/.test(label)) throw new Error('コピーの反応が無い: ' + label);
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return 'リンク・QR ' + Math.round(box.width) + 'px・' + label;
   },
 
@@ -320,7 +314,6 @@ const TESTS = {
     await page.waitForTimeout(800);
     if (await page.locator('#sheet:not([hidden])').count()) throw new Error('再読み込みでまた聞かれる');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return '確認→追加→再読み込みで聞かれない';
   },
 
@@ -348,7 +341,6 @@ const TESTS = {
     const links = await page.locator('#sources a').count();
     if (links < 10) throw new Error('出典のリンクが足りない');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return `未掲載 ${li}件 / 出典リンク ${links}`;
   },
 
@@ -371,7 +363,6 @@ const TESTS = {
     await page.waitForTimeout(300);
     if (await page.locator('#apbtn').getAttribute('aria-pressed') !== 'false') throw new Error('解除で外れない');
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return `${all} -> 事前申請 ${n}`;
   },
 
@@ -386,7 +377,6 @@ const TESTS = {
     });
     if (!(c.bg < 80 && c.fg > 150)) throw new Error('暗い配色になっていない: ' + JSON.stringify(c));
     if (page.__errors.length) throw new Error(page.__errors.join(' | '));
-    await ctx.close();
     return `背景${Math.round(c.bg)} 文字${Math.round(c.fg)}`;
   },
 
@@ -422,7 +412,6 @@ const TESTS = {
     const vp = await page.evaluate(() => (document.querySelector('meta[name=viewport]') || {}).content || '');
     if (!/width=device-width/.test(vp)) bad.push('viewport 指定が無い');
     if (page.__errors.length) bad.push(page.__errors.join(' | '));
-    await ctx.close();
     if (bad.length) throw new Error(bad.join(' ／ '));
     return sizes.map(s => `${s[0]} ${s[1]}x${s[2]}`).join(', ');
   },
@@ -439,7 +428,6 @@ const TESTS = {
     if (!d.includes('読み込めませんでした')) throw new Error('失敗の案内が出ない');
     if (d.includes('指定なし')) throw new Error('読めていない項目を既定値で出している');
     if (!d.includes('公式シラバスを開く')) throw new Error('公式リンクが無い');
-    await ctx.close();
     return '案内と公式リンクを表示';
   },
 };
@@ -463,6 +451,8 @@ const TESTS = {
         rec(t, name, true, msg);
       } catch (e) {
         rec(t, name, false, String(e.message).split('\n')[0].slice(0, 300));
+      } finally {
+        for (const c of openContexts.splice(0)) await c.close().catch(() => {});
       }
     }
     await browser.close().catch(() => {});

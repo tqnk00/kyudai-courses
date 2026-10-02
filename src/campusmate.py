@@ -35,7 +35,6 @@ class SearchSession:
     def __init__(self, client: httpx.Client | None = None):
         self.c = client or httpx.Client(
             headers={"User-Agent": USER_AGENT}, timeout=120, follow_redirects=True)
-        self.last = ""
 
     def close(self):
         self.c.close()
@@ -51,13 +50,11 @@ class SearchSession:
         body = urlencode([("timestamp", ts)] + fields)
         r = self.c.post(action, content=body, headers=FORM_HDR | {"Referer": action})
         r.raise_for_status()
-        self.last = r.text
         return r.text
 
     def open_form(self) -> str:
         r = self.c.get(ENTRY)
         r.raise_for_status()
-        self.last = r.text
         return r.text
 
     def search(self, year: int, kaiko_cd: str) -> str:

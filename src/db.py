@@ -99,22 +99,6 @@ CREATE TABLE IF NOT EXISTS course_slots (
 CREATE INDEX IF NOT EXISTS ix_slots_code ON course_slots(university_id, year, course_code);
 CREATE INDEX IF NOT EXISTS ix_slots_wd ON course_slots(university_id, year, weekday, period);
 
-CREATE TABLE IF NOT EXISTS timetable_facts (
-  university_id TEXT NOT NULL,
-  year          INTEGER NOT NULL,
-  course_code   TEXT,
-  source        TEXT NOT NULL,
-  room          TEXT,
-  room_raw      TEXT,
-  intensive_dates TEXT,
-  application   TEXT,
-  class_group   TEXT,
-  note          TEXT,
-  match_status  TEXT NOT NULL,
-  match_score   REAL,
-  raw_row       TEXT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS course_summary (
   university_id TEXT NOT NULL,
   year          INTEGER NOT NULL,
